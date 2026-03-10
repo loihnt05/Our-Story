@@ -1,0 +1,220 @@
+{
+  "format": 1,
+  "restore": {
+    "/home/loiancut/workspace/our-story/asp-backend/OurStory.Infrastructure/OurStory.Infrastructure.csproj": {}
+  },
+  "projects": {
+    "/home/loiancut/workspace/our-story/asp-backend/OurStory.Application/OurStory.Application.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/loiancut/workspace/our-story/asp-backend/OurStory.Application/OurStory.Application.csproj",
+        "projectName": "OurStory.Application",
+        "projectPath": "/home/loiancut/workspace/our-story/asp-backend/OurStory.Application/OurStory.Application.csproj",
+        "packagesPath": "/home/loiancut/.nuget/packages/",
+        "outputPath": "/home/loiancut/workspace/our-story/asp-backend/OurStory.Application/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/loiancut/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "/home/loiancut/workspace/our-story/asp-backend/OurStory.Domain/OurStory.Domain.csproj": {
+                "projectPath": "/home/loiancut/workspace/our-story/asp-backend/OurStory.Domain/OurStory.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "10.0.100"
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "MediatR": {
+              "target": "Package",
+              "version": "[14.1.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[8.0.24, 8.0.24]"
+            }
+          ],
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/10.0.103/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/home/loiancut/workspace/our-story/asp-backend/OurStory.Domain/OurStory.Domain.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/loiancut/workspace/our-story/asp-backend/OurStory.Domain/OurStory.Domain.csproj",
+        "projectName": "OurStory.Domain",
+        "projectPath": "/home/loiancut/workspace/our-story/asp-backend/OurStory.Domain/OurStory.Domain.csproj",
+        "packagesPath": "/home/loiancut/.nuget/packages/",
+        "outputPath": "/home/loiancut/workspace/our-story/asp-backend/OurStory.Domain/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/loiancut/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "10.0.100"
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[8.0.24, 8.0.24]"
+            }
+          ],
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/10.0.103/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/home/loiancut/workspace/our-story/asp-backend/OurStory.Infrastructure/OurStory.Infrastructure.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/loiancut/workspace/our-story/asp-backend/OurStory.Infrastructure/OurStory.Infrastructure.csproj",
+        "projectName": "OurStory.Infrastructure",
+        "projectPath": "/home/loiancut/workspace/our-story/asp-backend/OurStory.Infrastructure/OurStory.Infrastructure.csproj",
+        "packagesPath": "/home/loiancut/.nuget/packages/",
+        "outputPath": "/home/loiancut/workspace/our-story/asp-backend/OurStory.Infrastructure/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/loiancut/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "/home/loiancut/workspace/our-story/asp-backend/OurStory.Application/OurStory.Application.csproj": {
+                "projectPath": "/home/loiancut/workspace/our-story/asp-backend/OurStory.Application/OurStory.Application.csproj"
+              },
+              "/home/loiancut/workspace/our-story/asp-backend/OurStory.Domain/OurStory.Domain.csproj": {
+                "projectPath": "/home/loiancut/workspace/our-story/asp-backend/OurStory.Domain/OurStory.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "10.0.100"
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[8.0.24, 8.0.24]"
+            }
+          ],
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/10.0.103/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

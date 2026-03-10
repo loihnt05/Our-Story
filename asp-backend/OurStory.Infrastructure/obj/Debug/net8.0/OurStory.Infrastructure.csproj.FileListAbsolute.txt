@@ -1,0 +1,11 @@
+/home/loiancut/workspace/our-story/OurStory.Infrastructure/bin/Debug/net8.0/OurStory.Infrastructure.deps.json
+/home/loiancut/workspace/our-story/OurStory.Infrastructure/bin/Debug/net8.0/OurStory.Infrastructure.dll
+/home/loiancut/workspace/our-story/OurStory.Infrastructure/bin/Debug/net8.0/OurStory.Infrastructure.pdb
+/home/loiancut/workspace/our-story/OurStory.Infrastructure/obj/Debug/net8.0/OurStory.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+/home/loiancut/workspace/our-story/OurStory.Infrastructure/obj/Debug/net8.0/OurStory.Infrastructure.AssemblyInfoInputs.cache
+/home/loiancut/workspace/our-story/OurStory.Infrastructure/obj/Debug/net8.0/OurStory.Infrastructure.AssemblyInfo.cs
+/home/loiancut/workspace/our-story/OurStory.Infrastructure/obj/Debug/net8.0/OurStory.Infrastructure.csproj.CoreCompileInputs.cache
+/home/loiancut/workspace/our-story/OurStory.Infrastructure/obj/Debug/net8.0/OurStory.Infrastructure.dll
+/home/loiancut/workspace/our-story/OurStory.Infrastructure/obj/Debug/net8.0/refint/OurStory.Infrastructure.dll
+/home/loiancut/workspace/our-story/OurStory.Infrastructure/obj/Debug/net8.0/OurStory.Infrastructure.pdb
+/home/loiancut/workspace/our-story/OurStory.Infrastructure/obj/Debug/net8.0/ref/OurStory.Infrastructure.dll

@@ -1,0 +1,11 @@
+/home/loiancut/workspace/our-story/OurStory.Application/bin/Debug/net8.0/OurStory.Application.deps.json
+/home/loiancut/workspace/our-story/OurStory.Application/bin/Debug/net8.0/OurStory.Application.dll
+/home/loiancut/workspace/our-story/OurStory.Application/bin/Debug/net8.0/OurStory.Application.pdb
+/home/loiancut/workspace/our-story/OurStory.Application/obj/Debug/net8.0/OurStory.Application.GeneratedMSBuildEditorConfig.editorconfig
+/home/loiancut/workspace/our-story/OurStory.Application/obj/Debug/net8.0/OurStory.Application.AssemblyInfoInputs.cache
+/home/loiancut/workspace/our-story/OurStory.Application/obj/Debug/net8.0/OurStory.Application.AssemblyInfo.cs
+/home/loiancut/workspace/our-story/OurStory.Application/obj/Debug/net8.0/OurStory.Application.csproj.CoreCompileInputs.cache
+/home/loiancut/workspace/our-story/OurStory.Application/obj/Debug/net8.0/OurStory.Application.dll
+/home/loiancut/workspace/our-story/OurStory.Application/obj/Debug/net8.0/refint/OurStory.Application.dll
+/home/loiancut/workspace/our-story/OurStory.Application/obj/Debug/net8.0/OurStory.Application.pdb
+/home/loiancut/workspace/our-story/OurStory.Application/obj/Debug/net8.0/ref/OurStory.Application.dll
