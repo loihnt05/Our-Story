@@ -107,13 +107,13 @@ export function useLoveStory() {
     // Cycle quotes
     setQuoteIndex(Math.floor(Math.random() * ROMANTIC_QUOTES.length));
 
-    // Generate random background floating hearts
-    const bgHearts = Array.from({ length: 18 }).map((_, i) => ({
+    // Generate random background floating hearts (more hearts, faster speed)
+    const bgHearts = Array.from({ length: 35 }).map((_, i) => ({
       id: i,
       left: Math.random() * 100, // percentage
-      size: Math.random() * 24 + 12, // 12px to 36px
-      duration: Math.random() * 20 + 15, // 15s to 35s
-      delay: Math.random() * -20 // start immediately at random offsets
+      size: Math.random() * 20 + 10, // 10px to 30px
+      duration: Math.random() * 8 + 6, // 6s to 14s (faster!)
+      delay: Math.random() * -10 // start immediately at random offsets
     }));
     setFloatingBgHearts(bgHearts);
 

@@ -92,13 +92,13 @@ export default function TimelinePage() {
       localStorage.setItem("loved_milestones", JSON.stringify(defaultMilestones));
     }
 
-    // Generate random background floating hearts
-    const hearts = Array.from({ length: 15 }).map((_, i) => ({
+    // Generate random background floating hearts (more hearts, faster speed)
+    const hearts = Array.from({ length: 35 }).map((_, i) => ({
       id: i,
       left: Math.random() * 100,
       size: Math.random() * 20 + 10,
-      duration: Math.random() * 18 + 12,
-      delay: Math.random() * -15
+      duration: Math.random() * 8 + 6, // 6s to 14s (faster!)
+      delay: Math.random() * -10
     }));
     setBgHearts(hearts);
   }, []);
