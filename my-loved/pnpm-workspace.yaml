@@ -1,4 +1,5 @@
 allowBuilds:
+  '@tsparticles/engine': false
   sharp: false
   unrs-resolver: false
 ignoredBuiltDependencies:
