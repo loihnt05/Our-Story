@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
 import {
-  Geist,
+  Fredoka,
   Geist_Mono,
   Playfair_Display,
   Dancing_Script,
+  Molle,
 } from "next/font/google";
 import "./globals.css";
 import { AuthProviderWrapper as ClerkProvider } from "@/components/loved/AuthProvider";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const fredoka = Fredoka({
+  variable: "--font-sans",
   subsets: ["latin"],
 });
 
@@ -28,6 +29,13 @@ const dancing = Dancing_Script({
   subsets: ["latin"],
 });
 
+const molle = Molle({
+  weight: "400",
+  style: "italic",
+  variable: "--font-molle",
+  subsets: ["latin"],
+});
+
 export const metadata: Metadata = {
   title: "Our Love Story | Live Anniversary Counter",
   description:
@@ -43,7 +51,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html
         lang="en"
-        className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} ${dancing.variable} h-full antialiased`}
+        className={`${fredoka.variable} ${geistMono.variable} ${playfair.variable} ${dancing.variable} ${molle.variable} h-full antialiased`}
       >
         <body className="min-h-full flex flex-col">
           {children}

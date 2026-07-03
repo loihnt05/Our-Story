@@ -1,5 +1,5 @@
 import React from "react";
-import { Sparkles, HeartHandshake, User, Heart } from "lucide-react";
+import { Sparkles, User, Heart } from "lucide-react";
 import { BurstHeart } from "./types";
 
 interface CoupleCardProps {
@@ -37,9 +37,9 @@ export default function CoupleCard({
         backgroundSize: "16px 16px"
       }}
     >
-      {/* Decorative top-right graphic hand-shake */}
-      <div className="absolute top-0 right-0 p-3 opacity-15 pointer-events-none select-none text-rose-500">
-        <HeartHandshake className="w-16 h-16" />
+      {/* Decorative top-right graphic sparkles */}
+      <div className="absolute top-0 right-0 p-3 opacity-10 pointer-events-none select-none text-rose-500">
+        <Sparkles className="w-16 h-16 rotate-12" />
       </div>
 
       {/* Spotlight blur behind center heart */}
@@ -47,7 +47,7 @@ export default function CoupleCard({
 
       {/* Header */}
       <h2 className="text-base font-bold font-serif border-b pb-2.5 border-zinc-200/50 dark:border-zinc-800/50 flex items-center gap-1.5 z-10 text-zinc-900 dark:text-white">
-        <Sparkles className="w-4 h-4 text-rose-500 fill-rose-500 animate-pulse" />
+        <Heart className="w-4.5 h-4.5 text-rose-500 fill-rose-500/10" />
         The Couple
       </h2>
 
@@ -68,8 +68,9 @@ export default function CoupleCard({
               {personAAvatar ? (
                 <img src={personAAvatar} alt={personAName} className="w-full h-full object-cover" />
               ) : (
-                <div className="w-full h-full flex items-center justify-center bg-rose-50/30 dark:bg-rose-950/20 text-rose-400">
+                <div className="w-full h-full flex items-center justify-center bg-rose-50/30 dark:bg-rose-950/20 text-rose-400 relative">
                   <User className="w-6 h-6 opacity-60" />
+                  <Heart className="w-2.5 h-2.5 fill-rose-400 text-rose-400 absolute bottom-2 right-2 opacity-80 animate-pulse" />
                 </div>
               )}
             </div>
@@ -131,8 +132,9 @@ export default function CoupleCard({
               {personBAvatar ? (
                 <img src={personBAvatar} alt={personBName} className="w-full h-full object-cover" />
               ) : (
-                <div className="w-full h-full flex items-center justify-center bg-rose-50/30 dark:bg-rose-950/20 text-rose-400">
+                <div className="w-full h-full flex items-center justify-center bg-rose-50/30 dark:bg-rose-950/20 text-rose-400 relative">
                   <User className="w-6 h-6 opacity-60" />
+                  <Heart className="w-2.5 h-2.5 fill-rose-400 text-rose-400 absolute bottom-2 right-2 opacity-80 animate-pulse" />
                 </div>
               )}
             </div>

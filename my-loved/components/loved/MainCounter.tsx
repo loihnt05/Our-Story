@@ -51,7 +51,7 @@ export default function MainCounter({
 
       {/* Huge Day Display */}
       <div className="my-6 relative flex items-center justify-center">
-        <span className="text-7xl md:text-8xl font-serif font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-rose-600 via-pink-600 to-amber-500 select-none drop-shadow-sm font-semibold filter tracking-tight animate-pulse">
+        <span className="text-7xl md:text-8xl font-molle text-transparent bg-clip-text bg-gradient-to-r from-rose-600 via-pink-600 to-amber-500 select-none drop-shadow-sm filter tracking-tight animate-pulse">
           {timeLeft.totalDays.toLocaleString()}
         </span>
         <span className="absolute -bottom-5 text-sm font-bold uppercase tracking-widest text-rose-500/80 dark:text-rose-400/80 mt-1">
@@ -71,7 +71,7 @@ export default function MainCounter({
             key={index}
             className="flex flex-col items-center p-3 rounded-2xl bg-white/40 dark:bg-zinc-950/20 border border-white/30 dark:border-zinc-800/30 backdrop-blur-sm shadow-sm group/unit hover:scale-105 transition-transform"
           >
-            <span className={`text-xl md:text-2xl font-bold font-serif ${
+            <span className={`text-2xl md:text-3xl font-molle ${
               timeUnit.pulse ? "text-rose-500 dark:text-rose-400" : "text-zinc-900 dark:text-white"
             }`}>
               {String(timeUnit.val).padStart(2, "0")}
