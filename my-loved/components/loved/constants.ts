@@ -20,17 +20,19 @@ export const THEMES: Theme[] = [
     cardBg: "bg-white/70 dark:bg-zinc-900/60",
     heartColor: "fill-rose-500 text-rose-500",
     borderColor: "border-rose-200/50 dark:border-rose-900/30",
-    particleColors: ["#f43f5e", "#ec4899", "#f472b6", "#fda4af"]
+    particleColors: ["#f43f5e", "#ec4899", "#f472b6", "#fda4af"],
+    bgType: "hearts"
   },
   {
-    id: "midnight-velvet",
-    name: "Midnight Velvet",
-    gradient: "from-slate-950 via-purple-950 to-zinc-950",
-    textAccent: "text-purple-400",
-    cardBg: "bg-slate-900/60",
+    id: "lilac-dream",
+    name: "Lilac Dream 🪻",
+    gradient: "from-purple-50 via-indigo-50 to-purple-100 dark:from-zinc-950 dark:to-purple-950/20",
+    textAccent: "text-purple-600 dark:text-purple-400",
+    cardBg: "bg-white/70 dark:bg-zinc-900/60",
     heartColor: "fill-purple-500 text-purple-500",
-    borderColor: "border-purple-800/30",
-    particleColors: ["#a855f7", "#c084fc", "#e879f9", "#ec4899"]
+    borderColor: "border-purple-200/50 dark:border-purple-900/30",
+    particleColors: ["#a855f7", "#c084fc", "#e879f9", "#ec4899"],
+    bgType: "hearts"
   },
   {
     id: "sunset-glow",
@@ -40,7 +42,8 @@ export const THEMES: Theme[] = [
     cardBg: "bg-white/60 dark:bg-zinc-900/50",
     heartColor: "fill-amber-500 text-amber-500",
     borderColor: "border-amber-200/40 dark:border-amber-900/20",
-    particleColors: ["#f59e0b", "#f97316", "#ef4444", "#f472b6"]
+    particleColors: ["#f59e0b", "#f97316", "#ef4444", "#f472b6"],
+    bgType: "hearts"
   },
   {
     id: "sakura-bloom",
@@ -50,6 +53,40 @@ export const THEMES: Theme[] = [
     cardBg: "bg-white/80 dark:bg-zinc-900/60",
     heartColor: "fill-pink-500 text-pink-500",
     borderColor: "border-pink-200/50 dark:border-pink-900/30",
-    particleColors: ["#ec4899", "#f472b6", "#fbcfe8", "#fda4af"]
+    particleColors: ["#ec4899", "#f472b6", "#fbcfe8", "#fda4af"],
+    bgType: "hearts"
+  },
+  {
+    id: "starry-galaxy",
+    name: "Starry Galaxy 🌌",
+    gradient: "from-zinc-950 via-slate-900 to-black",
+    textAccent: "text-indigo-400",
+    cardBg: "bg-slate-900/60 dark:bg-zinc-900/50",
+    heartColor: "fill-indigo-500 text-indigo-500",
+    borderColor: "border-slate-800/50 dark:border-zinc-800/50",
+    particleColors: ["#818cf8", "#a78bfa", "#e0e7ff", "#ffffff"],
+    bgType: "stars"
+  },
+  {
+    id: "gravity-attraction",
+    name: "Gravity Attraction 💫",
+    gradient: "from-zinc-950 via-rose-950/20 to-black",
+    textAccent: "text-rose-400",
+    cardBg: "bg-zinc-900/60 dark:bg-zinc-900/50",
+    heartColor: "fill-rose-500 text-rose-500",
+    borderColor: "border-zinc-800/50 dark:border-zinc-800/50",
+    particleColors: ["#fb7185", "#f43f5e", "#fda4af", "#ffffff"],
+    bgType: "gravity"
+  },
+  {
+    id: "fireworks-celebration",
+    name: "Fireworks Celebration 🎆",
+    gradient: "from-indigo-950 via-zinc-950 to-black",
+    textAccent: "text-amber-400",
+    cardBg: "bg-zinc-900/70 dark:bg-zinc-900/60",
+    heartColor: "fill-amber-500 text-amber-500",
+    borderColor: "border-zinc-800/50 dark:border-zinc-800/50",
+    particleColors: ["#fbbf24", "#f97316", "#ef4444", "#38bdf8"],
+    bgType: "fireworks"
   }
 ];

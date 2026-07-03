@@ -7,6 +7,7 @@ import { THEMES } from "../../components/loved/constants";
 import { Milestone } from "../../components/loved/types";
 import { useAuth } from "@/components/loved/AuthProvider";
 import AccessDenied from "../../components/loved/AccessDenied";
+import ThemeBackground from "../../components/loved/ThemeBackground";
 
 export default function TimelinePage() {
   const { isSignedIn } = useAuth();
@@ -127,167 +128,136 @@ export default function TimelinePage() {
   return (
     <div className={`min-h-screen bg-gradient-to-br ${currentTheme.gradient} text-zinc-800 dark:text-zinc-100 transition-colors duration-500 relative overflow-x-hidden pb-20`}>
       
-      {/* Background drifting hearts */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none select-none">
-        {bgHearts.map((heart) => (
-          <svg
-            key={heart.id}
-            className="absolute text-rose-400/15 dark:text-rose-500/8 animate-float"
-            style={{
-              left: `${heart.left}%`,
-              width: `${heart.size}px`,
-              height: `${heart.size}px`,
-              bottom: `-50px`,
-              animationDuration: `${heart.duration}s`,
-              animationDelay: `${heart.delay}s`,
-            }}
-            viewBox="0 0 24 24"
-            fill="currentColor"
+      {/* Theme Animated Background */}
+      <ThemeBackground 
+        bgType={currentTheme.bgType} 
+        floatingHearts={bgHearts} 
+        particleColors={currentTheme.particleColors} 
+      />
+
+      <div className="relative z-10 flex flex-col w-full">
+        {/* Floating Header */}
+        <header className="relative w-full max-w-4xl mx-auto px-6 py-6 flex items-center justify-between z-10">
+          <Link
+            href="/"
+            className="flex items-center gap-1.5 px-4.5 py-2 rounded-full bg-white/40 dark:bg-zinc-800/40 border border-white/20 backdrop-blur-md shadow-sm text-xs font-bold text-zinc-700 dark:text-zinc-200 hover:bg-white/60 dark:hover:bg-zinc-800/60 transition-colors cursor-pointer"
           >
-            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-          </svg>
-        ))}
-      </div>
+            <ArrowLeft className="w-3.5 h-3.5 text-rose-500" />
+            <span>Go Back Home</span>
+          </Link>
 
-      {/* Floating Header */}
-      <header className="relative w-full max-w-4xl mx-auto px-6 py-6 flex items-center justify-between z-10">
-        <Link
-          href="/"
-          className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/40 dark:bg-zinc-800/40 border border-white/20 backdrop-blur-md shadow-sm text-sm font-semibold hover:bg-white/60 dark:hover:bg-zinc-800/60 transition-all cursor-pointer"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Back to Story
-        </Link>
-
-        <div className="flex items-center gap-2 bg-rose-500/10 px-4 py-1.5 rounded-full border border-rose-500/20">
-          <Heart className="w-4 h-4 text-rose-500 fill-rose-500" />
-          <span className="text-xs font-bold font-serif text-rose-600 dark:text-rose-400">
-            {personA} & {personB}
+          <span className="text-xl font-bold font-serif flex items-center gap-1.5 text-zinc-900 dark:text-white bg-white/40 dark:bg-zinc-800/40 px-4 py-2 border border-white/20 rounded-full shadow-sm backdrop-blur-md">
+            <Sparkles className="w-4 h-4 text-amber-500 fill-amber-500 animate-pulse" />
+            Our Memory Lane
           </span>
-        </div>
-      </header>
+        </header>
 
-      {/* Main Container */}
-      <main className="max-w-4xl mx-auto px-6 z-10 relative flex flex-col gap-10">
-        
-        {/* Title Block */}
-        <div className="text-center flex flex-col items-center gap-2 mt-4">
-          <div className="w-12 h-12 rounded-full bg-rose-500/10 flex items-center justify-center">
-            <Sparkles className="w-6 h-6 text-rose-500" />
-          </div>
-          <h1 className="text-4xl md:text-5xl font-bold font-cursive bg-clip-text text-zinc-950 dark:text-white">
-            Our Love Timeline
-          </h1>
-          <p className="text-zinc-500 dark:text-zinc-400 text-sm md:text-base max-w-md mt-1">
-            Every step, smile, and shared adventure. From the present moment back to the spark that started it all.
-          </p>
-        </div>
+        <main className="relative w-full max-w-6xl mx-auto px-6 flex flex-col gap-10 mt-6 items-center">
+          {/* Two Column Layout: Add Form on Left, Timeline List on Right */}
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start w-full">
+            
+            {/* Add Milestone Sticky Card */}
+            <div className="md:col-span-4 sticky top-6">
+              <div className={`p-6 rounded-3xl ${currentTheme.cardBg} border ${currentTheme.borderColor} shadow-xl backdrop-blur-md flex flex-col gap-4`}>
+                <h2 className="text-lg font-bold font-serif border-b pb-2.5 border-zinc-200/50 dark:border-zinc-800/50 flex items-center gap-2">
+                  <Plus className="w-4.5 h-4.5 text-rose-500" />
+                  Add Milestone
+                </h2>
 
-        {/* Two Column Layout: Add Form on Left, Timeline List on Right */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
-          
-          {/* Add Milestone Sticky Card */}
-          <div className="md:col-span-4 sticky top-6">
-            <div className={`p-6 rounded-3xl ${currentTheme.cardBg} border ${currentTheme.borderColor} shadow-xl backdrop-blur-md flex flex-col gap-4`}>
-              <h2 className="text-lg font-bold font-serif border-b pb-2.5 border-zinc-200/50 dark:border-zinc-800/50 flex items-center gap-2">
-                <Plus className="w-4.5 h-4.5 text-rose-500" />
-                Add Milestone
-              </h2>
-
-              <form onSubmit={handleAddMilestone} className="flex flex-col gap-3.5 mt-2">
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Title</label>
-                  <input
-                    type="text"
-                    required
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    placeholder="First Kiss, Trip to beach..."
-                    className="w-full p-2.5 rounded-xl bg-white/70 dark:bg-zinc-950/40 border border-zinc-200/50 dark:border-zinc-800/40 text-sm outline-none text-zinc-900 dark:text-white"
-                  />
-                </div>
-
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Date</label>
-                  <input
-                    type="date"
-                    required
-                    value={date}
-                    onChange={(e) => setDate(e.target.value)}
-                    className="w-full p-2.5 rounded-xl bg-white/70 dark:bg-zinc-950/40 border border-zinc-200/50 dark:border-zinc-800/40 text-sm outline-none text-zinc-900 dark:text-white"
-                  />
-                </div>
-
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Memory Notes</label>
-                  <textarea
-                    value={desc}
-                    onChange={(e) => setDesc(e.target.value)}
-                    placeholder="Tell our story..."
-                    maxLength={200}
-                    className="w-full p-2.5 rounded-xl bg-white/70 dark:bg-zinc-950/40 border border-zinc-200/50 dark:border-zinc-800/40 text-sm outline-none text-zinc-900 dark:text-white h-20 resize-none"
-                  />
-                </div>
-
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Photo Memory</label>
-                  {!image ? (
-                    <label className="flex flex-col items-center justify-center border-2 border-dashed border-zinc-200 dark:border-zinc-800 rounded-xl p-3.5 hover:bg-zinc-50 dark:hover:bg-zinc-950/40 cursor-pointer transition-colors text-xs text-zinc-400 font-medium">
-                      <span>Click to upload photo 📸</span>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleImageChange}
-                        className="hidden"
-                      />
-                    </label>
-                  ) : (
-                    <div className="relative rounded-xl overflow-hidden border border-zinc-200/50 dark:border-zinc-800/50 aspect-video">
-                      <img src={image} className="w-full h-full object-cover" />
-                      <button
-                        type="button"
-                        onClick={() => setImage("")}
-                        className="absolute top-1.5 right-1.5 p-1 rounded-full bg-black/60 hover:bg-black/85 text-white transition-colors cursor-pointer animate-scale-up"
-                        title="Remove photo"
-                      >
-                        <X className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
-                  )}
-                </div>
-
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Event Emoji Icon</label>
-                  <div className="grid grid-cols-5 gap-1.5 mt-1">
-                    {["💖", "🌸", "☕", "✈️", "💍", "🏡", "🍿", "🍕", "✨", "🍿"].slice(0, 9).concat(["🎉"]).map((em) => (
-                      <button
-                        key={em}
-                        type="button"
-                        onClick={() => setIcon(em)}
-                        className={`text-lg p-1.5 rounded-xl transition-all cursor-pointer ${
-                          icon === em 
-                            ? "bg-rose-500/10 border-rose-500 border-2" 
-                            : "bg-white/40 dark:bg-zinc-800/40 border border-transparent hover:bg-white/60 dark:hover:bg-zinc-800/60"
-                        }`}
-                      >
-                        {em}
-                      </button>
-                    ))}
+                <form onSubmit={handleAddMilestone} className="flex flex-col gap-3.5 mt-2">
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Title</label>
+                    <input
+                      type="text"
+                      required
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
+                      placeholder="First Kiss, Trip to beach..."
+                      className="w-full p-2.5 rounded-xl bg-white/70 dark:bg-zinc-950/40 border border-zinc-200/50 dark:border-zinc-800/40 text-sm outline-none text-zinc-900 dark:text-white"
+                    />
                   </div>
-                </div>
 
-                <button
-                  type="submit"
-                  className="w-full mt-3 py-3 rounded-full bg-rose-500 hover:bg-rose-600 text-white font-semibold text-sm shadow-md hover:shadow-lg transition-all cursor-pointer"
-                >
-                  Record Memory 📝
-                </button>
-              </form>
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Date</label>
+                    <input
+                      type="date"
+                      required
+                      value={date}
+                      onChange={(e) => setDate(e.target.value)}
+                      className="w-full p-2.5 rounded-xl bg-white/70 dark:bg-zinc-950/40 border border-zinc-200/50 dark:border-zinc-800/40 text-sm outline-none text-zinc-900 dark:text-white"
+                    />
+                  </div>
+
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Memory Notes</label>
+                    <textarea
+                      value={desc}
+                      onChange={(e) => setDesc(e.target.value)}
+                      placeholder="Tell our story..."
+                      maxLength={200}
+                      className="w-full p-2.5 rounded-xl bg-white/70 dark:bg-zinc-950/40 border border-zinc-200/50 dark:border-zinc-800/40 text-sm outline-none text-zinc-900 dark:text-white h-20 resize-none"
+                    />
+                  </div>
+
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Photo Memory</label>
+                    {!image ? (
+                      <label className="flex flex-col items-center justify-center border-2 border-dashed border-zinc-200 dark:border-zinc-800 rounded-xl p-3.5 hover:bg-zinc-50 dark:hover:bg-zinc-950/40 cursor-pointer transition-colors text-xs text-zinc-400 font-medium">
+                        <span>Click to upload photo 📸</span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handleImageChange}
+                          className="hidden"
+                        />
+                      </label>
+                    ) : (
+                      <div className="relative rounded-xl overflow-hidden border border-zinc-200/50 dark:border-zinc-800/50 aspect-video">
+                        <img src={image} className="w-full h-full object-cover" />
+                        <button
+                          type="button"
+                          onClick={() => setImage("")}
+                          className="absolute top-1.5 right-1.5 p-1 rounded-full bg-black/60 hover:bg-black/85 text-white transition-colors cursor-pointer animate-scale-up"
+                          title="Remove photo"
+                        >
+                          <X className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Event Emoji Icon</label>
+                    <div className="grid grid-cols-5 gap-1.5 mt-1">
+                      {["💖", "🌸", "☕", "✈️", "💍", "🏡", "🍿", "🍕", "✨", "🍿"].slice(0, 9).concat(["🎉"]).map((em) => (
+                        <button
+                          key={em}
+                          type="button"
+                          onClick={() => setIcon(em)}
+                          className={`text-lg p-1.5 rounded-xl transition-all cursor-pointer ${
+                            icon === em 
+                              ? "bg-rose-500/10 border-rose-500 border-2" 
+                              : "bg-white/40 dark:bg-zinc-800/40 border border-transparent hover:bg-white/60 dark:hover:bg-zinc-800/60"
+                          }`}
+                        >
+                          {em}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="w-full mt-3 py-3 rounded-full bg-rose-500 hover:bg-rose-600 text-white font-semibold text-sm shadow-md hover:shadow-lg transition-all cursor-pointer"
+                  >
+                    Record Memory 📝
+                  </button>
+                </form>
+              </div>
             </div>
-          </div>
 
-          {/* Timeline Scrollable Card */}
-          <div className="md:col-span-8 flex flex-col">
+            {/* Timeline Scrollable Card */}
+            <div className="md:col-span-8 flex flex-col w-full">
             {sortedMilestones.length === 0 ? (
               <div className="text-center py-20 rounded-3xl bg-white/20 dark:bg-black/20 border border-white/10 backdrop-blur-md flex flex-col items-center gap-3">
                 <Calendar className="w-12 h-12 opacity-30 text-rose-500" />
@@ -383,7 +353,7 @@ export default function TimelinePage() {
 
         </div>
       </main>
-
+      </div>
     </div>
   );
 }

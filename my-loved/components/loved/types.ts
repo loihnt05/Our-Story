@@ -7,6 +7,7 @@ export interface Theme {
   heartColor: string;
   borderColor: string;
   particleColors: string[];
+  bgType?: "stars" | "gravity" | "fireworks" | "hearts";
 }
 
 export interface Milestone {

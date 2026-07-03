@@ -8,6 +8,7 @@ import {
 } from "next/font/google";
 import "./globals.css";
 import { AuthProviderWrapper as ClerkProvider } from "@/components/loved/AuthProvider";
+import { ThemeProvider } from "@/components/theme-provider";
 
 const fredoka = Fredoka({
   variable: "--font-sans",
@@ -54,9 +55,12 @@ export default function RootLayout({
       <html
         lang="en"
         className={`${fredoka.variable} ${geistMono.variable} ${playfair.variable} ${dancing.variable} ${molle.variable} h-full antialiased`}
+        suppressHydrationWarning
       >
         <body className="min-h-full flex flex-col">
-          {children}
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            {children}
+          </ThemeProvider>
         </body>
       </html>
     </ClerkProvider>
