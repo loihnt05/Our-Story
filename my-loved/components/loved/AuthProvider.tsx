@@ -3,6 +3,15 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { LogOut } from "lucide-react";
 
+import {
+  ClerkProvider as ClerkProviderClient,
+  useAuth as useClerkAuth,
+  useClerk as useClerkInstance,
+  SignInButton as ClerkSignInButton,
+  UserButton as ClerkUserButton,
+  Show as ClerkShow,
+} from "@clerk/nextjs";
+
 // Determine if we should use Mock Auth or real Clerk
 const CLERK_PUBLISHABLE_KEY = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY || "";
 const IS_MOCK_AUTH = 
@@ -74,14 +83,10 @@ export function AuthProviderWrapper({ children }: { children: React.ReactNode })
     return <AuthProvider>{children}</AuthProvider>;
   }
 
-  // Import ClerkProvider dynamically or statically
-  // Using require here is safe because it runs in layout which is client/server, 
-  // but since we are inside a client wrapper, it's fine.
-  const { ClerkProvider } = require("@clerk/nextjs");
   return (
-    <ClerkProvider publishableKey={CLERK_PUBLISHABLE_KEY}>
+    <ClerkProviderClient publishableKey={CLERK_PUBLISHABLE_KEY}>
       <AuthProvider>{children}</AuthProvider>
-    </ClerkProvider>
+    </ClerkProviderClient>
   );
 }
 
@@ -97,7 +102,6 @@ export function useAuth() {
     };
   }
 
-  const { useAuth: useClerkAuth } = require("@clerk/nextjs");
   return useClerkAuth();
 }
 
@@ -112,7 +116,6 @@ export function useClerk() {
     };
   }
 
-  const { useClerk: useClerkInstance } = require("@clerk/nextjs");
   return useClerkInstance();
 }
 
@@ -134,7 +137,6 @@ export function SignInButton({
     );
   }
 
-  const { SignInButton: ClerkSignInButton } = require("@clerk/nextjs");
   return <ClerkSignInButton mode={mode}>{children}</ClerkSignInButton>;
 }
 
@@ -155,7 +157,6 @@ export function UserButton() {
     );
   }
 
-  const { UserButton: ClerkUserButton } = require("@clerk/nextjs");
   return <ClerkUserButton />;
 }
 
@@ -175,6 +176,5 @@ export function Show({
     return null;
   }
 
-  const { Show: ClerkShow } = require("@clerk/nextjs");
   return <ClerkShow when={when}>{children}</ClerkShow>;
 }

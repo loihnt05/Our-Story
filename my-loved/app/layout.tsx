@@ -36,6 +36,8 @@ const molle = Molle({
   subsets: ["latin"],
 });
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Our Love Story | Live Anniversary Counter",
   description:

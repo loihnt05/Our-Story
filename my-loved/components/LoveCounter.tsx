@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import WelcomeScreen from "./loved/WelcomeScreen";
 import Header from "./loved/Header";
 import CoupleCard from "./loved/CoupleCard";
 import LoveBoard from "./loved/LoveBoard";
@@ -11,59 +10,21 @@ import TimelineCard from "./loved/TimelineCard";
 import SettingsModal from "./loved/SettingsModal";
 import { useLoveStory } from "./loved/useLoveStory";
 import { THEMES, ROMANTIC_QUOTES } from "./loved/constants";
-import { useAuth, useClerk } from "@/components/loved/AuthProvider";
+import { useAuth } from "@/components/loved/AuthProvider";
 import AccessDenied from "./loved/AccessDenied";
 
 export default function LoveCounter() {
   const loved = useLoveStory();
 
   const { isSignedIn } = useAuth();
-  const { openSignIn } = useClerk();
 
   if (!loved.mounted) return null;
 
   const currentTheme = THEMES.find((t) => t.id === loved.themeId) || THEMES[0];
 
-  const isHomePage = typeof window !== "undefined" && window.location.pathname === "/";
-
   // Protect route if not logged in
   if (!isSignedIn) {
-    if (isHomePage) {
-      // Show Welcome Screen but click triggers login
-      return (
-        <WelcomeScreen
-          onEnter={() => {
-            if (openSignIn) {
-              openSignIn();
-            }
-          }}
-          gradient={currentTheme.gradient}
-          floatingHearts={loved.floatingBgHearts}
-          customTitle={loved.customTitle}
-          buttonText="Sign In to Enter 💖"
-        />
-      );
-    } else {
-      // Access Denied for other routes (like /number-loved)
-      return <AccessDenied gradient={currentTheme.gradient} />;
-    }
-  }
-
-  if (loved.showIntro) {
-    return (
-      <WelcomeScreen
-        onEnter={() => {
-          loved.setShowIntro(false);
-          if (loved.synthRef.current) {
-            loved.synthRef.current.start();
-            loved.setIsMuted(false);
-          }
-        }}
-        gradient={currentTheme.gradient}
-        floatingHearts={loved.floatingBgHearts}
-        customTitle={loved.customTitle}
-      />
-    );
+    return <AccessDenied gradient={currentTheme.gradient} />;
   }
 
   return (
