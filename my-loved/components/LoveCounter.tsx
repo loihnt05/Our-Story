@@ -13,15 +13,52 @@ import { THEMES, ROMANTIC_QUOTES } from "./loved/constants";
 import { useAuth } from "@/components/loved/AuthProvider";
 import AccessDenied from "./loved/AccessDenied";
 import ThemeBackground from "./loved/ThemeBackground";
+import { useTheme } from "next-themes";
 
 export default function LoveCounter() {
   const loved = useLoveStory();
-
   const { isSignedIn } = useAuth();
+  const { resolvedTheme, setTheme } = useTheme();
 
-  if (!loved.mounted) return null;
+  const prevThemeIdRef = React.useRef(loved.themeId);
+  const prevResolvedThemeRef = React.useRef(resolvedTheme);
 
   const currentTheme = THEMES.find((t) => t.id === loved.themeId) || THEMES[0];
+
+  // Keep next-themes and custom visual themes synced
+  React.useEffect(() => {
+    // 1. If visual theme (themeId) changed
+    if (prevThemeIdRef.current !== loved.themeId) {
+      const newThemeObj = THEMES.find((t) => t.id === loved.themeId);
+      if (newThemeObj) {
+        const expectedNextTheme = newThemeObj.isDark ? "dark" : "light";
+        if (resolvedTheme !== expectedNextTheme) {
+          setTheme(expectedNextTheme);
+          prevResolvedThemeRef.current = expectedNextTheme;
+        }
+      }
+      prevThemeIdRef.current = loved.themeId;
+    }
+
+    // 2. If next-themes (resolvedTheme) changed
+    if (prevResolvedThemeRef.current !== resolvedTheme && resolvedTheme) {
+      const currentThemeObj = THEMES.find((t) => t.id === loved.themeId);
+      const isCurrentlyDark = currentThemeObj?.isDark ?? false;
+      const expectedIsDark = resolvedTheme === "dark";
+
+      if (isCurrentlyDark !== expectedIsDark) {
+        const matchingTheme = expectedIsDark 
+          ? "starry-galaxy"  // Default dark theme
+          : "rose-gold";     // Default light theme
+        
+        loved.setThemeId(matchingTheme);
+        prevThemeIdRef.current = matchingTheme;
+      }
+      prevResolvedThemeRef.current = resolvedTheme;
+    }
+  }, [loved.themeId, resolvedTheme, loved.setThemeId, setTheme]);
+
+  if (!loved.mounted) return null;
 
   // Protect route if not logged in
   if (!isSignedIn) {

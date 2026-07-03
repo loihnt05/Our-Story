@@ -8,9 +8,11 @@ import { Milestone } from "../../components/loved/types";
 import { useAuth } from "@/components/loved/AuthProvider";
 import AccessDenied from "../../components/loved/AccessDenied";
 import ThemeBackground from "../../components/loved/ThemeBackground";
+import { useTheme } from "next-themes";
 
 export default function TimelinePage() {
   const { isSignedIn } = useAuth();
+  const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [milestones, setMilestones] = useState<Milestone[]>([]);
   const [themeId, setThemeId] = useState("rose-gold");
@@ -26,6 +28,43 @@ export default function TimelinePage() {
 
   // Floating background hearts
   const [bgHearts, setBgHearts] = useState<Array<{ id: number; left: number; size: number; duration: number; delay: number }>>([]);
+
+  const prevThemeIdRef = React.useRef(themeId);
+  const prevResolvedThemeRef = React.useRef(resolvedTheme);
+
+  // Sync next-themes and visual theme
+  React.useEffect(() => {
+    // 1. If visual theme (themeId) changed
+    if (prevThemeIdRef.current !== themeId) {
+      const newThemeObj = THEMES.find((t) => t.id === themeId);
+      if (newThemeObj) {
+        const expectedNextTheme = newThemeObj.isDark ? "dark" : "light";
+        if (resolvedTheme !== expectedNextTheme) {
+          setTheme(expectedNextTheme);
+          prevResolvedThemeRef.current = expectedNextTheme;
+        }
+      }
+      prevThemeIdRef.current = themeId;
+    }
+
+    // 2. If next-themes (resolvedTheme) changed
+    if (prevResolvedThemeRef.current !== resolvedTheme && resolvedTheme) {
+      const currentThemeObj = THEMES.find((t) => t.id === themeId);
+      const isCurrentlyDark = currentThemeObj?.isDark ?? false;
+      const expectedIsDark = resolvedTheme === "dark";
+
+      if (isCurrentlyDark !== expectedIsDark) {
+        const matchingTheme = expectedIsDark 
+          ? "starry-galaxy" 
+          : "rose-gold";
+        
+        setThemeId(matchingTheme);
+        localStorage.setItem("loved_theme", matchingTheme);
+        prevThemeIdRef.current = matchingTheme;
+      }
+      prevResolvedThemeRef.current = resolvedTheme;
+    }
+  }, [themeId, resolvedTheme, setTheme]);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect

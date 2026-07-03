@@ -21,7 +21,7 @@ interface ThemeBackgroundProps {
 export default function ThemeBackground({
   bgType = "hearts",
   floatingHearts = [],
-  particleColors = ["#f43f5e"]
+  particleColors = ["#f43f5e"],
 }: ThemeBackgroundProps) {
   const { resolvedTheme: theme } = useTheme();
   const [mounted, setMounted] = useState(false);
@@ -37,45 +37,58 @@ export default function ThemeBackground({
     case "stars":
       return (
         <div className="absolute inset-0 z-0 overflow-hidden bg-transparent">
-          <StarsBackground 
-            starColor={activeTheme === "dark" ? (particleColors[2] || "#ffffff") : "#475569"} 
-            factor={0.03} 
-            speed={40} 
+          <StarsBackground
+            starColor={
+              activeTheme === "dark"
+                ? particleColors[2] || "#ffffff"
+                : "#475569"
+            }
+            factor={0.03}
+            speed={40}
             className="w-full h-full bg-transparent"
           />
         </div>
       );
-    
+
     case "gravity":
       return (
-        <div 
+        <div
           className="absolute inset-0 z-0 overflow-hidden bg-transparent"
-          style={{ color: activeTheme === "dark" ? (particleColors[0] || "#fb7185") : "#e11d48" }}
+          style={{
+            color:
+              activeTheme === "dark"
+                ? particleColors[0] || "#fb7185"
+                : "#e11d48",
+          }}
         >
-          <GravityStarsBackground 
-            starsCount={200} 
-            starsSize={5} 
-            movementSpeed={0.5} 
-            glowIntensity={12} 
+          <GravityStarsBackground
+            starsCount={200}
+            starsSize={5}
+            movementSpeed={0.5}
+            glowIntensity={12}
             starsOpacity={0.8}
             className="w-full h-full bg-transparent"
           />
         </div>
       );
-    
+
     case "fireworks":
       return (
         <div className="absolute inset-0 z-0 overflow-hidden bg-transparent">
-          <FireworksBackground 
-            population={0.8}
-            color={activeTheme === "dark" ? particleColors : ["#db2777", "#7c3aed", "#2563eb", "#059669"]}
-            fireworkSpeed={{ min: 3, max: 7 }}
-            particleSize={{ min: 1.5, max: 4.5 }}
+          <FireworksBackground
+            population={1}
+            color={
+              activeTheme === "dark"
+                ? particleColors
+                : ["#db2777", "#7c3aed", "#2563eb", "#059669"]
+            }
+            // fireworkSpeed={{ min: 8, max: 15 }}
+            // particleSize={{ min: 2, max: 18 }}
             className="w-full h-full bg-transparent"
           />
         </div>
       );
-    
+
     case "hearts":
     default:
       return (

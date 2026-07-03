@@ -8,6 +8,7 @@ export interface Theme {
   borderColor: string;
   particleColors: string[];
   bgType?: "stars" | "gravity" | "fireworks" | "hearts";
+  isDark?: boolean;
 }
 
 export interface Milestone {

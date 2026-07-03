@@ -21,7 +21,8 @@ export const THEMES: Theme[] = [
     heartColor: "fill-rose-500 text-rose-500",
     borderColor: "border-rose-200/50 dark:border-rose-900/30",
     particleColors: ["#f43f5e", "#ec4899", "#f472b6", "#fda4af"],
-    bgType: "hearts"
+    bgType: "hearts",
+    isDark: false
   },
   {
     id: "lilac-dream",
@@ -32,7 +33,8 @@ export const THEMES: Theme[] = [
     heartColor: "fill-purple-500 text-purple-500",
     borderColor: "border-purple-200/50 dark:border-purple-900/30",
     particleColors: ["#a855f7", "#c084fc", "#e879f9", "#ec4899"],
-    bgType: "hearts"
+    bgType: "hearts",
+    isDark: false
   },
   {
     id: "sunset-glow",
@@ -43,7 +45,8 @@ export const THEMES: Theme[] = [
     heartColor: "fill-amber-500 text-amber-500",
     borderColor: "border-amber-200/40 dark:border-amber-900/20",
     particleColors: ["#f59e0b", "#f97316", "#ef4444", "#f472b6"],
-    bgType: "hearts"
+    bgType: "hearts",
+    isDark: false
   },
   {
     id: "sakura-bloom",
@@ -54,7 +57,8 @@ export const THEMES: Theme[] = [
     heartColor: "fill-pink-500 text-pink-500",
     borderColor: "border-pink-200/50 dark:border-pink-900/30",
     particleColors: ["#ec4899", "#f472b6", "#fbcfe8", "#fda4af"],
-    bgType: "hearts"
+    bgType: "hearts",
+    isDark: false
   },
   {
     id: "starry-galaxy",
@@ -65,7 +69,8 @@ export const THEMES: Theme[] = [
     heartColor: "fill-indigo-500 text-indigo-500",
     borderColor: "border-slate-800/50 dark:border-zinc-800/50",
     particleColors: ["#818cf8", "#a78bfa", "#e0e7ff", "#ffffff"],
-    bgType: "stars"
+    bgType: "stars",
+    isDark: true
   },
   {
     id: "gravity-attraction",
@@ -76,7 +81,8 @@ export const THEMES: Theme[] = [
     heartColor: "fill-rose-500 text-rose-500",
     borderColor: "border-zinc-800/50 dark:border-zinc-800/50",
     particleColors: ["#fb7185", "#f43f5e", "#fda4af", "#ffffff"],
-    bgType: "gravity"
+    bgType: "gravity",
+    isDark: true
   },
   {
     id: "fireworks-celebration",
@@ -87,6 +93,7 @@ export const THEMES: Theme[] = [
     heartColor: "fill-amber-500 text-amber-500",
     borderColor: "border-zinc-800/50 dark:border-zinc-800/50",
     particleColors: ["#fbbf24", "#f97316", "#ef4444", "#38bdf8"],
-    bgType: "fireworks"
+    bgType: "fireworks",
+    isDark: true
   }
 ];
