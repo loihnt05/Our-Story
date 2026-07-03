@@ -10,7 +10,7 @@ export function useLoveStory() {
   const [themeId, setThemeId] = useState("rose-gold");
   
   // Customisable names & dates
-  const [anniversaryDate, setAnniversaryDate] = useState("2025-01-01");
+  const [anniversaryDate, setAnniversaryDate] = useState("2026-01-27");
   const [personAName, setPersonAName] = useState("Romeo");
   const [personBName, setPersonBName] = useState("Juliet");
   const [personADesc, setPersonADesc] = useState("My Universe 🌌");
@@ -53,6 +53,7 @@ export function useLoveStory() {
 
   // Load from local storage
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
     
     // Load config
@@ -224,6 +225,7 @@ export function useLoveStory() {
     // Audio chime cue on click
     if (!isMuted && synthRef.current) {
       try {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const audioCtx = (synthRef.current as any).ctx;
         if (audioCtx && audioCtx.state !== "suspended") {
           const now = audioCtx.currentTime;

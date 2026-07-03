@@ -116,16 +116,6 @@ export default function LoveCounter() {
 
             <TimelineCard
               milestones={loved.milestones}
-              newMilestoneTitle={loved.newMilestoneTitle}
-              setNewMilestoneTitle={loved.setNewMilestoneTitle}
-              newMilestoneDate={loved.newMilestoneDate}
-              setNewMilestoneDate={loved.setNewMilestoneDate}
-              newMilestoneDesc={loved.newMilestoneDesc}
-              setNewMilestoneDesc={loved.setNewMilestoneDesc}
-              newMilestoneIcon={loved.newMilestoneIcon}
-              setNewMilestoneIcon={loved.setNewMilestoneIcon}
-              onAddMilestone={loved.handleAddMilestone}
-              onRemoveMilestone={loved.handleRemoveMilestone}
               cardBg={currentTheme.cardBg}
               borderColor={currentTheme.borderColor}
             />
