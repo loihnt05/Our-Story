@@ -1,6 +1,5 @@
 import LoveCounter from "@/components/LoveCounter";
 
-export default function Home() {
+export default function NumberLovedPage() {
   return <LoveCounter />;
 }
-
