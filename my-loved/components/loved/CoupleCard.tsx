@@ -30,41 +30,72 @@ export default function CoupleCard({
   onHeartClick
 }: CoupleCardProps) {
   return (
-    <div className={`p-6 rounded-3xl ${cardBg} border ${borderColor} shadow-xl backdrop-blur-md flex flex-col gap-6 relative overflow-hidden group hover:shadow-2xl transition-all duration-300`}>
-      <div className="absolute top-0 right-0 p-3 opacity-20 pointer-events-none">
-        <HeartHandshake className="w-20 h-20 text-rose-400" />
+    <div 
+      className={`p-6 rounded-3xl ${cardBg} border ${borderColor} shadow-xl backdrop-blur-md flex flex-col gap-6 relative overflow-hidden group hover:shadow-2xl transition-all duration-500`}
+      style={{
+        backgroundImage: "radial-gradient(rgba(244, 63, 94, 0.05) 1.5px, transparent 1.5px)",
+        backgroundSize: "16px 16px"
+      }}
+    >
+      {/* Decorative top-right graphic hand-shake */}
+      <div className="absolute top-0 right-0 p-3 opacity-15 pointer-events-none select-none text-rose-500">
+        <HeartHandshake className="w-16 h-16" />
       </div>
 
-      <h2 className="text-xl font-bold font-serif border-b pb-3 border-zinc-200/50 dark:border-zinc-800/50 flex items-center gap-2">
-        <Sparkles className="w-4 h-4 text-amber-500 fill-amber-500" />
+      {/* Spotlight blur behind center heart */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-gradient-to-r from-rose-500/8 via-pink-500/5 to-amber-500/8 rounded-full blur-2xl pointer-events-none -z-10 animate-pulse" />
+
+      {/* Header */}
+      <h2 className="text-base font-bold font-serif border-b pb-2.5 border-zinc-200/50 dark:border-zinc-800/50 flex items-center gap-1.5 z-10 text-zinc-900 dark:text-white">
+        <Sparkles className="w-4 h-4 text-rose-500 fill-rose-500 animate-pulse" />
         The Couple
       </h2>
 
-      <div className="flex items-center justify-between gap-4 mt-2">
-        {/* Person A */}
-        <div className="flex flex-col items-center text-center flex-1">
-          <div className="w-20 h-20 rounded-full border-4 border-rose-300/40 dark:border-rose-700/30 overflow-hidden relative shadow-md bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
-            {personAAvatar ? (
-              <img src={personAAvatar} alt={personAName} className="w-full h-full object-cover" />
-            ) : (
-              <User className="w-8 h-8 text-zinc-400 dark:text-zinc-500" />
-            )}
+      {/* Polaroid & Connective Heart Container */}
+      <div className="flex items-center justify-between gap-2 mt-4 z-10 select-none">
+        
+        {/* Person A Polaroid */}
+        <div className="flex flex-col items-center flex-1 relative">
+          
+          {/* Polaroid Frame */}
+          <div className="p-2.5 pb-4 bg-white dark:bg-zinc-950 rounded-xl border border-zinc-200/60 dark:border-zinc-800/60 shadow-md hover:shadow-lg transform hover:-rotate-[4deg] hover:scale-105 rotate-[-2deg] transition-all duration-300 max-w-[120px] w-full flex flex-col items-center relative">
+            
+            {/* Washi Tape */}
+            <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-10 h-3.5 bg-rose-200/30 dark:bg-rose-900/20 border-x border-dashed border-rose-300/20 rotate-[-3deg] shadow-sm" />
+
+            {/* Photo slot */}
+            <div className="w-full aspect-square rounded-lg overflow-hidden border border-zinc-100 dark:border-zinc-900 bg-rose-50/20 dark:bg-zinc-900/30 flex items-center justify-center relative">
+              {personAAvatar ? (
+                <img src={personAAvatar} alt={personAName} className="w-full h-full object-cover" />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center bg-rose-50/30 dark:bg-rose-950/20 text-rose-400">
+                  <User className="w-6 h-6 opacity-60" />
+                </div>
+              )}
+            </div>
+
+            {/* Label */}
+            <span className="font-bold text-xs text-zinc-800 dark:text-zinc-200 mt-2.5 line-clamp-1 text-center w-full font-serif">
+              {personAName}
+            </span>
           </div>
-          <h3 className="font-semibold text-lg mt-3 text-zinc-950 dark:text-white line-clamp-1">{personAName}</h3>
-          <p className="text-xs text-rose-500 dark:text-rose-400 font-medium italic mt-1 line-clamp-2">{personADesc}</p>
+
+          <p className="text-[10px] text-rose-500 dark:text-rose-400 font-semibold italic mt-3.5 line-clamp-1 max-w-[100px] text-center">
+            {personADesc}
+          </p>
         </div>
 
         {/* Pulsing Connective Heart */}
         <div className="flex flex-col items-center justify-center relative">
           <div 
             onClick={onHeartClick}
-            className="w-16 h-16 rounded-full bg-rose-50 dark:bg-rose-950/40 flex items-center justify-center shadow-lg border border-rose-200/50 dark:border-rose-900/30 hover:scale-110 cursor-pointer active:scale-95 transition-all z-20 group/heart"
+            className="w-14 h-14 rounded-full bg-rose-50 dark:bg-rose-950/40 flex items-center justify-center shadow-lg border border-rose-200/50 dark:border-rose-900/30 hover:scale-110 cursor-pointer active:scale-95 transition-all z-20 group/heart"
           >
-            <Heart className={`w-8 h-8 ${heartColor} animate-pulse group-hover/heart:scale-110 transition-transform`} />
+            <Heart className={`w-7 h-7 ${heartColor} animate-pulse group-hover/heart:scale-110 transition-transform`} />
           </div>
           
           {/* Connecting glowing dotted line */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 border-t-2 border-dashed border-rose-300/40 dark:border-rose-700/20 -z-10" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-28 border-t-2 border-dashed border-rose-300/30 dark:border-rose-700/10 -z-10" />
 
           {/* Flying burst hearts */}
           {burstHearts.map((heart) => (
@@ -86,21 +117,41 @@ export default function CoupleCard({
           ))}
         </div>
 
-        {/* Person B */}
-        <div className="flex flex-col items-center text-center flex-1">
-          <div className="w-20 h-20 rounded-full border-4 border-rose-300/40 dark:border-rose-700/30 overflow-hidden relative shadow-md bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
-            {personBAvatar ? (
-              <img src={personBAvatar} alt={personBName} className="w-full h-full object-cover" />
-            ) : (
-              <User className="w-8 h-8 text-zinc-400 dark:text-zinc-500" />
-            )}
+        {/* Person B Polaroid */}
+        <div className="flex flex-col items-center flex-1 relative">
+          
+          {/* Polaroid Frame */}
+          <div className="p-2.5 pb-4 bg-white dark:bg-zinc-950 rounded-xl border border-zinc-200/60 dark:border-zinc-800/60 shadow-md hover:shadow-lg transform hover:rotate-[4deg] hover:scale-105 rotate-[2deg] transition-all duration-300 max-w-[120px] w-full flex flex-col items-center relative">
+            
+            {/* Washi Tape */}
+            <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-10 h-3.5 bg-rose-200/30 dark:bg-rose-900/20 border-x border-dashed border-rose-300/20 rotate-[3deg] shadow-sm" />
+
+            {/* Photo slot */}
+            <div className="w-full aspect-square rounded-lg overflow-hidden border border-zinc-100 dark:border-zinc-900 bg-rose-50/20 dark:bg-zinc-900/30 flex items-center justify-center relative">
+              {personBAvatar ? (
+                <img src={personBAvatar} alt={personBName} className="w-full h-full object-cover" />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center bg-rose-50/30 dark:bg-rose-950/20 text-rose-400">
+                  <User className="w-6 h-6 opacity-60" />
+                </div>
+              )}
+            </div>
+
+            {/* Label */}
+            <span className="font-bold text-xs text-zinc-800 dark:text-zinc-200 mt-2.5 line-clamp-1 text-center w-full font-serif">
+              {personBName}
+            </span>
           </div>
-          <h3 className="font-semibold text-lg mt-3 text-zinc-950 dark:text-white line-clamp-1">{personBName}</h3>
-          <p className="text-xs text-rose-500 dark:text-rose-400 font-medium italic mt-1 line-clamp-2">{personBDesc}</p>
+
+          <p className="text-[10px] text-rose-500 dark:text-rose-400 font-semibold italic mt-3.5 line-clamp-1 max-w-[100px] text-center">
+            {personBDesc}
+          </p>
         </div>
+
       </div>
 
-      <div className="text-center text-xs text-zinc-500 dark:text-zinc-400 bg-zinc-100/50 dark:bg-zinc-950/20 p-2.5 rounded-xl border border-zinc-200/20">
+      {/* Footer Info */}
+      <div className="text-center text-[10px] font-medium text-zinc-500 dark:text-zinc-400 bg-zinc-100/50 dark:bg-zinc-950/20 p-2.5 rounded-xl border border-zinc-200/10 z-10 mt-1 select-none">
         Click the center heart to shower your partner with love!
       </div>
     </div>

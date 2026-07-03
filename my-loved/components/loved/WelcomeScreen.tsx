@@ -12,13 +12,15 @@ interface WelcomeScreenProps {
     delay: number;
   }>;
   customTitle: string;
+  buttonText?: string;
 }
 
 export default function WelcomeScreen({
   onEnter,
   gradient,
   floatingHearts,
-  customTitle
+  customTitle,
+  buttonText = "Enter Our Kingdom"
 }: WelcomeScreenProps) {
   return (
     <div className={`fixed inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-br ${gradient} transition-all duration-1000 p-6`}>
@@ -61,7 +63,7 @@ export default function WelcomeScreen({
           className="w-full flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-rose-500 to-pink-500 text-white font-medium rounded-full shadow-lg shadow-pink-500/20 hover:shadow-pink-500/35 transform hover:-translate-y-0.5 active:translate-y-0 transition-all cursor-pointer text-lg hover:brightness-105"
         >
           <HeartHandshake className="w-6 h-6 animate-bounce" />
-          Enter Our Kingdom
+          {buttonText}
         </button>
       </div>
     </div>

@@ -5,8 +5,11 @@ import Link from "next/link";
 import { ArrowLeft, Plus, Trash2, Calendar, Sparkles, Heart, X } from "lucide-react";
 import { THEMES } from "../../components/loved/constants";
 import { Milestone } from "../../components/loved/types";
+import { useAuth } from "@/components/loved/AuthProvider";
+import AccessDenied from "../../components/loved/AccessDenied";
 
 export default function TimelinePage() {
+  const { isSignedIn } = useAuth();
   const [mounted, setMounted] = useState(false);
   const [milestones, setMilestones] = useState<Milestone[]>([]);
   const [themeId, setThemeId] = useState("rose-gold");
@@ -24,6 +27,7 @@ export default function TimelinePage() {
   const [bgHearts, setBgHearts] = useState<Array<{ id: number; left: number; size: number; duration: number; delay: number }>>([]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
     
     // Load config
@@ -110,6 +114,10 @@ export default function TimelinePage() {
   if (!mounted) return null;
 
   const currentTheme = THEMES.find((t) => t.id === themeId) || THEMES[0];
+
+  if (!isSignedIn) {
+    return <AccessDenied gradient={currentTheme.gradient} />;
+  }
 
   // Sort milestones: FROM NOW TO BEFORE IN THE PAST (Newest/Latest to Oldest)
   const sortedMilestones = [...milestones].sort(

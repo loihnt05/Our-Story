@@ -1,5 +1,6 @@
 import React from "react";
 import { Heart, VolumeX, Volume2, Music, Settings } from "lucide-react";
+import { UserButton } from "./AuthProvider";
 
 interface HeaderProps {
   customTitle: string;
@@ -56,6 +57,11 @@ export default function Header({
         >
           <Settings className="w-5 h-5" />
         </button>
+
+        {/* User Profile / Logout Button */}
+        <div className="flex items-center justify-center p-1 bg-white/40 dark:bg-zinc-800/40 border border-white/20 backdrop-blur-md shadow-sm rounded-full">
+          <UserButton />
+        </div>
       </div>
     </header>
   );
