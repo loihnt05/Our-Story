@@ -79,6 +79,12 @@ export default function TimelineCard({
                 {selectedMilestone.icon}
               </div>
 
+              {selectedMilestone.image && (
+                <div className="w-full aspect-[16/10] rounded-lg overflow-hidden border border-zinc-200/40 dark:border-zinc-800/40 bg-zinc-50 dark:bg-zinc-900 mb-1 select-none">
+                  <img src={selectedMilestone.image} alt={selectedMilestone.title} className="w-full h-full object-cover" />
+                </div>
+              )}
+
               <div>
                 <span className="text-[10px] font-bold text-rose-500 dark:text-rose-400 font-serif">
                   {new Date(selectedMilestone.date).toLocaleDateString(undefined, {

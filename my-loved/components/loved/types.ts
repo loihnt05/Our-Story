@@ -15,6 +15,7 @@ export interface Milestone {
   date: string;
   description: string;
   icon: string;
+  image?: string;
 }
 
 export interface Note {

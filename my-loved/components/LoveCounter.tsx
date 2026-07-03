@@ -109,7 +109,7 @@ export default function LoveCounter() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
             <QuoteCard
               quoteIndex={loved.quoteIndex}
-              onNextQuote={() => loved.setQuoteIndex((prev) => (prev + 1) % ROMANTIC_QUOTES.length)}
+              setQuoteIndex={loved.setQuoteIndex}
               cardBg={currentTheme.cardBg}
               borderColor={currentTheme.borderColor}
             />

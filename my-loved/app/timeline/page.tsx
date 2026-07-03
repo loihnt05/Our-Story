@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { ArrowLeft, Plus, Trash2, Calendar, Sparkles, Heart } from "lucide-react";
+import { ArrowLeft, Plus, Trash2, Calendar, Sparkles, Heart, X } from "lucide-react";
 import { THEMES } from "../../components/loved/constants";
 import { Milestone } from "../../components/loved/types";
 
@@ -18,6 +18,7 @@ export default function TimelinePage() {
   const [date, setDate] = useState("");
   const [desc, setDesc] = useState("");
   const [icon, setIcon] = useState("💖");
+  const [image, setImage] = useState("");
 
   // Floating background hearts
   const [bgHearts, setBgHearts] = useState<Array<{ id: number; left: number; size: number; duration: number; delay: number }>>([]);
@@ -64,6 +65,17 @@ export default function TimelinePage() {
     localStorage.setItem("loved_milestones", JSON.stringify(updatedList));
   };
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   // Add Milestone
   const handleAddMilestone = (e: React.FormEvent) => {
     e.preventDefault();
@@ -74,7 +86,8 @@ export default function TimelinePage() {
       title,
       date,
       description: desc,
-      icon
+      icon,
+      image
     };
 
     const updated = [...milestones, newM];
@@ -85,6 +98,7 @@ export default function TimelinePage() {
     setDate("");
     setDesc("");
     setIcon("💖");
+    setImage("");
   };
 
   // Remove Milestone
@@ -208,6 +222,33 @@ export default function TimelinePage() {
                 </div>
 
                 <div className="flex flex-col gap-1.5">
+                  <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Photo Memory</label>
+                  {!image ? (
+                    <label className="flex flex-col items-center justify-center border-2 border-dashed border-zinc-200 dark:border-zinc-800 rounded-xl p-3.5 hover:bg-zinc-50 dark:hover:bg-zinc-950/40 cursor-pointer transition-colors text-xs text-zinc-400 font-medium">
+                      <span>Click to upload photo 📸</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageChange}
+                        className="hidden"
+                      />
+                    </label>
+                  ) : (
+                    <div className="relative rounded-xl overflow-hidden border border-zinc-200/50 dark:border-zinc-800/50 aspect-video">
+                      <img src={image} className="w-full h-full object-cover" />
+                      <button
+                        type="button"
+                        onClick={() => setImage("")}
+                        className="absolute top-1.5 right-1.5 p-1 rounded-full bg-black/60 hover:bg-black/85 text-white transition-colors cursor-pointer animate-scale-up"
+                        title="Remove photo"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex flex-col gap-1.5">
                   <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Event Emoji Icon</label>
                   <div className="grid grid-cols-5 gap-1.5 mt-1">
                     {["💖", "🌸", "☕", "✈️", "💍", "🏡", "🍿", "🍕", "✨", "🍿"].slice(0, 9).concat(["🎉"]).map((em) => (
@@ -278,6 +319,17 @@ export default function TimelinePage() {
                         <div className="absolute top-4 right-4 w-9 h-9 rounded-full bg-rose-50 dark:bg-rose-950/30 border border-rose-100 dark:border-rose-900/30 flex items-center justify-center text-lg z-10">
                           {milestone.icon}
                         </div>
+
+                        {/* Polaroid Photo */}
+                        {milestone.image && (
+                          <div className="w-full aspect-[4/3] rounded-lg overflow-hidden border border-zinc-200/60 dark:border-zinc-800/60 bg-zinc-50 dark:bg-zinc-900 mb-4 shadow-sm group-hover:scale-[1.01] transition-transform duration-300 select-none">
+                            <img
+                              src={milestone.image}
+                              alt={milestone.title}
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                        )}
 
                         {/* Content */}
                         <div className="flex flex-col gap-1">
