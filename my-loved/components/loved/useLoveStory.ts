@@ -424,6 +424,25 @@ export function useLoveStory() {
     saveJournalEntries(updated);
   };
 
+  // Edit comment in entry
+  const handleEditJournalComment = (entryId: string, commentId: string, content: string) => {
+    if (!content.trim()) return;
+    const updatedEntries = journalEntries.map((entry) => {
+      if (entry.id === entryId) {
+        return {
+          ...entry,
+          comments: entry.comments.map((c) => 
+            c.id === commentId 
+              ? { ...c, content: content.trim(), createdAt: new Date().toISOString() } 
+              : c
+          )
+        };
+      }
+      return entry;
+    });
+    saveJournalEntries(updatedEntries);
+  };
+
   // Get local date string YYYY-MM-DD
   const getLocalDateString = (date: Date) => {
     const year = date.getFullYear();
@@ -585,6 +604,7 @@ export function useLoveStory() {
     handleAddJournalComment,
     handleRemoveJournalEntry,
     handleRemoveJournalComment,
+    handleEditJournalComment,
     triggerStreakCelebration
   };
 }

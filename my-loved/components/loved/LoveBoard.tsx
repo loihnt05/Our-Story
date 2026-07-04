@@ -19,6 +19,7 @@ interface LoveBoardProps {
   onAddComment: (entryId: string, content: string) => void;
   onRemoveEntry: (entryId: string) => void;
   onRemoveComment: (entryId: string, commentId: string) => void;
+  onEditComment: (entryId: string, commentId: string, content: string) => void;
   personAName: string;
   personBName: string;
   personAAvatar?: string;
@@ -37,6 +38,7 @@ export default function LoveBoard({
   onAddComment,
   onRemoveEntry,
   onRemoveComment,
+  onEditComment,
   personAName,
   personBName,
   personAAvatar,
@@ -66,13 +68,25 @@ export default function LoveBoard({
 
   const todayStr = getTodayDateString();
 
-  // Filter entries
+  // Helper to format Date to YYYY-MM-DD for yesterday
+  const getYesterdayDateString = () => {
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    const year = yesterday.getFullYear();
+    const month = String(yesterday.getMonth() + 1).padStart(2, "0");
+    const day = String(yesterday.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
+  const yesterdayStr = getYesterdayDateString();
+
+  // Filter entries to only show today and yesterday
   const myEntries = journalEntries.filter(
-    (e) => e.author === currentUserCode
+    (e) => e.author === currentUserCode && (e.date === todayStr || e.date === yesterdayStr)
   );
   
   const partnerEntries = journalEntries.filter(
-    (e) => e.author === partnerUserCode
+    (e) => e.author === partnerUserCode && (e.date === todayStr || e.date === yesterdayStr)
   );
 
   const todayEntry = myEntries.find((e) => e.date === todayStr);
@@ -170,7 +184,7 @@ export default function LoveBoard({
       </div>
 
       {/* Editor Form (rendered outside of the scrollable container) */}
-      <div className="flex-1 h-full min-h-0 overflow-y-auto flex flex-col gap-4">
+      <div className="flex-1 h-full min-h-0 overflow-y-auto scrollbar-hide flex flex-col gap-4">
         {activeTab === "mine" && !todayEntry && (
           
           <JournalForm
@@ -197,6 +211,7 @@ export default function LoveBoard({
                   onRemoveEntry={onRemoveEntry}
                   onRemoveComment={onRemoveComment}
                   onAddComment={onAddComment}
+                  onEditComment={onEditComment}
                 />  
               )}
 
@@ -226,6 +241,7 @@ export default function LoveBoard({
                           onRemoveEntry={onRemoveEntry}
                           onRemoveComment={onRemoveComment}
                           onAddComment={onAddComment}
+                          onEditComment={onEditComment}
                         />
                       ))
                   )}
@@ -233,7 +249,7 @@ export default function LoveBoard({
               </div>
             </div>
         ) : (
-          <div className="flex-1 h-full min-h-0 overflow-y-auto pr-1 flex flex-col gap-4">
+          <div className="flex-1 h-full min-h-0 overflow-y-auto scrollbar-hide scroll-smooth pr-1 flex flex-col gap-4">
             {/* Partner's list of entries */}
             <div className="flex flex-col gap-4">
               {partnerEntries.map((entry) => (
@@ -250,6 +266,7 @@ export default function LoveBoard({
                   onRemoveEntry={onRemoveEntry}
                   onRemoveComment={onRemoveComment}
                   onAddComment={onAddComment}
+                  onEditComment={onEditComment}
                 />
               ))}
             </div>

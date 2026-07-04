@@ -153,6 +153,7 @@ export default function LoveCounter() {
               onAddComment={loved.handleAddJournalComment}
               onRemoveEntry={loved.handleRemoveJournalEntry}
               onRemoveComment={loved.handleRemoveJournalComment}
+              onEditComment={loved.handleEditJournalComment}
               personAName={loved.personAName}
               personBName={loved.personBName}
               personAAvatar={loved.personAAvatar}

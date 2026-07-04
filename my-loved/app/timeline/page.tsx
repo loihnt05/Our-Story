@@ -185,7 +185,7 @@ export default function TimelinePage() {
             <span>Go Back Home</span>
           </Link>
 
-          <span className="text-xl font-bold font-serif flex items-center gap-1.5 text-zinc-900 dark:text-white bg-white/40 dark:bg-zinc-800/40 px-4 py-2 border border-white/20 rounded-full shadow-sm backdrop-blur-md">
+          <span className="text-xl font-bold font-cursive flex items-center gap-1.5 text-zinc-900 dark:text-white bg-white/40 dark:bg-zinc-800/40 px-4 py-2 border border-white/20 rounded-full shadow-sm backdrop-blur-md">
             <Sparkles className="w-4 h-4 text-amber-500 fill-amber-500 animate-pulse" />
             Our Memory Lane
           </span>
@@ -198,7 +198,7 @@ export default function TimelinePage() {
             {/* Add Milestone Sticky Card */}
             <div className="md:col-span-4 sticky top-6">
               <div className={`p-6 rounded-3xl ${currentTheme.cardBg} border ${currentTheme.borderColor} shadow-xl backdrop-blur-md flex flex-col gap-4`}>
-                <h2 className="text-lg font-bold font-serif border-b pb-2.5 border-zinc-200/50 dark:border-zinc-800/50 flex items-center gap-2">
+                <h2 className="text-lg font-bold font-cursive border-b pb-2.5 border-zinc-200/50 dark:border-zinc-800/50 flex items-center gap-2">
                   <Plus className="w-4.5 h-4.5 text-rose-500" />
                   Add Milestone
                 </h2>
@@ -360,7 +360,7 @@ export default function TimelinePage() {
                             </span>
                           </div>
 
-                          <h3 className="font-extrabold text-lg text-zinc-900 dark:text-white leading-snug mt-2 select-all">
+                          <h3 className="font-extrabold font-cursive text-lg text-zinc-900 dark:text-white leading-snug mt-2 select-all">
                             {milestone.title}
                           </h3>
 
