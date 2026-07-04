@@ -2,18 +2,18 @@
 
 import React from "react";
 import { Flame } from "lucide-react";
-import Header from "./loved/Header";
-import CoupleCard from "./loved/CoupleCard";
-import LoveBoard from "./loved/LoveBoard";
-import MainCounter from "./loved/MainCounter";
-import QuoteCard from "./loved/QuoteCard";
-import TimelineCard from "./loved/TimelineCard";
-import SettingsModal from "./loved/SettingsModal";
-import { useLoveStory } from "./loved/useLoveStory";
-import { THEMES, ROMANTIC_QUOTES } from "./loved/constants";
-import { useAuth } from "@/components/loved/AuthProvider";
-import AccessDenied from "./loved/AccessDenied";
-import ThemeBackground from "./loved/ThemeBackground";
+import Header from "@/components/loved/core/Header";
+import CoupleCard from "@/components/loved/dashboard/CoupleCard";
+import LoveBoard from "@/components/loved/journal/LoveBoard";
+import MainCounter from "@/components/loved/dashboard/MainCounter";
+import QuoteCard from "@/components/loved/dashboard/QuoteCard";
+import TimelineCard from "@/components/loved/dashboard/TimelineCard";
+import SettingsModal from "@/components/loved/settings/SettingsModal";
+import { useLoveStory } from "@/components/loved/core/useLoveStory";
+import { THEMES, ROMANTIC_QUOTES } from "@/components/loved/core/constants";
+import { useAuth } from "@/components/loved/core/AuthProvider";
+import AccessDenied from "@/components/loved/core/AccessDenied";
+import ThemeBackground from "@/components/loved/core/ThemeBackground";
 import { useTheme } from "next-themes";
 
 export default function LoveCounter() {

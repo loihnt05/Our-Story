@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Plus } from "lucide-react";
-import EmotionSelector from "./EmotionSelector";
+import EmotionSelector from "@/components/loved/journal/EmotionSelector";
 
 interface JournalFormProps {
   currentUserName: string;

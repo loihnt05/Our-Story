@@ -1,4 +1,4 @@
-import { Theme } from "./types";
+import { Theme } from "@/components/loved/core/types";
 
 export const ROMANTIC_QUOTES = [
   "In all the world, there is no heart for me like yours. In all the world, there is no love for you like mine. — Maya Angelou",

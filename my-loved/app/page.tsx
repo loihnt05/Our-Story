@@ -2,10 +2,10 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth, useClerk } from "@/components/loved/AuthProvider";
-import WelcomeScreen from "@/components/loved/WelcomeScreen";
-import { THEMES } from "@/components/loved/constants";
-import { AmbientSynth } from "@/components/loved/AmbientSynth";
+import { useAuth, useClerk } from "@/components/loved/core/AuthProvider";
+import WelcomeScreen from "@/components/loved/core/WelcomeScreen";
+import { THEMES } from "@/components/loved/core/constants";
+import { AmbientSynth } from "@/components/loved/core/AmbientSynth";
 
 export default function Home() {
   const { isSignedIn } = useAuth();

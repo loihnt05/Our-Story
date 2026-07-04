@@ -2,9 +2,9 @@
 
 import React, { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
-import { StarsBackground } from "../animate-ui/components/backgrounds/stars";
-import { GravityStarsBackground } from "../animate-ui/components/backgrounds/gravity-stars";
-import { FireworksBackground } from "../animate-ui/components/backgrounds/fireworks";
+import { StarsBackground } from "@/components/animate-ui/components/backgrounds/stars";
+import { GravityStarsBackground } from "@/components/animate-ui/components/backgrounds/gravity-stars";
+import { FireworksBackground } from "@/components/animate-ui/components/backgrounds/fireworks";
 
 interface ThemeBackgroundProps {
   bgType?: "stars" | "gravity" | "fireworks" | "hearts";

@@ -15,7 +15,7 @@ import {
   Calendar, 
   Sparkles 
 } from "lucide-react";
-import { UserButton } from "./AuthProvider";
+import { UserButton } from "@/components/loved/core/AuthProvider";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import { usePathname } from "next/navigation";

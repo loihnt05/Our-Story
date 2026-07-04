@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Trash2, MessageCircle, Send } from "lucide-react";
-import { JournalEntry } from "./types";
+import { JournalEntry } from "@/components/loved/core/types";
 
 interface JournalEntryCardProps {
   entry: JournalEntry;

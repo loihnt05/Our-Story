@@ -6,9 +6,9 @@ import {
   Sparkles, 
   BookOpen
 } from "lucide-react";
-import { JournalEntry } from "./types";
-import JournalForm from "./JournalForm";
-import JournalEntryCard from "./JournalEntryCard";
+import { JournalEntry } from "@/components/loved/core/types";
+import JournalForm from "@/components/loved/journal/JournalForm";
+import JournalEntryCard from "@/components/loved/journal/JournalEntryCard";
 
 interface LoveBoardProps {
   journalEntries: JournalEntry[];

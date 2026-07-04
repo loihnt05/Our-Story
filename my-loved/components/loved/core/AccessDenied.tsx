@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { Lock, Heart } from "lucide-react";
-import { SignInButton } from "@/components/loved/AuthProvider";
+import { SignInButton } from "@/components/loved/core/AuthProvider";
 
 interface AccessDeniedProps {
   gradient: string;

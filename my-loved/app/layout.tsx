@@ -7,7 +7,7 @@ import {
   Molle,
 } from "next/font/google";
 import "./globals.css";
-import { AuthProviderWrapper as ClerkProvider } from "@/components/loved/AuthProvider";
+import { AuthProviderWrapper as ClerkProvider } from "@/components/loved/core/AuthProvider";
 import { ThemeProvider } from "@/components/theme-provider";
 
 const fredoka = Fredoka({

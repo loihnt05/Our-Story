@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
-import { AmbientSynth } from "./AmbientSynth";
-import { ROMANTIC_QUOTES } from "./constants";
-import { Milestone, Note, BurstHeart, JournalEntry, JournalComment } from "./types";
+import { AmbientSynth } from "@/components/loved/core/AmbientSynth";
+import { ROMANTIC_QUOTES } from "@/components/loved/core/constants";
+import { Milestone, Note, BurstHeart, JournalEntry, JournalComment } from "@/components/loved/core/types";
 
 export function useLoveStory() {
   const [mounted, setMounted] = useState(false);

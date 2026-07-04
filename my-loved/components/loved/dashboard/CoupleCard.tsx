@@ -1,6 +1,6 @@
 import React from "react";
 import { Sparkles, User, Heart } from "lucide-react";
-import { BurstHeart } from "./types";
+import { BurstHeart } from "@/components/loved/core/types";
 
 interface CoupleCardProps {
   personAName: string;

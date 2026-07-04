@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Sparkles, Quote, ChevronLeft, ChevronRight } from "lucide-react";
-import { ROMANTIC_QUOTES } from "./constants";
+import { ROMANTIC_QUOTES } from "@/components/loved/core/constants";
 
 interface QuoteCardProps {
   quoteIndex: number;

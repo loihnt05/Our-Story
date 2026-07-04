@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Calendar, HelpCircle, Shuffle, ChevronRight } from "lucide-react";
-import { Milestone } from "./types";
+import { Milestone } from "@/components/loved/core/types";
 import Link from "next/link";
 
 interface TimelineCardProps {
