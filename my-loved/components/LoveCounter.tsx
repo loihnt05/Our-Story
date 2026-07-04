@@ -27,6 +27,24 @@ export default function LoveCounter() {
   const [partnerDesc, setPartnerDesc] = React.useState("My Anchor ⚓");
   const [partnerAvatar, setPartnerAvatar] = React.useState("");
 
+  // Celebration hearts state to keep rendering pure
+  const [celebrationHearts, setCelebrationHearts] = React.useState<Array<{ id: number; left: number; size: number; duration: number; delay: number; color: string }>>([]);
+
+  React.useEffect(() => {
+    if (loved.showCelebration) {
+      const colors = ["text-rose-500", "text-pink-500", "text-amber-500", "text-red-500", "text-yellow-400"];
+      const hearts = Array.from({ length: 40 }).map((_, i) => ({
+        id: i,
+        left: Math.random() * 100,
+        size: Math.random() * 24 + 12,
+        duration: Math.random() * 2 + 2,
+        delay: Math.random() * 2,
+        color: colors[Math.floor(Math.random() * colors.length)]
+      }));
+      setCelebrationHearts(hearts);
+    }
+  }, [loved.showCelebration]);
+
   React.useEffect(() => {
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
@@ -222,7 +240,7 @@ export default function LoveCounter() {
             <div className="text-center flex flex-col items-center gap-1.5 select-none">
               <span className="text-4xl animate-bounce">💖</span>
               <h2 className="text-xl font-bold font-serif text-zinc-900 dark:text-white">
-                You're Invited!
+                You&apos;re Invited!
               </h2>
               <p className="text-xs text-zinc-500 leading-normal max-w-xs mt-1">
                 <strong>{partnerInviteName}</strong> has invited you to connect their anniversary space! Enter your profile details below to connect.
@@ -289,32 +307,24 @@ export default function LoveCounter() {
         <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/70 backdrop-blur-md animate-fade-in pointer-events-none select-none">
           {/* Confetti raining hearts */}
           <div className="absolute inset-0 overflow-hidden">
-            {Array.from({ length: 40 }).map((_, i) => {
-              const left = Math.random() * 100;
-              const delay = Math.random() * 2;
-              const duration = Math.random() * 2 + 2;
-              const size = Math.random() * 24 + 12;
-              const colors = ["text-rose-500", "text-pink-500", "text-amber-500", "text-red-500", "text-yellow-400"];
-              const randomColor = colors[Math.floor(Math.random() * colors.length)];
-              return (
-                <svg
-                  key={i}
-                  className={`absolute ${randomColor} animate-float`}
-                  style={{
-                    left: `${left}%`,
-                    width: `${size}px`,
-                    height: `${size}px`,
-                    bottom: `-50px`,
-                    animationDuration: `${duration}s`,
-                    animationDelay: `${delay}s`,
-                  }}
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                >
-                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                </svg>
-              );
-            })}
+            {celebrationHearts.map((heart) => (
+              <svg
+                key={heart.id}
+                className={`absolute ${heart.color} animate-float`}
+                style={{
+                  left: `${heart.left}%`,
+                  width: `${heart.size}px`,
+                  height: `${heart.size}px`,
+                  bottom: `-50px`,
+                  animationDuration: `${heart.duration}s`,
+                  animationDelay: `${heart.delay}s`,
+                }}
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+              </svg>
+            ))}
           </div>
 
           {/* Floating Sparkles and Flame Card */}
