@@ -127,9 +127,9 @@ export default function LoveCounter() {
           onOpenSettings={() => loved.setShowSettings(true)}
         />
 
-        <main className="flex-1 w-full max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-3 gap-8 mt-4 lg:mb-6 lg:min-h-0 items-stretch">
+        <main className="flex-1 w-full max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-3 lg:grid-rows-1 gap-8 mt-4 lg:mb-6 lg:min-h-0 items-stretch">
           
-          <div className="flex flex-col gap-8 h-full lg:min-h-0">
+          <div className="flex flex-col gap-8 lg:h-full lg:min-h-0">
             <CoupleCard
               personAName={loved.personAName}
               personADesc={loved.personADesc}
@@ -171,7 +171,7 @@ export default function LoveCounter() {
               borderColor={currentTheme.borderColor}
             />
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full lg:flex-1 lg:min-h-0">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-rows-1 gap-8 w-full lg:flex-1 lg:min-h-0">
 
               <QuoteCard
                 quoteIndex={loved.quoteIndex}
