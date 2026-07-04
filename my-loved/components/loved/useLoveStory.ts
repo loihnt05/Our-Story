@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { AmbientSynth } from "./AmbientSynth";
 import { ROMANTIC_QUOTES } from "./constants";
-import { Milestone, Note, BurstHeart } from "./types";
+import { Milestone, Note, BurstHeart, JournalEntry, JournalComment } from "./types";
 
 export function useLoveStory() {
   const [mounted, setMounted] = useState(false);
@@ -27,6 +27,9 @@ export function useLoveStory() {
   const [milestones, setMilestones] = useState<Milestone[]>([]);
   const [notes, setNotes] = useState<Note[]>([]);
   const [quoteIndex, setQuoteIndex] = useState(0);
+  const [journalEntries, setJournalEntries] = useState<JournalEntry[]>([]);
+  const [activePartner, setActivePartner] = useState<"A" | "B">("A");
+  const [showCelebration, setShowCelebration] = useState(false);
 
   // Form states
   const [newMilestoneTitle, setNewMilestoneTitle] = useState("");
@@ -102,6 +105,49 @@ export function useLoveStory() {
       ];
       setNotes(defaultNotes);
       localStorage.setItem("loved_notes", JSON.stringify(defaultNotes));
+    }
+
+    // Initial Journal fallback
+    const savedJournal = localStorage.getItem("loved_journal_entries");
+    if (savedJournal) {
+      setJournalEntries(JSON.parse(savedJournal));
+    } else {
+      const defaultJournal: JournalEntry[] = [
+        {
+          id: "j-1",
+          date: "2026-07-03",
+          author: "A",
+          emotion: "Loved 💖",
+          content: "Loved our late-night call yesterday. It felt like time stood still.",
+          createdAt: new Date(Date.now() - 86400000).toISOString(),
+          comments: [
+            {
+              id: "jc-1",
+              author: "B",
+              content: "Me too, Romeo! I didn't want to hang up at all. 🥰",
+              createdAt: new Date(Date.now() - 86400000 + 1800000).toISOString()
+            }
+          ]
+        },
+        {
+          id: "j-2",
+          date: "2026-07-03",
+          author: "B",
+          emotion: "Happy 😊",
+          content: "Had a busy day at work, but received your sweet morning message and it made my day!",
+          createdAt: new Date(Date.now() - 86400000).toISOString(),
+          comments: [
+            {
+              id: "jc-2",
+              author: "A",
+              content: "Always here to brighten your day, my love!",
+              createdAt: new Date(Date.now() - 86400000 + 3600000).toISOString()
+            }
+          ]
+        }
+      ];
+      setJournalEntries(defaultJournal);
+      localStorage.setItem("loved_journal_entries", JSON.stringify(defaultJournal));
     }
 
     // Cycle quotes
@@ -302,6 +348,178 @@ export function useLoveStory() {
     saveNotes(updated);
   };
 
+  // Save journal entries
+  const saveJournalEntries = (updatedList: JournalEntry[]) => {
+    setJournalEntries(updatedList);
+    localStorage.setItem("loved_journal_entries", JSON.stringify(updatedList));
+  };
+
+  // Add/Update daily journal entry
+  const handleAddJournalEntry = (date: string, emotion: string, content: string) => {
+    if (!content.trim()) return;
+    const existingIndex = journalEntries.findIndex(
+      (entry) => entry.date === date && entry.author === activePartner
+    );
+    let updatedEntries = [...journalEntries];
+    if (existingIndex > -1) {
+      updatedEntries[existingIndex] = {
+        ...updatedEntries[existingIndex],
+        emotion,
+        content,
+        createdAt: new Date().toISOString()
+      };
+    } else {
+      const newEntry: JournalEntry = {
+        id: `j-${Date.now()}`,
+        date,
+        author: activePartner,
+        emotion,
+        content,
+        createdAt: new Date().toISOString(),
+        comments: []
+      };
+      updatedEntries = [newEntry, ...updatedEntries];
+    }
+    saveJournalEntries(updatedEntries);
+  };
+
+  // Add comment to journal entry
+  const handleAddJournalComment = (entryId: string, content: string) => {
+    if (!content.trim()) return;
+    const updatedEntries = journalEntries.map((entry) => {
+      if (entry.id === entryId) {
+        const newComment: JournalComment = {
+          id: `jc-${Date.now()}`,
+          author: activePartner,
+          content,
+          createdAt: new Date().toISOString()
+        };
+        return {
+          ...entry,
+          comments: [...entry.comments, newComment]
+        };
+      }
+      return entry;
+    });
+    saveJournalEntries(updatedEntries);
+  };
+
+  // Remove daily journal entry
+  const handleRemoveJournalEntry = (entryId: string) => {
+    const updated = journalEntries.filter((entry) => entry.id !== entryId);
+    saveJournalEntries(updated);
+  };
+
+  // Remove comment from entry
+  const handleRemoveJournalComment = (entryId: string, commentId: string) => {
+    const updated = journalEntries.map((entry) => {
+      if (entry.id === entryId) {
+        return {
+          ...entry,
+          comments: entry.comments.filter((c) => c.id !== commentId)
+        };
+      }
+      return entry;
+    });
+    saveJournalEntries(updated);
+  };
+
+  // Get local date string YYYY-MM-DD
+  const getLocalDateString = (date: Date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
+  // Compute current streak and today's completeness
+  const getStreakInfo = () => {
+    const isDayCompleted = (dateStr: string) => {
+      const entryA = journalEntries.find(e => e.date === dateStr && e.author === "A");
+      const entryB = journalEntries.find(e => e.date === dateStr && e.author === "B");
+      if (!entryA || !entryB) return false;
+      const aCommentedOnB = entryB.comments.some(c => c.author === "A");
+      const bCommentedOnA = entryA.comments.some(c => c.author === "B");
+      return aCommentedOnB && bCommentedOnA;
+    };
+
+    const today = new Date();
+    let streak = 0;
+    const checkDate = new Date(today);
+
+    const todayStr = getLocalDateString(checkDate);
+    const todayCompleted = isDayCompleted(todayStr);
+
+    if (todayCompleted) {
+      streak = 1;
+      checkDate.setDate(checkDate.getDate() - 1);
+      while (true) {
+        const dateStr = getLocalDateString(checkDate);
+        if (isDayCompleted(dateStr)) {
+          streak++;
+          checkDate.setDate(checkDate.getDate() - 1);
+        } else {
+          break;
+        }
+      }
+    } else {
+      checkDate.setDate(checkDate.getDate() - 1);
+      const yesterdayStr = getLocalDateString(checkDate);
+      if (isDayCompleted(yesterdayStr)) {
+        streak = 1;
+        checkDate.setDate(checkDate.getDate() - 1);
+        while (true) {
+          const dateStr = getLocalDateString(checkDate);
+          if (isDayCompleted(dateStr)) {
+            streak++;
+            checkDate.setDate(checkDate.getDate() - 1);
+          } else {
+            break;
+          }
+        }
+      }
+    }
+
+    return {
+      count: streak,
+      isCompletedToday: todayCompleted
+    };
+  };
+
+  const streakInfo = getStreakInfo();
+
+  // Streak celebration trigger
+  const triggerStreakCelebration = () => {
+    setShowCelebration(true);
+    if (!isMuted && synthRef.current) {
+      try {
+        const audioCtx = (synthRef.current as any).ctx;
+        if (audioCtx && audioCtx.state !== "suspended") {
+          const now = audioCtx.currentTime;
+          const notes = [523.25, 659.25, 783.99, 987.77, 1046.50]; // C5, E5, G5, B5, C6
+          notes.forEach((freq, idx) => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = "sine";
+            osc.frequency.setValueAtTime(freq, now + idx * 0.12);
+            gain.gain.setValueAtTime(0, now + idx * 0.12);
+            gain.gain.linearRampToValueAtTime(0.06, now + idx * 0.12 + 0.05);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + idx * 0.12 + 0.5);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(now + idx * 0.12);
+            osc.stop(now + idx * 0.12 + 0.5);
+          });
+        }
+      } catch (err) {
+        console.error("Synth play error:", err);
+      }
+    }
+    setTimeout(() => {
+      setShowCelebration(false);
+    }, 5000);
+  };
+
   return {
     mounted,
     showIntro,
@@ -355,6 +573,19 @@ export function useLoveStory() {
     handleAddMilestone,
     handleRemoveMilestone,
     handleAddNote,
-    handleRemoveNote
+    handleRemoveNote,
+    // Daily Journal exports
+    journalEntries,
+    activePartner,
+    setActivePartner,
+    showCelebration,
+    setShowCelebration,
+    streakInfo,
+    handleAddJournalEntry,
+    handleAddJournalComment,
+    handleRemoveJournalEntry,
+    handleRemoveJournalComment,
+    triggerStreakCelebration
   };
 }
+

@@ -44,9 +44,9 @@ export default function TimelineCard({
   return (
     <div className={`p-6 rounded-3xl ${cardBg} border ${borderColor} shadow-xl backdrop-blur-md flex flex-col justify-between hover:shadow-2xl transition-all duration-300 min-h-[300px]`}>
       <div className="flex flex-col gap-4">
-        <h2 className="text-xl font-bold font-serif border-b pb-3 border-zinc-200/50 dark:border-zinc-800/50 flex items-center justify-between">
+        <h2 className="text-2xl font-extrabold font-cursive border-b pb-3 border-zinc-200/50 dark:border-zinc-800/50 flex items-center justify-between">
           <span className="flex items-center gap-2">
-            <Calendar className="w-4 h-4 text-emerald-500" />
+            <Calendar className="w-5 h-5 text-emerald-500" />
             Memory Capsule
           </span>
           <span className="text-xs font-sans text-zinc-400 font-normal">

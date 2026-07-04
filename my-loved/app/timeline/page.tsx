@@ -178,7 +178,7 @@ export default function TimelinePage() {
         {/* Floating Header */}
         <header className="relative w-full max-w-4xl mx-auto px-6 py-6 flex items-center justify-between z-10">
           <Link
-            href="/"
+            href="/number-loved"
             className="flex items-center gap-1.5 px-4.5 py-2 rounded-full bg-white/40 dark:bg-zinc-800/40 border border-white/20 backdrop-blur-md shadow-sm text-xs font-bold text-zinc-700 dark:text-zinc-200 hover:bg-white/60 dark:hover:bg-zinc-800/60 transition-colors cursor-pointer"
           >
             <ArrowLeft className="w-3.5 h-3.5 text-rose-500" />

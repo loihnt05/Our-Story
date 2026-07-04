@@ -1,19 +1,9 @@
-'use client';
+"use client";
 
-import { FireworksBackground } from '@/components/animate-ui/components/backgrounds/fireworks';
+import { SlackCounter } from "@charkour/react-reactions";
 
-type FireworksBackgroundDemoProps = {
-  population: number;
-};
-
-export default function FireworksBackgroundDemo({
-  population,
-}: FireworksBackgroundDemoProps) {
-
+export default function FireworksBackgroundDemo({}) {
   return (
-          <FireworksBackground 
-            population={population}
-            className="w-full h-full bg-transparent"
-          />
+        <SlackCounter />
   );
 }

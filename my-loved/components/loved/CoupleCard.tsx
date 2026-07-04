@@ -31,7 +31,7 @@ export default function CoupleCard({
 }: CoupleCardProps) {
   return (
     <div 
-      className={`p-6 rounded-3xl ${cardBg} border ${borderColor} shadow-xl backdrop-blur-md flex flex-col gap-6 relative overflow-hidden group hover:shadow-2xl transition-all duration-500`}
+      className={`shrink-0 p-6 rounded-3xl ${cardBg} border ${borderColor} shadow-xl backdrop-blur-md flex flex-col gap-6 relative overflow-hidden group hover:shadow-2xl transition-all duration-500`}
       style={{
         backgroundImage: "radial-gradient(rgba(244, 63, 94, 0.05) 1.5px, transparent 1.5px)",
         backgroundSize: "16px 16px"
@@ -46,7 +46,7 @@ export default function CoupleCard({
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-gradient-to-r from-rose-500/8 via-pink-500/5 to-amber-500/8 rounded-full blur-2xl pointer-events-none -z-10 animate-pulse" />
 
       {/* Header */}
-      <h2 className="text-base font-bold font-serif border-b pb-2.5 border-zinc-200/50 dark:border-zinc-800/50 flex items-center gap-1.5 z-10 text-zinc-900 dark:text-white">
+      <h2 className="text-2xl font-extrabold font-cursive border-b pb-2.5 border-zinc-200/50 dark:border-zinc-800/50 flex items-center gap-1.5 z-10 text-zinc-900 dark:text-white">
         <Heart className="w-4.5 h-4.5 text-rose-500 fill-rose-500/10" />
         The Couple
       </h2>
@@ -76,7 +76,7 @@ export default function CoupleCard({
             </div>
 
             {/* Label */}
-            <span className="font-bold text-xs text-zinc-800 dark:text-zinc-200 mt-2.5 line-clamp-1 text-center w-full font-serif">
+            <span className="font-bold text-xl text-zinc-800 dark:text-zinc-200 mt-2.5 line-clamp-1 text-center w-full font-cursive">
               {personAName}
             </span>
           </div>
@@ -140,7 +140,7 @@ export default function CoupleCard({
             </div>
 
             {/* Label */}
-            <span className="font-bold text-xs text-zinc-800 dark:text-zinc-200 mt-2.5 line-clamp-1 text-center w-full font-serif">
+            <span className="font-bold text-xl text-zinc-800 dark:text-zinc-200 mt-2.5 line-clamp-1 text-center w-full font-cursive">
               {personBName}
             </span>
           </div>
