@@ -34,7 +34,7 @@ export default function MainCounter({
   };
 
   return (
-    <div className={`p-8 rounded-3xl ${cardBg} border ${borderColor} shadow-xl backdrop-blur-md flex flex-col items-center justify-center text-center relative overflow-hidden group hover:shadow-2xl transition-all duration-300 min-h-[380px]`}>
+    <div className={`p-8 lg:py-6 rounded-3xl ${cardBg} border ${borderColor} shadow-xl backdrop-blur-md flex flex-col items-center justify-center text-center relative overflow-hidden group hover:shadow-2xl transition-all duration-300 min-h-[340px] md:min-h-[380px] lg:min-h-0 lg:flex-[1.2] shrink-0`}>
       
       {/* Cute Bouncy and Floating Styles */}
       <style dangerouslySetInnerHTML={{ __html: `

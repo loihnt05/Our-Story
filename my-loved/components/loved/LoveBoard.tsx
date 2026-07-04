@@ -134,7 +134,7 @@ export default function LoveBoard({
   };
 
   return (
-    <div className={`w-full p-6 rounded-3xl ${cardBg} border ${borderColor} shadow-xl backdrop-blur-md flex flex-col gap-4 hover:shadow-2xl transition-all duration-300 min-h-[300px]`}>
+    <div className={`flex-1 min-h-0 p-6 rounded-[24px] ${cardBg} border ${borderColor} shadow-xl backdrop-blur-md flex flex-col gap-4 hover:shadow-2xl transition-all duration-300 overflow-hidden`}>
       
       {/* Header section with Flame Streak and Title */}
       <div className="flex items-center justify-between border-b pb-3 border-zinc-200/50 dark:border-zinc-800/50">

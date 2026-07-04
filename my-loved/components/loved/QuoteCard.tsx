@@ -55,7 +55,7 @@ export default function QuoteCard({
     <div
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className={`p-6 rounded-3xl ${cardBg} border ${borderColor} shadow-xl backdrop-blur-md flex flex-col justify-between relative overflow-hidden group hover:shadow-2xl transition-all duration-500 min-h-[260px]`}
+      className={`p-6 rounded-3xl ${cardBg} border ${borderColor} shadow-xl backdrop-blur-md flex flex-col justify-between relative overflow-hidden group hover:shadow-2xl transition-all duration-500 min-h-[260px] h-full lg:min-h-0`}
     >
       {/* Delicate layout background quote marks */}
       <div className="absolute -top-4 -left-4 opacity-5 dark:opacity-10 text-rose-500 pointer-events-none select-none">
@@ -81,7 +81,7 @@ export default function QuoteCard({
       {/* Main Quote Content with Key-retrigger fade-in */}
       <div 
         key={quoteIndex}
-        className="flex-1 flex flex-col justify-center items-center py-6 text-center z-10 animate-fade-in"
+        className="flex-1 flex flex-col justify-center items-center py-4 text-center z-10 animate-fade-in overflow-y-auto pr-1"
       >
         <p className="text-zinc-800 dark:text-zinc-100 text-base md:text-lg leading-relaxed italic font-serif px-4 select-all">
           &ldquo;{quoteText}&rdquo;

@@ -111,7 +111,7 @@ export default function LoveCounter() {
   }
 
   return (
-    <div className={`min-h-screen flex flex-col bg-gradient-to-br ${currentTheme.gradient} text-zinc-800 dark:text-zinc-100 transition-colors duration-500 relative overflow-x-hidden pb-16`}>
+    <div className={`min-h-screen lg:h-screen lg:overflow-hidden flex flex-col bg-gradient-to-br ${currentTheme.gradient} text-zinc-800 dark:text-zinc-100 transition-colors duration-500 relative overflow-x-hidden lg:overflow-y-hidden pb-16 lg:pb-0`}>
       {/* Theme Animated Background */}
       <ThemeBackground 
         bgType={currentTheme.bgType} 
@@ -119,7 +119,7 @@ export default function LoveCounter() {
         particleColors={currentTheme.particleColors} 
       />
 
-      <div className="relative z-10 flex flex-col w-full flex-1">
+      <div className="relative z-10 flex flex-col w-full flex-1 lg:h-full lg:min-h-0">
         <Header
           customTitle={loved.customTitle}
           isMuted={loved.isMuted}
@@ -127,8 +127,9 @@ export default function LoveCounter() {
           onOpenSettings={() => loved.setShowSettings(true)}
         />
 
-        <main className="flex-1 w-full max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-3 gap-8 mt-4 items-start">
-          <div className="flex flex-col gap-8">
+        <main className="flex-1 w-full max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-3 gap-8 mt-4 lg:mb-6 lg:min-h-0 items-stretch">
+          
+          <div className="flex flex-col gap-8 h-full lg:min-h-0">
             <CoupleCard
               personAName={loved.personAName}
               personADesc={loved.personADesc}
@@ -162,7 +163,7 @@ export default function LoveCounter() {
             />
           </div>
 
-          <div className="flex flex-col gap-8 lg:col-span-2">
+          <div className="flex flex-col gap-8 lg:col-span-2 lg:h-full lg:min-h-0">
             <MainCounter
               timeLeft={loved.timeLeft}
               anniversaryDate={loved.anniversaryDate}
@@ -170,7 +171,8 @@ export default function LoveCounter() {
               borderColor={currentTheme.borderColor}
             />
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full lg:flex-1 lg:min-h-0">
+
               <QuoteCard
                 quoteIndex={loved.quoteIndex}
                 setQuoteIndex={loved.setQuoteIndex}
