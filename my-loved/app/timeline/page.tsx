@@ -176,19 +176,23 @@ export default function TimelinePage() {
 
       <div className="relative z-10 flex flex-col w-full">
         {/* Floating Header */}
-        <header className="relative w-full max-w-4xl mx-auto px-6 py-6 flex items-center justify-between z-10">
-          <Link
-            href="/number-loved"
-            className="flex items-center gap-1.5 px-4.5 py-2 rounded-full bg-white/40 dark:bg-zinc-800/40 border border-white/20 backdrop-blur-md shadow-sm text-xs font-bold text-zinc-700 dark:text-zinc-200 hover:bg-white/60 dark:hover:bg-zinc-800/60 transition-colors cursor-pointer"
-          >
-            <ArrowLeft className="w-3.5 h-3.5 text-rose-500" />
-            <span>Go Back Home</span>
-          </Link>
+        <header className="relative w-full max-w-6xl mx-auto px-6 py-6 grid grid-cols-1 md:grid-cols-12 gap-8 items-center z-10">
+          <div className="md:col-span-4 flex justify-start">
+            <Link
+              href="/number-loved"
+              className="flex items-center gap-1.5 px-4.5 py-2 rounded-full bg-white/40 dark:bg-zinc-800/40 border border-white/20 backdrop-blur-md shadow-sm text-xs font-bold text-zinc-700 dark:text-zinc-200 hover:bg-white/60 dark:hover:bg-zinc-800/60 transition-colors cursor-pointer"
+            >
+              <ArrowLeft className="w-3.5 h-3.5 text-rose-500" />
+              <span>Go Back Home</span>
+            </Link>
+          </div>
 
-          <span className="text-xl font-bold font-cursive flex items-center gap-1.5 text-zinc-900 dark:text-white bg-white/40 dark:bg-zinc-800/40 px-4 py-2 border border-white/20 rounded-full shadow-sm backdrop-blur-md">
-            <Sparkles className="w-4 h-4 text-amber-500 fill-amber-500 animate-pulse" />
-            Our Memory Lane
-          </span>
+          <div className="md:col-span-8 flex justify-end max-w-lg md:ml-12 md:pl-8 w-full">
+            <span className="text-xl font-bold font-cursive flex items-center gap-1.5 text-zinc-900 dark:text-white bg-white/40 dark:bg-zinc-800/40 px-4 py-2 border border-white/20 rounded-full shadow-sm backdrop-blur-md">
+              <Sparkles className="w-4 h-4 text-amber-500 fill-amber-500 animate-pulse" />
+              Our Memory Lane
+            </span>
+          </div>
         </header>
 
         <main className="relative w-full max-w-6xl mx-auto px-6 flex flex-col gap-10 mt-6 items-center">
@@ -322,7 +326,7 @@ export default function TimelinePage() {
                       className="relative animate-scale-up"
                     >
                       {/* Timeline dot heart */}
-                      <span className="absolute -left-[45px] top-6 flex h-8 w-8 items-center justify-center rounded-full bg-white dark:bg-zinc-900 border-2 border-rose-300 dark:border-rose-800 shadow-md text-xs select-none hover:scale-110 transition-transform">
+                      <span className="absolute -left-[50px] top-6 flex h-8 w-8 items-center justify-center rounded-full bg-white dark:bg-zinc-900 border-2 border-rose-300 dark:border-rose-800 shadow-md text-xs select-none hover:scale-110 transition-transform">
                         ❤️
                       </span>
 
