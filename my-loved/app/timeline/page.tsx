@@ -24,6 +24,42 @@ export default function TimelinePage() {
   // Floating background hearts
   const [bgHearts, setBgHearts] = useState<Array<{ id: number; left: number; size: number; duration: number; delay: number }>>([]);
 
+  // Sticky Card Inertia/LERP state
+  const [offsetY, setOffsetY] = useState(0);
+
+  useEffect(() => {
+    let currentY = window.scrollY;
+    let targetY = window.scrollY;
+    let rAFId: number;
+
+    const handleScroll = () => {
+      targetY = window.scrollY;
+    };
+
+    const updatePosition = () => {
+      // Buttery smooth LERP lag (0.035 makes the catch-up slower and softer)
+      currentY += (targetY - currentY) * 0.035;
+      const diff = targetY - currentY;
+      const clampedDiff = Math.max(-120, Math.min(120, diff));
+      
+      if (typeof window !== "undefined" && window.innerWidth >= 768) {
+        setOffsetY(clampedDiff);
+      } else {
+        setOffsetY(0);
+      }
+      
+      rAFId = requestAnimationFrame(updatePosition);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    rAFId = requestAnimationFrame(updatePosition);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      cancelAnimationFrame(rAFId);
+    };
+  }, []);
+
   const prevThemeIdRef = React.useRef(themeId);
   const prevResolvedThemeRef = React.useRef(resolvedTheme);
 
@@ -174,7 +210,10 @@ export default function TimelinePage() {
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start w-full">
             
             {/* Add Milestone Sticky Card */}
-            <div className="md:col-span-4 md:sticky md:top-[calc(max(24px,50vh-280px))] top-4 transition-all duration-500 ease-in-out">
+            <div 
+              className="md:col-span-4 md:sticky md:top-[calc(max(24px,50vh-280px))] top-4"
+              style={{ transform: `translateY(${offsetY}px)`, willChange: "transform" }}
+            >
               <MilestoneForm
                 cardBg={currentTheme.cardBg}
                 borderColor={currentTheme.borderColor}
