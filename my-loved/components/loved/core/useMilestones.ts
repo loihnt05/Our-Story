@@ -32,25 +32,20 @@ export function useMilestones(mounted: boolean) {
   };
 
   // Add Milestone
-  const handleAddMilestone = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newMilestoneTitle || !newMilestoneDate) return;
+  const handleAddMilestone = (title: string, date: string, desc: string, icon: string, image?: string) => {
+    if (!title || !date) return;
     
     const newM: Milestone = {
       id: Date.now().toString(),
-      title: newMilestoneTitle,
-      date: newMilestoneDate,
-      description: newMilestoneDesc,
-      icon: newMilestoneIcon
+      title,
+      date,
+      description: desc,
+      icon,
+      image
     };
 
     const updated = [...milestones, newM].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
     saveMilestones(updated);
-    
-    setNewMilestoneTitle("");
-    setNewMilestoneDate("");
-    setNewMilestoneDesc("");
-    setNewMilestoneIcon("💖");
   };
 
   // Remove Milestone

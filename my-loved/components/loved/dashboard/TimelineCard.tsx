@@ -43,7 +43,7 @@ export default function TimelineCard({
 
   return (
     <div className={`p-6 rounded-3xl ${cardBg} border ${borderColor} shadow-xl backdrop-blur-md flex flex-col justify-between hover:shadow-2xl transition-all duration-300 min-h-[300px] h-full lg:min-h-0`}>
-      <div className="flex flex-col gap-4 flex-1 overflow-hidden">
+      <div className="flex flex-col gap-4 flex-1 ">
         <h2 className="text-2xl font-extrabold font-cursive border-b pb-3 border-zinc-200/50 dark:border-zinc-800/50 flex items-center justify-between shrink-0">
           <span className="flex items-center gap-2">
             <Calendar className="w-5 h-5 text-emerald-500" />
@@ -56,7 +56,7 @@ export default function TimelineCard({
 
         {/* Display one random milestone */}
         {!selectedMilestone ? (
-          <div className="text-center text-zinc-400 dark:text-zinc-500 text-sm py-12 italic flex flex-col items-center gap-2 flex-1 overflow-y-auto">
+          <div className="text-center text-zinc-400 dark:text-zinc-500 text-sm py-12 italic flex flex-col items-center gap-2 flex-1 overflow-y-auto scrollbar-hide">
             <HelpCircle className="w-8 h-8 opacity-40 text-rose-400" />
             <span>No memories recorded yet. Go to our timeline to add some!</span>
           </div>

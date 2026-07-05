@@ -81,7 +81,7 @@ export default function QuoteCard({
       {/* Main Quote Content with Key-retrigger fade-in */}
       <div 
         key={quoteIndex}
-        className="flex-1 flex flex-col justify-center items-center py-4 text-center z-10 animate-fade-in overflow-y-auto pr-1"
+        className="flex-1 flex flex-col justify-center items-center py-4 text-center z-10 animate-fade-in overflow-y-auto scrollbar-hide pr-1"
       >
         <p className="text-zinc-800 dark:text-zinc-100 text-base md:text-lg leading-relaxed italic font-serif px-4 select-all">
           &ldquo;{quoteText}&rdquo;

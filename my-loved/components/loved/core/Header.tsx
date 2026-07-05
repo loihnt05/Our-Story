@@ -25,13 +25,17 @@ interface HeaderProps {
   isMuted: boolean;
   onTogglePlay: () => void;
   onOpenSettings: () => void;
+  onTabChange?: (href: string) => void;
+  activeTabHref?: string;
 }
 
 export default function Header({
   customTitle,
   isMuted,
   onTogglePlay,
-  onOpenSettings
+  onOpenSettings,
+  onTabChange,
+  activeTabHref
 }: HeaderProps) {
   const { resolvedTheme: theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
@@ -46,18 +50,31 @@ export default function Header({
     setTheme(theme === "dark" ? "light" : "dark");
   };
 
+  const currentPath = activeTabHref || pathname;
   const navItems = [
     { 
       name: "Dashboard", 
       href: "/number-loved", 
       icon: LayoutDashboard,
-      isActive: pathname === "/number-loved"
+      isActive: currentPath === "/number-loved"
     },
     { 
       name: "Memory Lane", 
       href: "/timeline", 
       icon: Calendar,
-      isActive: pathname === "/timeline"
+      isActive: currentPath === "/timeline"
+    },
+    { 
+      name: "Stats Dashboard", 
+      href: "/relationship-dashboard", 
+      icon: Heart,
+      isActive: currentPath === "/relationship-dashboard"
+    },
+    { 
+      name: "Love Quiz", 
+      href: "/quiz", 
+      icon: Sparkles,
+      isActive: currentPath === "/quiz"
     },
   ];
 
@@ -91,7 +108,13 @@ export default function Header({
             <Link
               key={item.name}
               href={item.href}
-              onClick={() => isMobileView && setIsMobileOpen(false)}
+              onClick={(e) => {
+                if (onTabChange) {
+                  e.preventDefault();
+                  onTabChange(item.href);
+                }
+                if (isMobileView) setIsMobileOpen(false);
+              }}
               className={`flex items-center gap-3 px-4 py-3 rounded-2xl text-xs font-bold transition-all border ${
                 item.isActive
                   ? "bg-gradient-to-r from-rose-500/10 to-pink-500/5 border-rose-500/20 text-rose-600 dark:text-rose-400 shadow-sm"
@@ -194,7 +217,16 @@ export default function Header({
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           
           {/* Left: Branding */}
-          <Link href="/number-loved" className="flex items-center gap-3 hover:opacity-90 transition-opacity">
+          <Link 
+            href="/number-loved" 
+            onClick={(e) => {
+              if (onTabChange) {
+                e.preventDefault();
+                onTabChange("/number-loved");
+              }
+            }}
+            className="flex items-center gap-3 hover:opacity-90 transition-opacity"
+          >
             <div className="w-9 h-9 rounded-full bg-rose-500/15 flex items-center justify-center animate-pulse shrink-0">
               <Heart className="w-4.5 h-4.5 text-rose-500 fill-rose-500" />
             </div>
@@ -209,6 +241,12 @@ export default function Header({
               <Link
                 key={item.name}
                 href={item.href}
+                onClick={(e) => {
+                  if (onTabChange) {
+                    e.preventDefault();
+                    onTabChange(item.href);
+                  }
+                }}
                 className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold transition-all border ${
                   item.isActive
                     ? "bg-white dark:bg-zinc-800 shadow-sm text-rose-600 dark:text-rose-400 border-zinc-200/10"
