@@ -16,6 +16,7 @@ import TimelineTab from "@/components/loved/timeline/TimelineTab";
 import StatsTab from "@/components/loved/stats/StatsTab";
 import QuizTab from "@/components/loved/quiz/QuizTab";
 import SurpriseTakeover from "@/components/loved/surprise/SurpriseTakeover";
+import OnboardingWizard from "@/components/loved/core/OnboardingWizard";
 
 interface LoveCounterProps {
   initialTabHref?: string;
@@ -38,6 +39,17 @@ export default function LoveCounter({ initialTabHref }: LoveCounterProps) {
   // Celebration hearts
   const [celebrationHearts, setCelebrationHearts] = useState<Array<{ id: number; left: number; size: number; duration: number; delay: number; color: string }>>([]);
 
+  // Onboarding state
+  const [onboardingCompleted, setOnboardingCompleted] = useState(true);
+
+  // Check onboarding status on mount
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const completed = localStorage.getItem("loved_onboarding_completed") === "true";
+      setOnboardingCompleted(completed);
+    }
+  }, []);
+
   // LERP Scroll position state (for timeline tab)
   const [offsetY, setOffsetY] = useState(0);
   const [isDesktop, setIsDesktop] = useState(false);
@@ -59,7 +71,7 @@ export default function LoveCounter({ initialTabHref }: LoveCounterProps) {
         setShowSurprise(true);
       } else {
         // 2. Check if today is a dynamic milestone (years of relationship or multiple of 100 days)
-        const anni = localStorage.getItem("loved_anniversaryDate") || "2025-01-01";
+        const anni = localStorage.getItem("loved_anniversary") || localStorage.getItem("loved_anniversaryDate") || "2025-01-01";
         try {
           const start = new Date(anni);
           const now = new Date();
@@ -77,11 +89,11 @@ export default function LoveCounter({ initialTabHref }: LoveCounterProps) {
             milestoneKey = "days_" + days;
           }
 
-          // 3. Check if today is the anniversary of any milestone in the timeline
+          // 3. Check if today is the anniversary of any milestone in the timeline (Proposal, Engagement, Wedding, Custom)
+          const today = new Date();
           const milestonesStr = localStorage.getItem("loved_milestones");
           if (milestonesStr) {
             const milestones = JSON.parse(milestonesStr);
-            const today = new Date();
             
             for (const m of milestones) {
               if (m.date) {
@@ -253,6 +265,19 @@ export default function LoveCounter({ initialTabHref }: LoveCounterProps) {
 
   if (!isSignedIn) {
     return <AccessDenied gradient={currentTheme.gradient} />;
+  }
+
+  if (!onboardingCompleted) {
+    return (
+      <OnboardingWizard
+        onComplete={() => {
+          setOnboardingCompleted(true);
+          if (typeof window !== "undefined") {
+            window.location.reload();
+          }
+        }}
+      />
+    );
   }
 
   return (

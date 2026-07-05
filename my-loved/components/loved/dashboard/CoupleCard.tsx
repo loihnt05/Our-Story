@@ -90,7 +90,7 @@ export default function CoupleCard({
         <div className="flex flex-col items-center justify-center relative">
           <div 
             onClick={onHeartClick}
-            className="w-14 h-14 rounded-full bg-rose-50 dark:bg-rose-950/40 flex items-center justify-center shadow-lg border border-rose-200/50 dark:border-rose-900/30 hover:scale-110 cursor-pointer active:scale-95 transition-all z-20 group/heart"
+            className="w-14 h-14 rounded-full bg-rose-50 dark:bg-rose-950/40 flex items-center justify-center shadow-lg border border-rose-200/50 dark:border-rose-900/30 hover:scale-110 cursor-pointer active:scale-95 transition-all z-300 group/heart"
           >
             <Heart className={`w-7 h-7 ${heartColor} animate-pulse group-hover/heart:scale-110 transition-transform`} />
           </div>
@@ -102,7 +102,7 @@ export default function CoupleCard({
           {burstHearts.map((heart) => (
             <svg
               key={heart.id}
-              className="absolute text-rose-500 fill-rose-500 pointer-events-none animate-heart-burst"
+              className="absolute text-rose-500 fill-rose-500 pointer-events-none animate-heart-burst z-100"
               style={{
                 left: `${heart.x}px`,
                 top: `${heart.y}px`,

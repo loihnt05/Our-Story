@@ -10,6 +10,7 @@ import {
   SignInButton as ClerkSignInButton,
   UserButton as ClerkUserButton,
   Show as ClerkShow,
+  useUser as useClerkUser,
 } from "@clerk/nextjs";
 
 // Determine if we should use Mock Auth or real Clerk
@@ -177,4 +178,25 @@ export function Show({
   }
 
   return <ClerkShow when={when}>{children}</ClerkShow>;
+}
+
+export function useUser() {
+  const mock = useMockAuth();
+  const clerkUser = useClerkUser();
+
+  if (IS_MOCK_AUTH) {
+    return {
+      isLoaded: true,
+      isSignedIn: mock.isSignedIn,
+      user: mock.isSignedIn ? {
+        fullName: "Romeo Montague",
+        firstName: "Romeo",
+        lastName: "Montague",
+        primaryEmailAddress: { emailAddress: "romeo@verona.it" },
+        imageUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=256&auto=format&fit=crop"
+      } : null
+    };
+  }
+
+  return clerkUser;
 }
