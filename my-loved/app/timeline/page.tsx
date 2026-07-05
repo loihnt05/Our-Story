@@ -139,7 +139,7 @@ export default function TimelinePage() {
   );
 
   return (
-    <div className={`min-h-screen bg-gradient-to-br ${currentTheme.gradient} text-zinc-800 dark:text-zinc-100 transition-colors duration-500 relative overflow-x-hidden pb-20`}>
+    <div className={`min-h-screen bg-gradient-to-br ${currentTheme.gradient} text-zinc-800 dark:text-zinc-100 transition-colors duration-500 relative overflow-x-clip pb-20`}>
       
       {/* Theme Animated Background */}
       <ThemeBackground 
@@ -174,7 +174,7 @@ export default function TimelinePage() {
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start w-full">
             
             {/* Add Milestone Sticky Card */}
-            <div className="md:col-span-4 sticky top-6">
+            <div className="md:col-span-4 md:sticky md:top-[calc(max(24px,50vh-280px))] top-4 transition-all duration-500 ease-in-out">
               <MilestoneForm
                 cardBg={currentTheme.cardBg}
                 borderColor={currentTheme.borderColor}

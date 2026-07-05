@@ -45,7 +45,7 @@ export default function MilestoneForm({
   };
 
   return (
-    <div className={`p-6 rounded-3xl ${cardBg} border ${borderColor} shadow-xl backdrop-blur-md flex flex-col gap-4`}>
+    <div className={`p-6 rounded-3xl ${cardBg} border ${borderColor} shadow-xl backdrop-blur-md flex flex-col gap-4 hover:shadow-2xl hover:scale-[1.01] transition-all duration-300 ease-in-out`}>
       <h2 className="text-lg font-bold font-cursive border-b pb-2.5 border-zinc-200/50 dark:border-zinc-800/50 flex items-center gap-2">
         <Plus className="w-4.5 h-4.5 text-rose-500" />
         Add Milestone

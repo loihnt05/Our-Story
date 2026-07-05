@@ -27,6 +27,10 @@ interface LoveBoardProps {
   cardBg: string;
   borderColor: string;
   triggerStreakCelebration: () => void;
+  lastActiveStreak: number;
+  recoveriesUsed: number;
+  recoveredDates: string[];
+  onRecoverStreak: () => void;
 }
 
 export default function LoveBoard({
@@ -45,9 +49,56 @@ export default function LoveBoard({
   personBAvatar,
   cardBg,
   borderColor,
-  triggerStreakCelebration
+  triggerStreakCelebration,
+  lastActiveStreak,
+  recoveriesUsed,
+  recoveredDates,
+  onRecoverStreak
 }: LoveBoardProps) {
   const [activeTab, setActiveTab] = useState<"mine" | "partner">("mine");
+
+  const getMaxRecoveries = (streakCount: number) => {
+    if (streakCount >= 500) return 5;
+    if (streakCount >= 100) return 3;
+    return 1;
+  };
+
+  const getStreakStyle = (count: number, isCompleted: boolean) => {
+    if (count === 0) {
+      return {
+        bgClass: "bg-zinc-200 dark:bg-zinc-800/40 text-zinc-400 dark:text-zinc-500 opacity-60 cursor-not-allowed border border-transparent",
+        flameClass: "text-zinc-400 dark:text-zinc-500",
+        tierName: "No Streak"
+      };
+    }
+    if (count >= 500) {
+      return {
+        bgClass: isCompleted
+          ? "bg-gradient-to-r from-indigo-500 via-purple-500 via-pink-500 to-amber-400 text-white animate-pulse shadow-[0_0_15px_rgba(168,85,247,0.6)] border border-yellow-300 cursor-pointer hover:scale-105"
+          : "bg-gradient-to-r from-indigo-500/60 via-purple-500/60 via-pink-500/60 to-amber-400/60 text-white/80 border border-purple-500/30 cursor-default",
+        flameClass: "text-amber-300 fill-current animate-bounce",
+        tierName: "Ultimate"
+      };
+    }
+    if (count >= 100) {
+      return {
+        bgClass: isCompleted
+          ? "bg-gradient-to-r from-rose-500 via-pink-500 to-orange-500 text-white shadow-[0_0_10px_rgba(244,63,94,0.4)] cursor-pointer hover:scale-105"
+          : "bg-gradient-to-r from-rose-500/60 via-pink-500/60 to-orange-500/60 text-white/80 border border-rose-550/30 cursor-default",
+        flameClass: "text-orange-300 fill-current animate-pulse",
+        tierName: "Prominent"
+      };
+    }
+    return {
+      bgClass: isCompleted
+        ? "bg-gradient-to-r from-amber-500 to-orange-500 text-white cursor-pointer hover:scale-105"
+        : "bg-gradient-to-r from-amber-500/60 to-orange-500/60 text-white/80 border border-amber-550/30 cursor-default",
+      flameClass: "text-orange-200 fill-current",
+      tierName: "Basic"
+    };
+  };
+
+  const streakStyle = getStreakStyle(streakInfo.count, streakInfo.isCompletedToday);
 
   const currentUserCode = activePartner;
   const partnerUserCode = activePartner === "A" ? "B" : "A";
@@ -127,6 +178,12 @@ export default function LoveBoard({
 
         {/* Streak Counter Widget */}
         <div className="flex items-center gap-2">
+          {streakInfo.count > 0 && (
+            <span className="text-[10px] font-bold px-2 py-1 rounded-lg bg-zinc-150 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400 border border-zinc-200/50 dark:border-zinc-700/50 shadow-sm shrink-0">
+              Recoveries: {getMaxRecoveries(lastActiveStreak) - recoveriesUsed} left
+            </span>
+          )}
+
           <button
             onClick={() => {
               if (streakInfo.isCompletedToday) {
@@ -134,20 +191,16 @@ export default function LoveBoard({
               }
             }}
             disabled={!streakInfo.isCompletedToday}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all shadow-sm select-none group relative ${
-              streakInfo.isCompletedToday
-                ? "bg-gradient-to-r from-amber-500 to-rose-500 text-white animate-pulse hover:scale-110 cursor-pointer"
-                : "bg-zinc-200 dark:bg-zinc-800/40 text-zinc-400 dark:text-zinc-500 opacity-60 cursor-not-allowed"
-            }`}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all shadow-sm select-none group relative ${streakStyle.bgClass}`}
             title={
               streakInfo.isCompletedToday
-                ? `Active Streak: ${streakInfo.count} Days! Click to celebrate! ✨`
+                ? `Active ${streakStyle.tierName} Streak: ${streakInfo.count} Days! Click to celebrate! ✨`
                 : streakInfo.count > 0
-                ? `Streak of ${streakInfo.count} ${streakInfo.count === 1 ? "day" : "days"} pending today's check-in! Share daily and comment to activate!`
+                ? `Streak of ${streakInfo.count} ${streakInfo.count === 1 ? "day" : "days"} (${streakStyle.tierName}) pending today's check-in! Share daily and comment to activate!`
                 : "No streak yet. Share daily and comment on each other's posts to build a streak!"
             }
           >
-            <Flame className={`w-4 h-4 ${streakInfo.isCompletedToday ? "fill-current animate-bounce text-amber-300" : "text-zinc-400 dark:text-zinc-500"}`} />
+            <Flame className={`w-4 h-4 ${streakStyle.flameClass}`} />
             <span>{streakInfo.count} {streakInfo.count === 1 ? "day" : "days"}</span>
             {streakInfo.isCompletedToday && (
               <Sparkles className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 absolute -top-1 -right-1 text-yellow-300 animate-spin transition-opacity duration-200" />
@@ -185,6 +238,37 @@ export default function LoveBoard({
 
       {/* Editor Form (rendered outside of the scrollable container) */}
       <div className="flex-1 h-full min-h-0 overflow-y-auto scrollbar-hide flex flex-col gap-4">
+        {/* Streak Recovery Card */}
+        {streakInfo.count === 0 && lastActiveStreak > 0 && (
+          <div className="p-4 rounded-2xl bg-gradient-to-r from-red-500/10 via-orange-500/10 to-amber-500/10 border border-red-500/20 shadow-md flex flex-col sm:flex-row items-center justify-between gap-4 animate-pulse shrink-0">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-red-100 dark:bg-red-950/30 flex items-center justify-center text-red-500 shrink-0">
+                <Flame className="w-5 h-5 text-red-400 dark:text-red-500" />
+              </div>
+              <div className="text-left">
+                <h4 className="text-xs font-bold text-red-600 dark:text-red-400 uppercase tracking-wider">Streak Lost! 💔</h4>
+                <p className="text-xs text-zinc-605 dark:text-zinc-305 mt-0.5">
+                  You lost your <strong className="text-red-500">{lastActiveStreak}</strong> day streak.
+                </p>
+                <p className="text-[10px] text-zinc-400 dark:text-zinc-550 mt-0.5">
+                  Recoveries remaining: <strong>{getMaxRecoveries(lastActiveStreak) - recoveriesUsed}</strong> of {getMaxRecoveries(lastActiveStreak)}
+                </p>
+              </div>
+            </div>
+            
+            {getMaxRecoveries(lastActiveStreak) - recoveriesUsed > 0 ? (
+              <button
+                onClick={onRecoverStreak}
+                className="px-4 py-2 rounded-full bg-gradient-to-r from-rose-500 to-pink-500 hover:brightness-110 text-white font-bold text-xs shadow-md transition-all hover:scale-105 cursor-pointer whitespace-nowrap shrink-0 border-none"
+              >
+                Recover Streak ✨
+              </button>
+            ) : (
+              <span className="text-xs text-zinc-400 dark:text-zinc-500 italic shrink-0">No recoveries left</span>
+            )}
+          </div>
+        )}
+
         {activeTab === "mine" && !todayEntry && (
           
           <JournalForm
