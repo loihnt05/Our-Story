@@ -29,7 +29,7 @@ export default function MilestoneCard({
       </span>
 
       {/* Polaroid Style Card */}
-      <div className="relative bg-white dark:bg-zinc-950 p-5 pt-7 pb-6 rounded-2xl border border-zinc-200/50 dark:border-zinc-800/70 shadow-lg hover:shadow-xl hover:rotate-1 hover:scale-[1.01] transition-all duration-300 group max-w-lg">
+      <div className="relative bg-white/40 dark:bg-zinc-900/45 p-5 pt-7 pb-6 rounded-[24px] border border-zinc-200/30 dark:border-zinc-800/30 shadow-lg backdrop-blur-md hover:shadow-xl hover:rotate-1 hover:scale-[1.01] transition-all duration-300 group max-w-lg">
         
         {/* Washi Tape / Tape sticker at top */}
         <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 w-28 h-6 bg-rose-200/40 dark:bg-rose-900/20 backdrop-blur-sm border-x border-dashed border-rose-300/30 dark:border-rose-700/10 rotate-[-2deg] select-none" />
@@ -67,7 +67,7 @@ export default function MilestoneCard({
           </h3>
 
           {milestone.description && (
-            <p className="text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed italic font-serif mt-3 border-l-2 border-rose-200/30 dark:border-rose-800/20 pl-3.5 bg-zinc-50/50 dark:bg-zinc-950/40 py-2.5 rounded-r-xl">
+            <p className="text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed italic font-serif mt-3 border-l-2 border-rose-200/30 dark:border-rose-800/20 pl-3.5 bg-zinc-50/30 dark:bg-zinc-950/25 py-2.5 rounded-r-xl">
               &ldquo;{milestone.description}&rdquo;
             </p>
           )}

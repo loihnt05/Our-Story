@@ -229,13 +229,13 @@ Romeo`,
         </div>
 
         {/* NEXT ANNIVERSARY */}
-        <div className="p-6 rounded-[28px] bg-white/40 dark:bg-zinc-905/40 border border-white/20 dark:border-zinc-800/20 shadow-lg backdrop-blur-md flex flex-col gap-4 hover:shadow-xl hover:scale-[1.02] transition-all duration-300 group">
+        <div className="p-6 rounded-[28px] bg-white/40 dark:bg-zinc-900/40 border border-white/20 dark:border-zinc-800/20 shadow-lg backdrop-blur-md flex flex-col gap-4 hover:shadow-xl hover:scale-[1.02] transition-all duration-300 group">
           <div className="w-10 h-10 rounded-full bg-purple-100 dark:bg-purple-950/40 flex items-center justify-center text-purple-500">
             <Gift className="w-5 h-5 text-purple-500 fill-purple-500/10" />
           </div>
           <div className="text-left mt-2">
             <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest">Next Anniversary</span>
-            <h3 className="text-3xl font-extrabold text-purple-650 dark:text-purple-400 mt-1 font-serif" style={{ fontFamily: "var(--font-molle)" }}>
+            <h3 className="text-3xl font-extrabold text-purple-600 dark:text-purple-400 mt-1 font-serif" style={{ fontFamily: "var(--font-molle)" }}>
               35 <span className="text-sm font-bold text-zinc-500 dark:text-zinc-400 font-sans">days</span>
             </h3>
             <p className="text-xs text-zinc-500 mt-2 font-medium">
@@ -249,11 +249,11 @@ Romeo`,
           onClick={() => setActiveStatsModal("letters")}
           className="p-6 rounded-[28px] bg-white/40 dark:bg-zinc-900/40 border border-white/20 dark:border-zinc-800/20 shadow-lg backdrop-blur-md flex flex-col gap-4 hover:shadow-xl hover:scale-[1.02] transition-all duration-300 group cursor-pointer"
         >
-          <div className="w-10 h-10 rounded-full bg-pink-100 dark:bg-pink-955/40 flex items-center justify-center text-pink-500">
+          <div className="w-10 h-10 rounded-full bg-pink-100 dark:bg-pink-900/40 flex items-center justify-center text-pink-500">
             <Mail className="w-5 h-5 text-pink-500 fill-pink-500/10" />
           </div>
           <div className="text-left mt-2 flex-1">
-            <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-550 uppercase tracking-widest">Letters Shared</span>
+            <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-400 uppercase tracking-widest">Letters Shared</span>
             <h3 className="text-3xl font-extrabold text-pink-600 dark:text-pink-400 mt-1 font-serif" style={{ fontFamily: "var(--font-molle)" }}>
               56 <span className="text-sm font-bold text-zinc-500 dark:text-zinc-400 font-sans">letters</span>
             </h3>
@@ -268,11 +268,11 @@ Romeo`,
           onClick={() => setActiveStatsModal("photos")}
           className="p-6 rounded-[28px] bg-white/40 dark:bg-zinc-900/40 border border-white/20 dark:border-zinc-800/20 shadow-lg backdrop-blur-md flex flex-col gap-4 hover:shadow-xl hover:scale-[1.02] transition-all duration-300 group cursor-pointer"
         >
-          <div className="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-950/40 flex items-center justify-center text-indigo-500">
+          <div className="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-900/40 flex items-center justify-center text-indigo-500">
             <Camera className="w-5 h-5 text-indigo-500" />
           </div>
           <div className="text-left mt-2 flex-1">
-            <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-550 uppercase tracking-widest">Photos Captured</span>
+            <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-400 uppercase tracking-widest">Photos Captured</span>
             <h3 className="text-3xl font-extrabold text-indigo-650 dark:text-indigo-400 mt-1 font-serif" style={{ fontFamily: "var(--font-molle)" }}>
               1,842 <span className="text-sm font-bold text-zinc-500 dark:text-zinc-400 font-sans">photos</span>
             </h3>
@@ -287,12 +287,12 @@ Romeo`,
           onClick={() => setActiveStatsModal("memories")}
           className="p-6 rounded-[28px] bg-white/40 dark:bg-zinc-900/40 border border-white/20 dark:border-zinc-800/20 shadow-lg backdrop-blur-md flex flex-col gap-4 hover:shadow-xl hover:scale-[1.02] transition-all duration-300 group cursor-pointer"
         >
-          <div className="w-10 h-10 rounded-full bg-teal-100 dark:bg-teal-950/40 flex items-center justify-center text-teal-500">
+          <div className="w-10 h-10 rounded-full bg-teal-100 dark:bg-teal-900/40 flex items-center justify-center text-teal-500">
             <BookOpen className="w-5 h-5 text-teal-500" />
           </div>
           <div className="text-left mt-2 flex-1">
-            <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-555 uppercase tracking-widest">Shared Memories</span>
-            <h3 className="text-3xl font-extrabold text-teal-650 dark:text-teal-400 mt-1 font-serif" style={{ fontFamily: "var(--font-molle)" }}>
+            <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-400 uppercase tracking-widest">Shared Memories</span>
+            <h3 className="text-3xl font-extrabold text-teal-600 dark:text-teal-400 mt-1 font-serif" style={{ fontFamily: "var(--font-molle)" }}>
               412 <span className="text-sm font-bold text-zinc-500 dark:text-zinc-400 font-sans">capsules</span>
             </h3>
             <p className="text-xs text-zinc-500 mt-2 font-medium">
@@ -401,7 +401,7 @@ Romeo`,
               <div className="w-full max-w-md flex flex-col items-center gap-5 text-center">
                 <div>
                   <span className="text-[10px] font-bold uppercase tracking-wider text-rose-500">Love Chemistry Quiz ⚡</span>
-                  <h3 className="text-xs font-bold text-zinc-405 dark:text-zinc-550 uppercase tracking-widest mt-1 text-center">
+                  <h3 className="text-xs font-bold text-zinc-400 dark:text-zinc-400 uppercase tracking-widest mt-1 text-center">
                     Guess {loved.personBName}&apos;s favorite:
                   </h3>
                   <h4 className="text-base font-extrabold text-zinc-850 dark:text-zinc-100 mt-2 font-serif px-4 py-3 rounded-2xl bg-rose-500/5 border border-rose-500/10">
@@ -482,7 +482,7 @@ Romeo`,
 
       {/* Letters Modal */}
       {activeStatsModal === "letters" && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in text-zinc-800 dark:text-zinc-150">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in text-zinc-800 dark:text-zinc-200">
           <div className="w-full max-w-lg rounded-3xl bg-white dark:bg-zinc-900 shadow-2xl border border-zinc-200 dark:border-zinc-800 p-6 overflow-hidden animate-scale-up flex flex-col max-h-[85vh]">
             <div className="flex items-center justify-between border-b pb-3 border-zinc-200/50 dark:border-zinc-800/50 shrink-0">
               <h2 className="text-lg font-bold font-cursive flex items-center gap-2">
@@ -494,7 +494,7 @@ Romeo`,
                   setActiveStatsModal(null);
                   setSelectedStatsLetter(null);
                 }}
-                className="p-1 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-400 hover:text-zinc-755 dark:hover:text-white transition-colors cursor-pointer border-none bg-transparent"
+                className="p-1 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-400 hover:text-zinc-700 dark:hover:text-white transition-colors cursor-pointer border-none bg-transparent"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -507,13 +507,13 @@ Romeo`,
                     <div
                       key={letter.id}
                       onClick={() => setSelectedStatsLetter(letter.id)}
-                      className="p-4 rounded-2xl bg-zinc-50 dark:bg-zinc-955/40 border border-zinc-200/30 dark:border-zinc-800/30 hover:border-rose-300 hover:bg-rose-50/10 cursor-pointer transition-all text-left flex flex-col gap-1 hover:scale-[1.01]"
+                      className="p-4 rounded-2xl bg-zinc-50 dark:bg-zinc-950/40 border border-zinc-200/30 dark:border-zinc-800/30 hover:border-rose-300 hover:bg-rose-50/10 cursor-pointer transition-all text-left flex flex-col gap-1 hover:scale-[1.01]"
                     >
                       <div className="flex items-center justify-between">
                         <h4 className="text-xs font-bold text-zinc-900 dark:text-white">{letter.title}</h4>
                         <span className="text-[9px] font-bold text-zinc-400">{letter.date}</span>
                       </div>
-                      <p className="text-xs text-zinc-550 dark:text-zinc-400 line-clamp-1 leading-normal">
+                      <p className="text-xs text-zinc-500 dark:text-zinc-400 line-clamp-1 leading-normal">
                         {letter.excerpt}
                       </p>
                     </div>
@@ -531,12 +531,12 @@ Romeo`,
                   {(() => {
                     const lObj = mockLetters.find(l => l.id === selectedStatsLetter)!;
                     return (
-                      <div className="p-6 rounded-2xl bg-amber-50/20 dark:bg-zinc-950/30 border border-amber-200/30 dark:border-zinc-800/30 font-serif text-sm leading-relaxed text-zinc-850 dark:text-zinc-200 shadow-sm relative overflow-hidden">
+                      <div className="p-6 rounded-2xl bg-amber-50/20 dark:bg-zinc-950/30 border border-amber-200/30 dark:border-zinc-800/30 font-serif text-sm leading-relaxed text-zinc-800 dark:text-zinc-200 shadow-sm relative overflow-hidden">
                         <div className="absolute top-0 bottom-0 left-6 w-[1px] bg-red-400/20" />
                         <div className="pl-6 whitespace-pre-line font-cursive text-base">
                           {lObj.content}
                         </div>
-                        <div className="text-right text-[10px] text-zinc-450 mt-6 pl-6">
+                        <div className="text-right text-[10px] text-zinc-400 mt-6 pl-6">
                           Written on {lObj.date}
                         </div>
                       </div>
@@ -551,7 +551,7 @@ Romeo`,
 
       {/* Photos Modal */}
       {activeStatsModal === "photos" && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in text-zinc-805 dark:text-zinc-150">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in text-zinc-800 dark:text-zinc-200">
           <div className="w-full max-w-lg rounded-3xl bg-white dark:bg-zinc-900 shadow-2xl border border-zinc-200 dark:border-zinc-800 p-6 overflow-hidden animate-scale-up flex flex-col max-h-[85vh]">
             <div className="flex items-center justify-between border-b pb-3 border-zinc-200/50 dark:border-zinc-800/50 shrink-0">
               <h2 className="text-lg font-bold font-cursive flex items-center gap-2">
@@ -560,7 +560,7 @@ Romeo`,
               </h2>
               <button 
                 onClick={() => setActiveStatsModal(null)}
-                className="p-1 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-400 hover:text-zinc-755 dark:hover:text-white transition-colors cursor-pointer border-none bg-transparent"
+                className="p-1 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-400 hover:text-zinc-700 dark:hover:text-white transition-colors cursor-pointer border-none bg-transparent"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -577,7 +577,7 @@ Romeo`,
                   </div>
                   <div className="text-left w-full">
                     <h4 className="text-[11px] font-bold text-zinc-800 dark:text-zinc-200 truncate">{photo.title}</h4>
-                    <p className="text-[9px] text-zinc-550 dark:text-zinc-455 mt-1 line-clamp-2 leading-relaxed">
+                    <p className="text-[9px] text-zinc-500 dark:text-zinc-400 mt-1 line-clamp-2 leading-relaxed">
                       {photo.desc}
                     </p>
                   </div>
@@ -590,7 +590,7 @@ Romeo`,
 
       {/* Memories Modal */}
       {activeStatsModal === "memories" && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in text-zinc-800 dark:text-zinc-150">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in text-zinc-800 dark:text-zinc-200">
           <div className="w-full max-w-sm rounded-3xl bg-white dark:bg-zinc-900 shadow-2xl border border-zinc-200 dark:border-zinc-800 p-6 overflow-hidden animate-scale-up flex flex-col">
             <div className="flex items-center justify-between border-b pb-3 border-zinc-200/50 dark:border-zinc-800/50 shrink-0">
               <h2 className="text-lg font-bold font-cursive flex items-center gap-2">
@@ -599,7 +599,7 @@ Romeo`,
               </h2>
               <button 
                 onClick={() => setActiveStatsModal(null)}
-                className="p-1 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-450 hover:text-zinc-755 dark:hover:text-white transition-colors cursor-pointer border-none bg-transparent"
+                className="p-1 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-500 hover:text-zinc-700 dark:hover:text-white transition-colors cursor-pointer border-none bg-transparent"
               >
                 <X className="w-5 h-5" />
               </button>
