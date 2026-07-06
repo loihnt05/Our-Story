@@ -43,6 +43,13 @@ export default function PolaroidCard({
   onHoverEnd
 }: PolaroidCardProps) {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [useDelay, setUseDelay] = useState(true);
+
+  // Disable stagger delay after initial load (so hover interactions are instant)
+  useEffect(() => {
+    const timer = setTimeout(() => setUseDelay(false), 2000);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Parallax tracking based on mouse movements (disabled when hovered to keep readability)
   useEffect(() => {
@@ -61,19 +68,16 @@ export default function PolaroidCard({
   const parallaxX = isMeHovered ? 0 : mousePos.x * 24 * depthFactor;
   const parallaxY = isMeHovered ? 0 : mousePos.y * 24 * depthFactor;
 
-  // Active shift: hovered photo pushes outward toward the viewport edges
-  const activeShiftX = isMeHovered ? (targetX < 0 ? -60 : targetX > 0 ? 60 : 0) : 0;
-  const activeShiftY = isMeHovered ? (targetY < 0 ? -30 : targetY > 0 ? 30 : 0) : 0;
+  // Align slightly to the left (-160px) when active to make space for details panel on the right
+  const animateX = isMeHovered ? -160 : targetX + parallaxX;
+  const animateY = isMeHovered ? 0 : targetY + parallaxY;
 
-  // Focus blur (spotlight): dim and blur others, sharpen the active card
+  // Focus blur (spotlight): dim and blur others heavily, sharpen the active card
   const blurAmount = isMeHovered 
     ? "blur(0px)" 
     : isAnyHovered 
-    ? "blur(2px)" 
+    ? "blur(4px)" 
     : `blur(${0.4 * (1 - depthFactor)}px)`;
-
-  // Determine slide direction for the details tag based on screen height placement
-  const isSlideUp = targetY > 0;
 
   return (
     <motion.div
@@ -82,26 +86,26 @@ export default function PolaroidCard({
       }
       initial={{ opacity: 0, scale: 0.1, rotate: 0, x: 0, y: 0, zIndex: zIndex }}
       animate={{ 
-        opacity: isMeHovered ? 1 : isAnyHovered ? 0.35 : 1, 
+        opacity: isMeHovered ? 1 : isAnyHovered ? 0.1 : 1, 
         scale: isMeHovered ? 1.12 : 1, 
         rotate: isMeHovered ? 0 : rotation, 
-        x: targetX + parallaxX + activeShiftX, 
-        y: targetY + parallaxY + activeShiftY,
+        x: animateX, 
+        y: animateY,
         zIndex: isMeHovered ? 100 : zIndex
       }}
       transition={{ 
         type: "spring", 
-        stiffness: 45, 
-        damping: 14, 
-        mass: 1.1,
-        delay: isMeHovered ? 0 : delay 
+        stiffness: isMeHovered ? 75 : 140, // Snap back faster when unhovering
+        damping: isMeHovered ? 15 : 22,
+        mass: 1.0,
+        delay: useDelay ? delay : 0 // No delay after initial mount fanning
       }}
       onHoverStart={onHoverStart}
       onHoverEnd={onHoverEnd}
       className="absolute top-1/2 left-1/2 p-4 pb-8 bg-[#faf9f6] dark:bg-zinc-850 border border-zinc-250/45 dark:border-zinc-700/60 rounded-xl w-72 sm:w-80 text-zinc-800 dark:text-zinc-200 cursor-grab active:cursor-grabbing transform pointer-events-auto transition-shadow"
       style={{
         boxShadow: isMeHovered 
-          ? "0 30px 70px rgba(0,0,0,0.4), 0 15px 30px rgba(0,0,0,0.25)"
+          ? "0 40px 80px rgba(0,0,0,0.5), 0 20px 45px rgba(0,0,0,0.3)"
           : `0 12px 28px rgba(0,0,0,0.18), 0 5px 10px rgba(0,0,0,0.12)`,
         filter: blurAmount,
         borderImage: "radial-gradient(circle, #eae7db 0%, #faf9f6 100%) 1",
@@ -119,24 +123,20 @@ export default function PolaroidCard({
         <span className="text-[10px] text-zinc-400 dark:text-zinc-500 uppercase tracking-widest block mt-0.5">{date}</span>
       </div>
 
-      {/* Hand-written Memory Info Backing Card (Slides out from behind the photo) */}
+      {/* Hand-written Memory Info Backing Card (Slides out to the right side of the photo) */}
       <AnimatePresence>
         {isMeHovered && (
           <motion.div
-            initial={{ opacity: 0, y: isSlideUp ? 30 : -30, scale: 0.95 }}
-            animate={{ opacity: 1, y: isSlideUp ? "-100%" : "100%", scale: 1 }}
-            exit={{ opacity: 0, y: isSlideUp ? 30 : -30, scale: 0.95 }}
+            initial={{ opacity: 0, x: -30, scale: 0.95 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
+            exit={{ opacity: 0, x: -30, scale: 0.95 }}
             transition={{ 
               type: "spring", 
-              stiffness: 70, 
-              damping: 14,
+              stiffness: 75, 
+              damping: 15,
               delay: 0.05 
             }}
-            className={`absolute left-3 right-3 bg-[#fffdf5] dark:bg-zinc-900 border-amber-200/80 dark:border-zinc-700 shadow-2xl p-4 z-[-1] text-left select-none pointer-events-auto ${
-              isSlideUp 
-                ? "top-0 border-x border-t rounded-t-2xl pb-6 pt-4" 
-                : "bottom-0 border-x border-b rounded-b-2xl pt-6 pb-4"
-            }`}
+            className="absolute left-full top-0 bottom-0 w-[280px] sm:w-[320px] bg-[#fffdf5] dark:bg-zinc-900 border-y border-r border-amber-200/80 dark:border-zinc-700 shadow-2xl p-5 z-[-1] text-left select-none pointer-events-auto rounded-r-2xl flex flex-col justify-center gap-3 border-l-0"
             style={{
               backgroundImage: "linear-gradient(rgba(229, 231, 235, 0.4) 1px, transparent 1px)",
               backgroundSize: "100% 24px",
@@ -146,7 +146,12 @@ export default function PolaroidCard({
             {/* Margins red line */}
             <div className="absolute left-2.5 top-0 bottom-0 w-[1px] bg-red-300 opacity-60 pointer-events-none" />
             
-            <div className="pl-4.5 flex flex-col gap-2 font-sans">
+            <div className="pl-4 flex flex-col gap-2.5 font-sans">
+              <div className="flex flex-col gap-0.5 border-b border-zinc-200/50 dark:border-zinc-800 pb-2">
+                <h3 className="font-serif font-bold text-base text-rose-500 leading-tight truncate max-w-[220px]">{caption}</h3>
+                <span className="text-[9px] text-zinc-400 dark:text-zinc-500 uppercase tracking-widest">{date}</span>
+              </div>
+
               <div className="flex items-center gap-1.5 text-[10px] font-bold text-rose-500 uppercase tracking-wider">
                 <span>✨ Milestone:</span>
                 <span className="text-zinc-700 dark:text-zinc-300 font-semibold lowercase first-letter:uppercase truncate max-w-[150px]">{milestone}</span>
@@ -155,16 +160,11 @@ export default function PolaroidCard({
               {location && (
                 <div className="flex items-center gap-1.5 text-[9px] text-zinc-550 dark:text-zinc-400">
                   <span>📍 Location:</span>
-                  <span className="font-medium text-zinc-700 dark:text-zinc-300 truncate max-w-[140px]">{location}</span>
+                  <span className="font-medium text-zinc-700 dark:text-zinc-300 truncate max-w-[160px]">{location}</span>
                 </div>
               )}
-              
-              <div className="flex items-center gap-1.5 text-[9px] text-zinc-550 dark:text-zinc-400">
-                <span>📅 Date:</span>
-                <span className="font-medium text-zinc-700 dark:text-zinc-300">{date}</span>
-              </div>
 
-              <div className="flex items-center gap-1.5 text-[9px] text-zinc-550 dark:text-zinc-400 border-b border-zinc-200/50 dark:border-zinc-800 pb-2">
+              <div className="flex items-center gap-1.5 text-[9px] text-zinc-550 dark:text-zinc-400">
                 <span>💝 Timeline:</span>
                 <span className="font-medium text-rose-500 font-serif">Day {daysTogether} of our story</span>
               </div>
@@ -176,7 +176,7 @@ export default function PolaroidCard({
             </div>
             
             {/* Cute sticker clip decoration */}
-            <div className="absolute top-2 right-3 text-sm select-none rotate-12 opacity-80 pointer-events-none">📎❤️</div>
+            <div className="absolute top-3 right-3 text-base select-none rotate-12 opacity-80 pointer-events-none">📎❤️</div>
           </motion.div>
         )}
       </AnimatePresence>

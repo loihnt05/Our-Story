@@ -138,8 +138,8 @@ export default function SurpriseTakeover({ loved, currentTheme, onClose, onNavig
                 </div>
               )}
 
-              {/* parchment letter content (dims and blurs to spotlight hovered photos) */}
-              <div className={`w-full transition-all duration-500 ease-out ${hoveredPhotoIndex !== null ? "opacity-20 blur-[3px] scale-[0.97] pointer-events-none" : "opacity-100 scale-100 z-20"}`}>
+              {/* parchment letter content (fades away completely to spotlight centered hovered photo) */}
+              <div className={`w-full transition-all duration-500 ease-out ${hoveredPhotoIndex !== null ? "opacity-0 blur-[6px] scale-[0.95] pointer-events-none" : "opacity-100 scale-100 z-20"}`}>
                 <LetterCard
                   activeLetterTab={state.activeLetterTab}
                   setActiveLetterTab={state.setActiveLetterTab}
