@@ -23,7 +23,13 @@ export default function MainCounter({
   borderColor
 }: MainCounterProps) {
   const formatAnniversaryDate = () => {
-    const d = new Date(anniversaryDate);
+    const parts = anniversaryDate.split("-");
+    let d: Date;
+    if (parts.length === 3) {
+      d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+    } else {
+      d = new Date(anniversaryDate);
+    }
     if (isNaN(d.getTime())) return "";
     return d.toLocaleDateString(undefined, {
       weekday: "long",

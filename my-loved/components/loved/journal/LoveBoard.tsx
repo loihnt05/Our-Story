@@ -155,7 +155,13 @@ export default function LoveBoard({
     if (dateStr === yesterdayStr) return "Yesterday";
 
     try {
-      const parsed = new Date(dateStr);
+      const parts = dateStr.split("-");
+      let parsed: Date;
+      if (parts.length === 3) {
+        parsed = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+      } else {
+        parsed = new Date(dateStr);
+      }
       return parsed.toLocaleDateString(undefined, {
         month: "short",
         day: "numeric",

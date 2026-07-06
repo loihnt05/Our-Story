@@ -13,13 +13,21 @@ export default function MilestoneCard({
   milestone,
   onRemoveMilestone
 }: MilestoneCardProps) {
-  // Format Date
-  const mDate = new Date(milestone.date);
-  const formattedDay = mDate.getDate();
-  const formattedMonthYear = mDate.toLocaleDateString(undefined, {
-    month: "long",
-    year: "numeric"
-  });
+  // Format Date safely to avoid timezone shift
+  const parts = milestone.date.split("-");
+  let mDate: Date;
+  if (parts.length === 3) {
+    mDate = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+  } else {
+    mDate = new Date(milestone.date);
+  }
+  const formattedDay = isNaN(mDate.getTime()) ? "" : mDate.getDate();
+  const formattedMonthYear = isNaN(mDate.getTime())
+    ? ""
+    : mDate.toLocaleDateString(undefined, {
+        month: "long",
+        year: "numeric"
+      });
 
   return (
     <div className="relative animate-scale-up">

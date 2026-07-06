@@ -13,7 +13,18 @@ export function useMilestones(mounted: boolean) {
     if (!mounted) return;
     const savedMilestones = localStorage.getItem("loved_milestones");
     if (savedMilestones) {
-      setMilestones(JSON.parse(savedMilestones));
+      try {
+        setMilestones(JSON.parse(savedMilestones));
+      } catch (err) {
+        console.error("Failed to parse milestones from localStorage", err);
+        const defaultMilestones = [
+          { id: "1", title: "First Met 🌸", date: "2024-11-15", description: "The spark that started everything.", icon: "✨" },
+          { id: "2", title: "First Date ☕", date: "2024-12-05", description: "Coffee, laughs, and talking for hours.", icon: "☕" },
+          { id: "3", title: "Officially Together 💕", date: "2025-01-01", description: "Holding hands and starting our journey.", icon: "💖" }
+        ];
+        setMilestones(defaultMilestones);
+        localStorage.setItem("loved_milestones", JSON.stringify(defaultMilestones));
+      }
     } else {
       const defaultMilestones = [
         { id: "1", title: "First Met 🌸", date: "2024-11-15", description: "The spark that started everything.", icon: "✨" },

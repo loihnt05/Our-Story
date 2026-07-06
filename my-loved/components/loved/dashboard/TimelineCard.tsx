@@ -87,11 +87,22 @@ export default function TimelineCard({
 
               <div>
                 <span className="text-[10px] font-bold text-rose-500 dark:text-rose-400 font-serif">
-                  {new Date(selectedMilestone.date).toLocaleDateString(undefined, {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric"
-                  })}
+                  {(() => {
+                    const parts = selectedMilestone.date.split("-");
+                    let d: Date;
+                    if (parts.length === 3) {
+                      d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+                    } else {
+                      d = new Date(selectedMilestone.date);
+                    }
+                    return isNaN(d.getTime())
+                      ? ""
+                      : d.toLocaleDateString(undefined, {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric"
+                        });
+                  })()}
                 </span>
                 <h4 className="font-bold text-base text-zinc-900 dark:text-white leading-snug mt-0.5">
                   {selectedMilestone.title}

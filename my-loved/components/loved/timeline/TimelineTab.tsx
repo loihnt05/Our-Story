@@ -22,7 +22,7 @@ export default function TimelineTab({ loved, currentTheme, offsetY, isDesktop }:
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start w-full">
         {/* Sticky Form */}
         <div 
-          className="md:col-span-4 md:sticky md:top-1/2 top-4"
+          className="md:col-span-4 md:sticky md:top-1/2 top-4 "
           style={{ 
             transform: isDesktop ? `translateY(calc(-50% + ${offsetY}px))` : "none", 
             willChange: "transform" 
