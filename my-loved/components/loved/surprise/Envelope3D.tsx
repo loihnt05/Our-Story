@@ -38,17 +38,26 @@ export default function Envelope3D({
       )}
 
       {/* 3D Envelope Wrapper */}
-      <div className="relative w-80 h-52 sm:w-96 sm:h-60 perspective-[1000px] preserve-3d scale-90 sm:scale-100 mt-2">
+      <div 
+        style={{ perspective: "1000px", transformStyle: "preserve-3d" }}
+        className="relative w-80 h-52 sm:w-96 sm:h-60 scale-90 sm:scale-100 mt-2"
+      >
         
-        {/* Inside Layer / Card sliding up */}
+        {/* Inside Layer / Card sliding up (Three-stage connected timeline) */}
         <motion.div
           animate={
             envelopeState === "letter-sliding"
-              ? { y: -160, scale: 0.9, zIndex: 12 }
-              : { y: 0, scale: 0.85, zIndex: 8 }
+              ? { y: -160, scale: 0.9, zIndex: 12, boxShadow: "0 25px 50px rgba(0,0,0,0.25)" }
+              : envelopeState === "opening"
+              ? { y: -25, scale: 0.88, zIndex: 8, boxShadow: "0 8px 16px rgba(0,0,0,0.12)" }
+              : { y: 0, scale: 0.85, zIndex: 8, boxShadow: "inset 0 0 15px rgba(0,0,0,0.1)" }
           }
-          transition={{ type: "spring", stiffness: 60, damping: 14 }}
-          className="absolute inset-x-5 top-5 bottom-5 bg-gradient-to-b from-[#fdfbf7] to-[#f5f0e6] dark:from-zinc-800 dark:to-zinc-900 rounded-2xl shadow-[inset_0_0_15px_rgba(0,0,0,0.1),0_10px_20px_rgba(0,0,0,0.15)] border border-amber-200/60 p-5 flex flex-col items-center justify-center"
+          transition={
+            envelopeState === "letter-sliding"
+              ? { type: "spring", stiffness: 60, damping: 14, delay: 0.35 }
+              : { type: "spring", stiffness: 70, damping: 15 }
+          }
+          className="absolute inset-x-5 top-5 bottom-5 bg-gradient-to-b from-[#fdfbf7] to-[#f5f0e6] dark:from-zinc-800 dark:to-zinc-900 rounded-2xl border border-amber-200/60 p-5 flex flex-col items-center justify-center"
         >
           <div className="w-full h-full border-2 border-amber-300/40 rounded-xl flex flex-col items-center justify-center text-amber-800 dark:text-amber-200 font-serif relative">
             <div className="absolute top-2 left-2 text-xs opacity-40">❦</div>
@@ -82,21 +91,43 @@ export default function Envelope3D({
           <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-rose-850/80 shadow-[0_-5px_15px_rgba(0,0,0,0.15)] [clip-path:polygon(0%_100%,50%_0%,100%_100%)] border-t border-white/5" />
         </div>
 
-        {/* Top opening Flap */}
+        {/* Double-Sided Top opening Flap with 3D Rotation (Cause-and-effect opening) */}
         <motion.div
           style={{
             transformOrigin: "top",
-            clipPath: "polygon(0% 0%, 50% 100%, 100% 0%)"
+            transformStyle: "preserve-3d",
+            zIndex: (envelopeState === "opening" || envelopeState === "letter-sliding") ? 5 : 15
           }}
           animate={
             envelopeState !== "closed" && envelopeState !== "seal-breaking"
-              ? { rotateX: 180, zIndex: 5, y: -1 }
-              : { rotateX: 0, zIndex: 15, y: 0 }
+              ? { rotateX: -168 }
+              : { rotateX: 0 }
           }
-          transition={{ duration: 0.8, ease: "easeInOut" }}
-          className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-rose-800 to-rose-700 border-b border-rose-650 shadow-md flex items-center justify-center"
+          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+          className="absolute inset-x-0 top-0 h-1/2"
         >
-          <div className="absolute inset-1 border-b border-amber-300/40 opacity-70 pointer-events-none" style={{ clipPath: "polygon(0% 0%, 50% 95%, 100% 0%)" }} />
+          {/* Front of Flap (Red exterior facing forward initially) */}
+          <div
+            style={{
+              backfaceVisibility: "hidden",
+              clipPath: "polygon(0% 0%, 50% 100%, 100% 0%)"
+            }}
+            className="absolute inset-0 bg-gradient-to-b from-rose-800 to-rose-700 border-b border-rose-650 shadow-md flex items-center justify-center"
+          >
+            <div className="absolute inset-1 border-b border-amber-300/40 opacity-70 pointer-events-none" style={{ clipPath: "polygon(0% 0%, 50% 95%, 100% 0%)" }} />
+          </div>
+
+          {/* Back of Flap (Cream interior revealed on flip) */}
+          <div
+            style={{
+              transform: "rotateX(180deg) rotateZ(180deg)",
+              backfaceVisibility: "hidden",
+              clipPath: "polygon(0% 0%, 50% 100%, 100% 0%)"
+            }}
+            className="absolute inset-0 bg-gradient-to-b from-[#f5f0e6] to-[#eae3d2] dark:from-zinc-800 dark:to-zinc-900 border-t border-amber-200/40"
+          >
+            <div className="absolute inset-1 border-t border-amber-400/20 opacity-50 pointer-events-none" style={{ clipPath: "polygon(0% 0%, 50% 95%, 100% 0%)" }} />
+          </div>
         </motion.div>
 
         {/* Wax Seal Ribbons */}

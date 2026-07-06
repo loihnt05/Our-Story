@@ -140,20 +140,23 @@ export function useSurpriseState(loved: any) {
     triggerAudioEffect("seal");
 
     setTimeout(() => {
+      // Flap starts to open
       setEnvelopeState("opening");
       
+      // Transition to letter-sliding when flap is halfway open (450ms)
       setTimeout(() => {
         setEnvelopeState("letter-sliding");
         triggerAudioEffect("unfold");
 
+        // Zoom/unfold letter after it has fully slid out (1200ms)
         setTimeout(() => {
           setEnvelopeState("zoomed");
           setShowPolaroids(true);
           setTriggerConfetti(true);
           triggerAudioEffect("confetti");
         }, 1200);
-      }, 1000);
-    }, 800);
+      }, 450);
+    }, 600);
   };
 
   // Typewriter printing inside letter card

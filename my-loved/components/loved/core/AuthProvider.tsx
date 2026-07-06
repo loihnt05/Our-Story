@@ -103,6 +103,7 @@ export function useAuth() {
     };
   }
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   return useClerkAuth();
 }
 
@@ -117,6 +118,7 @@ export function useClerk() {
     };
   }
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   return useClerkInstance();
 }
 
