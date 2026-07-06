@@ -84,7 +84,7 @@ export default function PolaroidCard({
       transformTemplate={({ x, y, rotate, scale }) => 
         `translate(-50%, -50%) ${x ? `translateX(${x})` : ""} ${y ? `translateY(${y})` : ""} ${rotate ? `rotate(${rotate})` : ""} ${scale ? `scale(${scale})` : ""}`
       }
-      initial={{ opacity: 0, scale: 0.1, rotate: 0, x: 0, y: 0, zIndex: zIndex }}
+      initial={{ opacity: 0, scale: 0.9, rotate: 0, x: 0, y: 0, zIndex: zIndex }}
       animate={{ 
         opacity: isMeHovered ? 1 : isAnyHovered ? 0.1 : 1, 
         scale: isMeHovered ? 1.12 : 1, 
@@ -95,20 +95,20 @@ export default function PolaroidCard({
       }}
       transition={{ 
         type: "spring", 
-        stiffness: isMeHovered ? 75 : 140, // Snap back faster when unhovering
-        damping: isMeHovered ? 15 : 22,
+        stiffness: isMeHovered ? 75 : (useDelay ? 45 : 140), // Snappier when unhovering
+        damping: isMeHovered ? 15 : (useDelay ? 9 : 22),    // Lower damping (9) for initial entry gives a beautiful physical overshoot and gravity settle!
         mass: 1.0,
         delay: useDelay ? delay : 0 // No delay after initial mount fanning
       }}
       onHoverStart={onHoverStart}
       onHoverEnd={onHoverEnd}
-      className="absolute top-1/2 left-1/2 p-4 pb-8 bg-[#faf9f6] dark:bg-zinc-850 border border-zinc-250/45 dark:border-zinc-700/60 rounded-xl w-72 sm:w-80 text-zinc-800 dark:text-zinc-200 cursor-grab active:cursor-grabbing transform pointer-events-auto transition-shadow"
+      className="absolute top-1/2 left-1/2 p-4 pb-8 bg-[#faf7f0] dark:bg-zinc-850 border border-[#eadecc]/60 dark:border-zinc-700/60 rounded-xl w-72 sm:w-80 text-zinc-800 dark:text-zinc-200 cursor-grab active:cursor-grabbing transform pointer-events-auto transition-shadow"
       style={{
         boxShadow: isMeHovered 
-          ? "0 40px 80px rgba(0,0,0,0.5), 0 20px 45px rgba(0,0,0,0.3)"
-          : `0 12px 28px rgba(0,0,0,0.18), 0 5px 10px rgba(0,0,0,0.12)`,
+          ? "0 40px 80px -15px rgba(0,0,0,0.4), 0 20px 45px -10px rgba(0,0,0,0.3)"
+          : `0 20px 40px -15px rgba(0,0,0,0.25), 0 15px 25px -10px rgba(0,0,0,0.15), 0 5px 10px -5px rgba(0,0,0,0.1)`,
         filter: blurAmount,
-        borderImage: "radial-gradient(circle, #eae7db 0%, #faf9f6 100%) 1",
+        borderImage: "radial-gradient(circle, #eae7db 0%, #faf7f0 100%) 1",
       }}
     >
       {/* Expanded forgiving hover boundary overlay */}
