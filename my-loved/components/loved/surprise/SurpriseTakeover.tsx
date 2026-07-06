@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { Volume2, VolumeX, X } from "lucide-react";
 import { AnimatePresence } from "motion/react";
 import { POLAROID_IMAGES } from "./constants";
@@ -25,6 +25,9 @@ export default function SurpriseTakeover({ loved, currentTheme, onClose, onNavig
 
   // Custom high-performance canvas rendering loop hook
   useSurpriseCanvas(canvasRef, state.triggerConfetti);
+
+  // Active hovered photo index (spotlight spotlight focus)
+  const [hoveredPhotoIndex, setHoveredPhotoIndex] = useState<number | null>(null);
 
   const handleCompleteSurprise = () => {
     if (typeof window !== "undefined") {
@@ -115,33 +118,43 @@ export default function SurpriseTakeover({ loved, currentTheme, onClose, onNavig
                         url={img.url}
                         caption={img.caption}
                         date={img.date}
+                        location={img.location}
+                        milestone={img.milestone}
+                        daysTogether={img.daysTogether}
+                        note={img.note}
                         targetX={config.targetX}
                         targetY={config.targetY}
                         rotation={config.rotation}
                         depthFactor={config.depthFactor}
                         zIndex={config.zIndex}
                         delay={0.6 + i * 0.15}
+                        isAnyHovered={hoveredPhotoIndex !== null}
+                        isMeHovered={hoveredPhotoIndex === i}
+                        onHoverStart={() => setHoveredPhotoIndex(i)}
+                        onHoverEnd={() => setHoveredPhotoIndex(null)}
                       />
                     );
                   })}
                 </div>
               )}
 
-              {/* parchment letter content */}
-              <LetterCard
-                activeLetterTab={state.activeLetterTab}
-                setActiveLetterTab={state.setActiveLetterTab}
-                milestoneTitle={state.milestoneTitle}
-                daysTogether={state.daysTogether}
-                monthsTogether={state.monthsTogether}
-                yearsTogether={state.yearsTogether}
-                typedMessage={state.typedMessage}
-                savedNote={state.savedNote}
-                noteContent={state.noteContent}
-                setNoteContent={state.setNoteContent}
-                handleSaveNote={state.handleSaveNote}
-                handleCompleteSurprise={handleCompleteSurprise}
-              />
+              {/* parchment letter content (dims and blurs to spotlight hovered photos) */}
+              <div className={`w-full transition-all duration-500 ease-out ${hoveredPhotoIndex !== null ? "opacity-20 blur-[3px] scale-[0.97] pointer-events-none" : "opacity-100 scale-100 z-20"}`}>
+                <LetterCard
+                  activeLetterTab={state.activeLetterTab}
+                  setActiveLetterTab={state.setActiveLetterTab}
+                  milestoneTitle={state.milestoneTitle}
+                  daysTogether={state.daysTogether}
+                  monthsTogether={state.monthsTogether}
+                  yearsTogether={state.yearsTogether}
+                  typedMessage={state.typedMessage}
+                  savedNote={state.savedNote}
+                  noteContent={state.noteContent}
+                  setNoteContent={state.setNoteContent}
+                  handleSaveNote={state.handleSaveNote}
+                  handleCompleteSurprise={handleCompleteSurprise}
+                />
+              </div>
             </div>
           </div>
         )}
