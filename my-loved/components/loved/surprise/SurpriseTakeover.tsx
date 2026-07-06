@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { Volume2, VolumeX, X } from "lucide-react";
 import { AnimatePresence } from "motion/react";
 import { POLAROID_IMAGES } from "./constants";
@@ -28,6 +28,49 @@ export default function SurpriseTakeover({ loved, currentTheme, onClose, onNavig
 
   // Active hovered photo index (spotlight spotlight focus)
   const [hoveredPhotoIndex, setHoveredPhotoIndex] = useState<number | null>(null);
+  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handleHoverStart = (index: number) => {
+    // If another photo is already locked in focus, ignore hover events
+    if (hoveredPhotoIndex !== null && hoveredPhotoIndex !== index) {
+      return;
+    }
+    
+    // Cancel any pending exit timeouts
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+      hoverTimeoutRef.current = null;
+    }
+    
+    setHoveredPhotoIndex(index);
+  };
+
+  const handleHoverEnd = (index: number) => {
+    // Only handle exit if the leaving photo is the active one
+    if (hoveredPhotoIndex !== index) {
+      return;
+    }
+    
+    // Clear any existing timeout
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+    }
+    
+    // Start hover-out delay (350ms) to allow forgiving cursor movements
+    hoverTimeoutRef.current = setTimeout(() => {
+      setHoveredPhotoIndex(null);
+      hoverTimeoutRef.current = null;
+    }, 350);
+  };
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const handleCompleteSurprise = () => {
     if (typeof window !== "undefined") {
@@ -130,8 +173,8 @@ export default function SurpriseTakeover({ loved, currentTheme, onClose, onNavig
                         delay={0.6 + i * 0.15}
                         isAnyHovered={hoveredPhotoIndex !== null}
                         isMeHovered={hoveredPhotoIndex === i}
-                        onHoverStart={() => setHoveredPhotoIndex(i)}
-                        onHoverEnd={() => setHoveredPhotoIndex(null)}
+                        onHoverStart={() => handleHoverStart(i)}
+                        onHoverEnd={() => handleHoverEnd(i)}
                       />
                     );
                   })}

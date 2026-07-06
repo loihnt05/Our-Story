@@ -111,6 +111,11 @@ export default function PolaroidCard({
         borderImage: "radial-gradient(circle, #eae7db 0%, #faf9f6 100%) 1",
       }}
     >
+      {/* Expanded forgiving hover boundary overlay */}
+      {isMeHovered && (
+        <div className="absolute inset-[-40px] z-[-2] bg-transparent pointer-events-auto cursor-default" />
+      )}
+
       {/* Photo Container */}
       <div className="w-full h-52 sm:h-60 rounded-lg overflow-hidden border border-zinc-200/40 dark:border-zinc-700/40 bg-zinc-100 dark:bg-zinc-900 relative shadow-[inset_0_2px_8px_rgba(0,0,0,0.1)]">
         <img src={url} alt={caption} className="w-full h-full object-cover select-none pointer-events-none" />
