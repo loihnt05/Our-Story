@@ -7,7 +7,7 @@ export default function MotionEnvelope() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[400px] bg-slate-900 p-8">
+    <div className="flex flex-col h-screen items-center justify-center min-h-[400px] bg-slate-900 p-8">
       {/* Container holding the envelope and triggering state */}
       <div 
         className="relative w-80 h-52 cursor-pointer group"

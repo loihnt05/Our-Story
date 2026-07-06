@@ -94,45 +94,55 @@ export default function SurpriseTakeover({ loved, currentTheme, onClose, onNavig
         {state.envelopeState === "zoomed" && (
           <div className="absolute inset-0 flex flex-col md:flex-row items-center justify-center p-4 md:p-12 z-30 bg-black/60 backdrop-blur-md select-text overflow-y-auto">
             
-            {/* Memory Polaroids */}
-            {state.showPolaroids && (
-              <div className="hidden lg:block absolute inset-0 pointer-events-auto z-10 overflow-hidden select-none">
-                {POLAROID_IMAGES.map((img, i) => {
-                  const rotation = i === 0 ? -12 : i === 1 ? 12 : -8;
-                  const top = i === 0 ? "15%" : i === 1 ? "15%" : "55%";
-                  const left = i === 0 ? "10%" : i === 1 ? "80%" : "82%";
-                  return (
-                    <PolaroidCard
-                      key={i}
-                      url={img.url}
-                      caption={img.caption}
-                      date={img.date}
-                      rotation={rotation}
-                      top={top}
-                      left={left}
-                      delay={0.8 + i * 0.3}
-                    />
-                  );
-                })}
-              </div>
-            )}
+            {/* Anchor container to lock coordinate system relative to the LetterCard */}
+            <div className="relative w-full max-w-xl flex items-center justify-center min-h-[500px]">
+              
+              {/* Memory Polaroids fanned out around the central letter */}
+              {state.showPolaroids && (
+                <div className="hidden sm:block absolute inset-0 pointer-events-none z-10 overflow-visible select-none">
+                  {POLAROID_IMAGES.map((img, i) => {
+                    const configs = [
+                      { targetX: -290, targetY: -110, rotation: -8, depthFactor: 0.8, zIndex: 15 },  // Left Side (Upper)
+                      { targetX: 290, targetY: -120, rotation: 8, depthFactor: 0.6, zIndex: 14 },   // Right Side (Upper)
+                      { targetX: -280, targetY: 120, rotation: -6, depthFactor: 0.7, zIndex: 13 },   // Left Side (Lower)
+                      { targetX: 280, targetY: 110, rotation: 10, depthFactor: 0.9, zIndex: 16 },   // Right Side (Lower)
+                      { targetX: 0, targetY: -285, rotation: -3, depthFactor: 0.5, zIndex: 12 }    // Top Center peeking
+                    ];
+                    const config = configs[i % configs.length];
+                    return (
+                      <PolaroidCard
+                        key={i}
+                        url={img.url}
+                        caption={img.caption}
+                        date={img.date}
+                        targetX={config.targetX}
+                        targetY={config.targetY}
+                        rotation={config.rotation}
+                        depthFactor={config.depthFactor}
+                        zIndex={config.zIndex}
+                        delay={0.6 + i * 0.15}
+                      />
+                    );
+                  })}
+                </div>
+              )}
 
-            {/* parchment letter content */}
-            <LetterCard
-              activeLetterTab={state.activeLetterTab}
-              setActiveLetterTab={state.setActiveLetterTab}
-              milestoneTitle={state.milestoneTitle}
-              daysTogether={state.daysTogether}
-              monthsTogether={state.monthsTogether}
-              yearsTogether={state.yearsTogether}
-              typedMessage={state.typedMessage}
-              savedNote={state.savedNote}
-              noteContent={state.noteContent}
-              setNoteContent={state.setNoteContent}
-              handleSaveNote={state.handleSaveNote}
-              handleCompleteSurprise={handleCompleteSurprise}
-            />
-
+              {/* parchment letter content */}
+              <LetterCard
+                activeLetterTab={state.activeLetterTab}
+                setActiveLetterTab={state.setActiveLetterTab}
+                milestoneTitle={state.milestoneTitle}
+                daysTogether={state.daysTogether}
+                monthsTogether={state.monthsTogether}
+                yearsTogether={state.yearsTogether}
+                typedMessage={state.typedMessage}
+                savedNote={state.savedNote}
+                noteContent={state.noteContent}
+                setNoteContent={state.setNoteContent}
+                handleSaveNote={state.handleSaveNote}
+                handleCompleteSurprise={handleCompleteSurprise}
+              />
+            </div>
           </div>
         )}
       </AnimatePresence>
