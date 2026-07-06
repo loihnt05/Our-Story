@@ -9,6 +9,7 @@ import { useAuth } from "@/components/loved/core/AuthProvider";
 import AccessDenied from "@/components/loved/core/AccessDenied";
 import ThemeBackground from "@/components/loved/core/ThemeBackground";
 import { useTheme } from "next-themes";
+import { usePathname } from "next/navigation";
 
 // Import modular tab components
 import DashboardTab from "@/components/loved/dashboard/DashboardTab";
@@ -26,9 +27,17 @@ export default function LoveCounter({ initialTabHref }: LoveCounterProps) {
   const loved = useLoveStory();
   const { isSignedIn } = useAuth();
   const { resolvedTheme, setTheme } = useTheme();
+  const pathname = usePathname();
 
   // Active SPA Tab state
-  const [activeTabHref, setActiveTabHref] = useState(initialTabHref || "/number-loved");
+  const [activeTabHref, setActiveTabHref] = useState(pathname || initialTabHref || "/number-loved");
+
+  // Sync state with next/navigation URL changes
+  useEffect(() => {
+    if (pathname) {
+      setActiveTabHref(pathname);
+    }
+  }, [pathname]);
 
   // Invite parameters state
   const [partnerInviteName, setPartnerInviteName] = useState<string | null>(null);
