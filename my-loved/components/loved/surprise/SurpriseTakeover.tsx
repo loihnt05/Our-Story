@@ -94,7 +94,7 @@ export default function SurpriseTakeover({ loved, currentTheme, onClose, onNavig
   };
 
   return (
-    <div className="fixed inset-0 z-[100] bg-zinc-950 text-white select-none overflow-hidden flex flex-col items-center justify-center font-sans">
+    <div className="fixed inset-0 z-[100] bg-[radial-gradient(circle_at_center,rgba(40,12,50,0.25)_0%,rgba(9,9,11,0.65)_50%,rgba(9,9,11,1)_100%)] bg-zinc-950 text-white select-none overflow-hidden flex flex-col items-center justify-center font-sans">
       
       {/* Canvas particle layers */}
       <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none z-10" />

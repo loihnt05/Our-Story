@@ -88,17 +88,6 @@ export function useSurpriseCanvas(
     const render = () => {
       ctx.clearRect(0, 0, width, height);
 
-      // Ambient radial background glow
-      const time = Date.now() * 0.0004;
-      const grad = ctx.createRadialGradient(width / 2, height / 2, 50, width / 2, height / 2, width);
-      const rGlow = Math.floor(Math.sin(time) * 20 + 35);
-      const bGlow = Math.floor(Math.cos(time) * 30 + 45);
-      grad.addColorStop(0, `rgba(${rGlow}, 12, ${bGlow}, 0.25)`);
-      grad.addColorStop(0.5, "rgba(9, 9, 11, 0.65)");
-      grad.addColorStop(1, "rgba(9, 9, 11, 0.95)");
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, width, height);
-
       // Random continuous explosions
       if (Math.random() < 0.02) {
         addExplosion(Math.random() * width, Math.random() * (height * 0.6), Math.random() * 40 + 30);

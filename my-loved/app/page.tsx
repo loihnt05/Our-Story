@@ -8,7 +8,7 @@ import { THEMES } from "@/components/loved/core/constants";
 import { AmbientSynth } from "@/components/loved/core/AmbientSynth";
 
 export default function Home() {
-  const { isSignedIn } = useAuth();
+  const { isSignedIn, isLoaded } = useAuth();
   const { openSignIn } = useClerk();
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
@@ -41,9 +41,10 @@ export default function Home() {
   const currentTheme = THEMES.find((t) => t.id === themeId) || THEMES[0];
 
   const handleEnter = () => {
+    if (!isLoaded) return;
     if (!isSignedIn) {
       if (openSignIn) {
-        openSignIn();
+        openSignIn({});
       }
     } else {
       // Trigger a brief romantic start chime

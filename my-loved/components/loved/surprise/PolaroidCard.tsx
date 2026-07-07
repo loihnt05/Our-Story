@@ -73,11 +73,12 @@ export default function PolaroidCard({
   const animateY = isMeHovered ? 0 : targetY + parallaxY;
 
   // Focus blur (spotlight): dim and blur others heavily, sharpen the active card
+  // Disabled the tiny depth-factor blur when no card is active to eliminate heavy rasterization rendering lag during mouse movement
   const blurAmount = isMeHovered 
-    ? "blur(0px)" 
+    ? "none" 
     : isAnyHovered 
     ? "blur(4px)" 
-    : `blur(${0.4 * (1 - depthFactor)}px)`;
+    : "none";
 
   return (
     <motion.div

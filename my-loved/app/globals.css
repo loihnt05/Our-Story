@@ -49,6 +49,7 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+  --animate-spin-slow: spin 8s linear infinite;
 }
 
 :root {
@@ -144,7 +145,7 @@
 /* Custom Love Theme Animations */
 @keyframes float {
   0% {
-    transform: translateY(0) scale(0.6) rotate(0deg);
+    transform: translate3d(0, 0, 0) scale(0.6) rotate(0deg);
     opacity: 0;
   }
   10% {
@@ -154,7 +155,7 @@
     opacity: 0.7;
   }
   100% {
-    transform: translateY(-105vh) scale(1.1) rotate(360deg);
+    transform: translate3d(0, -105vh, 0) scale(1.1) rotate(360deg);
     opacity: 0;
   }
 }
@@ -194,6 +195,7 @@
   animation-name: float;
   animation-iteration-count: infinite;
   animation-timing-function: linear;
+  will-change: transform, opacity;
 }
 
 .animate-scale-up {
