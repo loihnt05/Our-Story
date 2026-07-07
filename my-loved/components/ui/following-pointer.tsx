@@ -67,7 +67,10 @@ export const FollowerPointerCard = ({
       }}
       ref={ref}
       className={cn(
-        "relative [&_:is(input,textarea,[contenteditable='true'])]:cursor-text [&_:is(button,a,select,[role='button'])]:cursor-pointer",
+        "relative [&_:is(input,textarea,[contenteditable='true'])]:cursor-text",
+        isInside
+          ? "[&_:is(button,a,select,[role='button'],.cursor-pointer)]:!cursor-none"
+          : "[&_:is(button,a,select,[role='button'])]:cursor-pointer",
         className,
       )}
     >
