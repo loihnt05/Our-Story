@@ -9,6 +9,7 @@ import {
 import "./globals.css";
 import { AuthProviderWrapper as ClerkProvider } from "@/components/loved/core/AuthProvider";
 import { ThemeProvider } from "@/components/theme-provider";
+import CursorWrapper from "@/components/loved/core/CursorWrapper";
 
 const fredoka = Fredoka({
   variable: "--font-sans",
@@ -59,7 +60,9 @@ export default function RootLayout({
       >
         <body className="min-h-full flex flex-col">
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            {children}
+            <CursorWrapper>
+              {children}
+            </CursorWrapper>
           </ThemeProvider>
         </body>
       </html>
