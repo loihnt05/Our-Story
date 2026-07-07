@@ -52,12 +52,11 @@ export const FollowerPointerCard = ({
       onMouseLeave={handleMouseLeave}
       onMouseEnter={handleMouseEnter}
       onMouseMove={handleMouseMove}
-      style={{
-        cursor: "none",
-      }}
       ref={ref}
-      className={cn("relative [&_*]:!cursor-none", className)}
-    >
+      className={cn(
+        "relative cursor-none [&_:is(input,textarea,[contenteditable='true'])]:cursor-text [&_:is(button,a,select,[role='button'])]:cursor-pointer",
+        className,
+      )}
       <AnimatePresence>
         {isInside && <FollowPointer x={x} y={y} title={title} />}
       </AnimatePresence>
