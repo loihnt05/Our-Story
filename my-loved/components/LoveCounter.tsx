@@ -18,6 +18,8 @@ import StatsTab from "@/components/loved/stats/StatsTab";
 import QuizTab from "@/components/loved/quiz/QuizTab";
 import SurpriseTakeover from "@/components/loved/surprise/SurpriseTakeover";
 import OnboardingWizard from "@/components/loved/core/OnboardingWizard";
+import { X, BookHeart } from "lucide-react";
+import TimelineMemoryReminder from "@/components/loved/timeline/TimelineMemoryReminder";
 
 interface LoveCounterProps {
   initialTabHref?: string;
@@ -31,6 +33,10 @@ export default function LoveCounter({ initialTabHref }: LoveCounterProps) {
 
   // Active SPA Tab state
   const [activeTabHref, setActiveTabHref] = useState(pathname || initialTabHref || "/number-loved");
+
+  // Memory reminder states
+  const [activeMemoryMilestone, setActiveMemoryMilestone] = useState<any | null>(null);
+  const [showMemoryReminder, setShowMemoryReminder] = useState(false);
 
   // Sync state with next/navigation URL changes
   useEffect(() => {
@@ -90,12 +96,15 @@ export default function LoveCounter({ initialTabHref }: LoveCounterProps) {
           const isMultipleOf100 = days % 100 === 0;
           const isYearAnniversary = days % 365 === 0;
 
-          let trigger = false;
-          let milestoneKey = "";
-
           if (isMultipleOf100 || isYearAnniversary) {
-            trigger = true;
-            milestoneKey = "days_" + days;
+            const milestoneKey = "days_" + days;
+            const viewedMilestonesStr = localStorage.getItem("loved_surprise_milestones_viewed") || "[]";
+            const viewedMilestones = JSON.parse(viewedMilestonesStr);
+            
+            if (!viewedMilestones.includes(milestoneKey)) {
+              setShowSurprise(true);
+              localStorage.setItem("loved_current_surprise_milestone", milestoneKey);
+            }
           }
 
           // 3. Check if today is the anniversary of any milestone in the timeline (Proposal, Engagement, Wedding, Custom)
@@ -103,28 +112,24 @@ export default function LoveCounter({ initialTabHref }: LoveCounterProps) {
           const milestonesStr = localStorage.getItem("loved_milestones");
           if (milestonesStr) {
             const milestones = JSON.parse(milestonesStr);
-            
-            for (const m of milestones) {
-              if (m.date) {
-                // Parse milestone date (YYYY-MM-DD)
-                const mDate = new Date(m.date);
-                if (mDate.getMonth() === today.getMonth() && mDate.getDate() === today.getDate()) {
-                  // It's an annual anniversary of this milestone today!
-                  trigger = true;
-                  milestoneKey = "milestone_" + m.id + "_" + today.getFullYear();
-                  break; // Trigger the first matched anniversary
-                }
-              }
-            }
-          }
+            const matchingMilestone = milestones.find((m: any) => {
+              if (!m.date) return false;
+              const mDate = new Date(m.date);
+              return (
+                mDate.getMonth() === today.getMonth() &&
+                mDate.getDate() === today.getDate() &&
+                today.getFullYear() > mDate.getFullYear()
+              );
+            });
 
-          if (trigger && milestoneKey) {
-            const viewedMilestonesStr = localStorage.getItem("loved_surprise_milestones_viewed") || "[]";
-            const viewedMilestones = JSON.parse(viewedMilestonesStr);
-            
-            if (!viewedMilestones.includes(milestoneKey)) {
-              setShowSurprise(true);
-              localStorage.setItem("loved_current_surprise_milestone", milestoneKey);
+            if (matchingMilestone) {
+              const reminderKey = `loved_memory_reminded_${matchingMilestone.id}_${today.getFullYear()}`;
+              const alreadyViewed = localStorage.getItem(reminderKey) === "true";
+              
+              setActiveMemoryMilestone(matchingMilestone);
+              if (!alreadyViewed) {
+                setShowMemoryReminder(true);
+              }
             }
           }
         } catch (err) {
@@ -308,6 +313,35 @@ export default function LoveCounter({ initialTabHref }: LoveCounterProps) {
           activeTabHref={activeTabHref}
         />
 
+        {/* Timeline Memory Reminder Toast Banner */}
+        {activeMemoryMilestone && (
+          <div className="mx-6 md:mx-8 mt-2.5 animate-bounce z-40">
+            <div className="flex items-center justify-between p-4 bg-gradient-to-r from-rose-500/80 to-pink-500/80 backdrop-blur-md rounded-2xl border border-white/20 shadow-lg text-white">
+              <div className="flex items-center gap-3 cursor-pointer" onClick={() => setShowMemoryReminder(true)}>
+                <span className="text-2xl">{activeMemoryMilestone.icon || "💖"}</span>
+                <div className="text-left">
+                  <h4 className="text-xs md:text-sm font-bold tracking-wide flex items-center gap-1.5">
+                    <span>On This Day Memory! ⏳</span>
+                  </h4>
+                  <p className="text-[10px] md:text-xs text-white/90">
+                    Today is the anniversary of <span className="font-semibold underline">"{activeMemoryMilestone.title}"</span>. Click to relive this memory.
+                  </p>
+                </div>
+              </div>
+              <button 
+                onClick={() => {
+                  const todayDate = new Date();
+                  localStorage.setItem(`loved_memory_reminded_${activeMemoryMilestone.id}_${todayDate.getFullYear()}`, "true");
+                  setActiveMemoryMilestone(null);
+                }}
+                className="p-1.5 rounded-full hover:bg-white/10 text-white/70 hover:text-white transition-colors cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Unified Tab Area with Smooth Animation */}
         <div key={activeTabHref} ref={scrollContainerRef} className="animate-fade-in flex-1 overflow-y-auto lg:min-h-0 py-4 px-4 sm:px-6 md:px-8 scrollbar-hide">
           {activeTabHref === "/number-loved" && <DashboardTab loved={loved} currentTheme={currentTheme} />}
@@ -338,6 +372,15 @@ export default function LoveCounter({ initialTabHref }: LoveCounterProps) {
           currentTheme={currentTheme}
           onClose={() => setShowSurprise(false)}
           onNavigateToTab={(href) => handleTabChange(href)}
+        />
+      )}
+
+      {/* Timeline Memory Reminder Overlay */}
+      {showMemoryReminder && activeMemoryMilestone && (
+        <TimelineMemoryReminder
+          milestone={activeMemoryMilestone}
+          loved={loved}
+          onClose={() => setShowMemoryReminder(false)}
         />
       )}
 

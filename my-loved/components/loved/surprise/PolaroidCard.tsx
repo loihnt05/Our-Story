@@ -164,13 +164,13 @@ export default function PolaroidCard({
               </div>
               
               {location && (
-                <div className="flex items-center gap-1.5 text-[9px] text-zinc-550 dark:text-zinc-400">
+                <div className="flex items-center gap-1.5 text-[9px] text-zinc-500 dark:text-zinc-400">
                   <span>📍 Location:</span>
                   <span className="font-medium text-zinc-700 dark:text-zinc-300 truncate max-w-[160px]">{location}</span>
                 </div>
               )}
 
-              <div className="flex items-center gap-1.5 text-[9px] text-zinc-550 dark:text-zinc-400">
+              <div className="flex items-center gap-1.5 text-[9px] text-zinc-500 dark:text-zinc-400">
                 <span>💝 Timeline:</span>
                 <span className="font-medium text-rose-500 font-serif">Day {daysTogether} of our story</span>
               </div>

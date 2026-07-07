@@ -22,7 +22,7 @@ export default function NotFound() {
           Love Lost in Space
         </h1>
 
-        <p className="text-zinc-650 dark:text-zinc-350 text-sm md:text-base">
+        <p className="text-zinc-600 dark:text-zinc-400 text-sm md:text-base">
           Oh no! The page you are looking for has drifted away. It might have been deleted, moved, or never existed in our love story.
         </p>
 

@@ -33,7 +33,7 @@ export default function Error({ error, reset }: ErrorProps) {
           A Little Hiccup in Our Story
         </h1>
 
-        <p className="text-zinc-650 dark:text-zinc-350 text-sm md:text-base">
+        <p className="text-zinc-600 dark:text-zinc-400 text-sm md:text-base">
           Oops! Something went wrong while loading this page. Don't worry, our memories are safe, but the stars flickered for a moment.
         </p>
 
