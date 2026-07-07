@@ -9,6 +9,7 @@ import {
 import "./globals.css";
 import { AuthProviderWrapper as ClerkProvider } from "@/components/loved/core/AuthProvider";
 import { ThemeProvider } from "@/components/theme-provider";
+import { TooltipProvider } from "@/components/animate-ui/components/animate/tooltip";
 import CursorWrapper from "@/components/loved/core/CursorWrapper";
 
 const fredoka = Fredoka({
@@ -60,9 +61,11 @@ export default function RootLayout({
       >
         <body className="min-h-full flex flex-col">
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <CursorWrapper>
-              {children}
-            </CursorWrapper>
+            <TooltipProvider>
+              <CursorWrapper>
+                {children}
+              </CursorWrapper>
+            </TooltipProvider>
           </ThemeProvider>
         </body>
       </html>

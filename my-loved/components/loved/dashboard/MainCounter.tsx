@@ -98,7 +98,7 @@ export default function MainCounter({
       <div className="my-6 relative flex items-center justify-center gap-4 cute-floating select-none">
         <span className="text-3xl animate-bounce select-none" style={{ animationDuration: "1.2s", animationDelay: "0.1s" }}>🐰</span>
         <div className="relative flex flex-col items-center">
-          <span className="text-7xl md:text-8xl p-1 font-molle text-transparent bg-clip-text bg-gradient-to-r from-rose-600 via-pink-600 to-amber-500 select-none drop-shadow-[0_4px_8px_rgba(244,63,94,0.15)] filter tracking-tight">
+          <span className="text-7xl md:text-8xl p-3 font-molle text-transparent bg-clip-text bg-gradient-to-r from-rose-600 via-pink-600 to-amber-500 select-none drop-shadow-[0_4px_8px_rgba(244,63,94,0.15)] filter tracking-tight">
             {timeLeft.totalDays.toLocaleString()}
           </span>
           <span className="absolute -bottom-5 text-sm font-bold uppercase tracking-widest text-rose-500/80 dark:text-rose-400/80 mt-1">

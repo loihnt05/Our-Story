@@ -23,6 +23,7 @@ import { UserButton } from "@/components/loved/core/AuthProvider";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/animate-ui/components/animate/tooltip";
 
 interface HeaderProps {
   customTitle: string;
@@ -171,33 +172,43 @@ export default function Header({
           </span>
           <div className="flex items-center gap-2">
             {/* Music Player */}
-            <button
-              onClick={onTogglePlay}
-              className="p-2.5 rounded-xl bg-white/40 dark:bg-zinc-800/40 border border-white/20 backdrop-blur-md shadow-sm text-zinc-700 dark:text-zinc-200 hover:bg-white/60 dark:hover:bg-zinc-800/60 transition-all cursor-pointer"
-              title={isMuted ? "Play Ambient Music" : "Mute Music"}
-            >
-              {isMuted ? (
-                <VolumeX className="w-4.5 h-4.5 text-rose-500" />
-              ) : (
-                <div className="relative">
-                  <Volume2 className="w-4.5 h-4.5 text-rose-500" />
-                  <Music className="w-2.5 h-2.5 text-rose-500 absolute -top-1 -right-1 animate-bounce" />
-                </div>
-              )}
-            </button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  onClick={onTogglePlay}
+                  className="p-2.5 rounded-xl bg-white/40 dark:bg-zinc-800/40 border border-white/20 backdrop-blur-md shadow-sm text-zinc-700 dark:text-zinc-200 hover:bg-white/60 dark:hover:bg-zinc-800/60 transition-all cursor-pointer"
+                >
+                  {isMuted ? (
+                    <VolumeX className="w-4.5 h-4.5 text-rose-500" />
+                  ) : (
+                    <div className="relative">
+                      <Volume2 className="w-4.5 h-4.5 text-rose-500" />
+                      <Music className="w-2.5 h-2.5 text-rose-500 absolute -top-1 -right-1 animate-bounce" />
+                    </div>
+                  )}
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>
+                {isMuted ? "Play Ambient Music" : "Mute Music"}
+              </TooltipContent>
+            </Tooltip>
 
             {/* Dark Mode */}
-            <button
-              onClick={toggleTheme}
-              className="p-2.5 rounded-xl bg-white/40 dark:bg-zinc-800/40 border border-white/20 backdrop-blur-md shadow-sm text-zinc-700 dark:text-zinc-200 hover:bg-white/60 dark:hover:bg-zinc-800/60 transition-all cursor-pointer"
-              title="Toggle Theme"
-            >
-              {theme === "dark" ? (
-                <Sun className="w-4.5 h-4.5 text-amber-500 fill-amber-500/20" />
-              ) : (
-                <Moon className="w-4.5 h-4.5 text-indigo-500 fill-indigo-500/20" />
-              )}
-            </button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  onClick={toggleTheme}
+                  className="p-2.5 rounded-xl bg-white/40 dark:bg-zinc-800/40 border border-white/20 backdrop-blur-md shadow-sm text-zinc-700 dark:text-zinc-200 hover:bg-white/60 dark:hover:bg-zinc-800/60 transition-all cursor-pointer"
+                >
+                  {theme === "dark" ? (
+                    <Sun className="w-4.5 h-4.5 text-amber-500 fill-amber-500/20" />
+                  ) : (
+                    <Moon className="w-4.5 h-4.5 text-indigo-500 fill-indigo-500/20" />
+                  )}
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>Toggle Theme</TooltipContent>
+            </Tooltip>
           </div>
         </div>
 
@@ -441,49 +452,63 @@ export default function Header({
             <div className="flex items-center gap-2">
               {/* Notification Center Popover */}
               <div className="relative">
-                <button
-                  onClick={() => setIsNotifyOpen(!isNotifyOpen)}
-                  className="p-2 rounded-xl bg-white/40 dark:bg-zinc-800/40 border border-white/20 backdrop-blur-md shadow-sm text-zinc-700 dark:text-zinc-200 hover:bg-white/60 dark:hover:bg-zinc-800/60 transition-all cursor-pointer relative"
-                  title="Notifications"
-                >
-                  <Bell className="w-4 h-4 text-rose-500" />
-                  {notifications.length > 0 && (
-                    <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-rose-600 text-[9px] font-bold text-white animate-pulse">
-                      {notifications.length}
-                    </span>
-                  )}
-                </button>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      onClick={() => setIsNotifyOpen(!isNotifyOpen)}
+                      className="p-2 rounded-xl bg-white/40 dark:bg-zinc-800/40 border border-white/20 backdrop-blur-md shadow-sm text-zinc-700 dark:text-zinc-200 hover:bg-white/60 dark:hover:bg-zinc-800/60 transition-all cursor-pointer relative"
+                    >
+                      <Bell className="w-4 h-4 text-rose-500" />
+                      {notifications.length > 0 && (
+                        <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-rose-600 text-[9px] font-bold text-white animate-pulse">
+                          {notifications.length}
+                        </span>
+                      )}
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent>Notifications</TooltipContent>
+                </Tooltip>
                 {isNotifyOpen && renderNotificationDropdown()}
               </div>
 
               {/* Music Player */}
-              <button
-                onClick={onTogglePlay}
-                className="p-2 rounded-xl bg-white/40 dark:bg-zinc-800/40 border border-white/20 backdrop-blur-md shadow-sm text-zinc-700 dark:text-zinc-200 hover:bg-white/60 dark:hover:bg-zinc-800/60 transition-all cursor-pointer"
-                title={isMuted ? "Play Ambient Music" : "Mute Music"}
-              >
-                {isMuted ? (
-                  <VolumeX className="w-4 h-4 text-rose-500" />
-                ) : (
-                  <div className="relative">
-                    <Volume2 className="w-4 h-4 text-rose-500" />
-                    <Music className="w-2.5 h-2.5 text-rose-500 absolute -top-0.5 -right-0.5 animate-bounce" />
-                  </div>
-                )}
-              </button>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    onClick={onTogglePlay}
+                    className="p-2 rounded-xl bg-white/40 dark:bg-zinc-800/40 border border-white/20 backdrop-blur-md shadow-sm text-zinc-700 dark:text-zinc-200 hover:bg-white/60 dark:hover:bg-zinc-800/60 transition-all cursor-pointer"
+                  >
+                    {isMuted ? (
+                      <VolumeX className="w-4 h-4 text-rose-500" />
+                    ) : (
+                      <div className="relative">
+                        <Volume2 className="w-4 h-4 text-rose-500" />
+                        <Music className="w-2.5 h-2.5 text-rose-500 absolute -top-0.5 -right-0.5 animate-bounce" />
+                      </div>
+                    )}
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  {isMuted ? "Play Ambient Music" : "Mute Music"}
+                </TooltipContent>
+              </Tooltip>
 
               {/* Theme Toggle */}
-              <button
-                onClick={toggleTheme}
-                className="p-2 rounded-xl bg-white/40 dark:bg-zinc-800/40 border border-white/20 backdrop-blur-md shadow-sm text-zinc-700 dark:text-zinc-200 hover:bg-white/60 dark:hover:bg-zinc-800/60 transition-all cursor-pointer"
-                title="Toggle Theme"
-              >
-                {theme === "dark" ? (
-                  <Sun className="w-4 h-4 text-amber-500 fill-amber-500/20" />
-                ) : (
-                  <Moon className="w-4 h-4 text-indigo-500 fill-indigo-500/20" />
-                )}
-              </button>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    onClick={toggleTheme}
+                    className="p-2 rounded-xl bg-white/40 dark:bg-zinc-800/40 border border-white/20 backdrop-blur-md shadow-sm text-zinc-700 dark:text-zinc-200 hover:bg-white/60 dark:hover:bg-zinc-800/60 transition-all cursor-pointer"
+                  >
+                    {theme === "dark" ? (
+                      <Sun className="w-4 h-4 text-amber-500 fill-amber-500/20" />
+                    ) : (
+                      <Moon className="w-4 h-4 text-indigo-500 fill-indigo-500/20" />
+                    )}
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>Toggle Theme</TooltipContent>
+              </Tooltip>
             </div>
 
             <div className="w-[1px] h-6 bg-zinc-200/20 dark:bg-zinc-800/20" />
@@ -507,17 +532,22 @@ export default function Header({
           <div className="lg:hidden flex items-center gap-2">
             {/* Bell button for mobile */}
             <div className="relative">
-              <button
-                onClick={() => setIsNotifyOpen(!isNotifyOpen)}
-                className="p-2 rounded-xl bg-white/40 dark:bg-zinc-800/40 border border-white/20 backdrop-blur-md text-zinc-700 dark:text-zinc-200 hover:bg-white/60 dark:hover:bg-zinc-800/60 transition-all cursor-pointer relative"
-              >
-                <Bell className="w-4.5 h-4.5 text-rose-500" />
-                {notifications.length > 0 && (
-                  <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-rose-600 text-[9px] font-bold text-white animate-pulse">
-                    {notifications.length}
-                  </span>
-                )}
-              </button>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    onClick={() => setIsNotifyOpen(!isNotifyOpen)}
+                    className="p-2 rounded-xl bg-white/40 dark:bg-zinc-800/40 border border-white/20 backdrop-blur-md text-zinc-700 dark:text-zinc-200 hover:bg-white/60 dark:hover:bg-zinc-800/60 transition-all cursor-pointer relative"
+                  >
+                    <Bell className="w-4.5 h-4.5 text-rose-500" />
+                    {notifications.length > 0 && (
+                      <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-rose-600 text-[9px] font-bold text-white animate-pulse">
+                        {notifications.length}
+                      </span>
+                    )}
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>Notifications</TooltipContent>
+              </Tooltip>
               {isNotifyOpen && renderNotificationDropdown()}
             </div>
 
