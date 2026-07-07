@@ -18,8 +18,10 @@ import StatsTab from "@/components/loved/stats/StatsTab";
 import QuizTab from "@/components/loved/quiz/QuizTab";
 import SurpriseTakeover from "@/components/loved/surprise/SurpriseTakeover";
 import OnboardingWizard from "@/components/loved/core/OnboardingWizard";
-import { X, BookHeart } from "lucide-react";
+import { X } from "lucide-react";
 import TimelineMemoryReminder from "@/components/loved/timeline/TimelineMemoryReminder";
+import InviteAcceptanceModal from "@/components/loved/core/InviteAcceptanceModal";
+import StreakCelebrationOverlay from "@/components/loved/core/StreakCelebrationOverlay";
 
 interface LoveCounterProps {
   initialTabHref?: string;
@@ -47,12 +49,6 @@ export default function LoveCounter({ initialTabHref }: LoveCounterProps) {
 
   // Invite parameters state
   const [partnerInviteName, setPartnerInviteName] = useState<string | null>(null);
-  const [partnerNameInput, setPartnerNameInput] = useState("Juliet");
-  const [partnerDesc, setPartnerDesc] = useState("My Anchor ⚓");
-  const [partnerAvatar, setPartnerAvatar] = useState("");
-
-  // Celebration hearts
-  const [celebrationHearts, setCelebrationHearts] = useState<Array<{ id: number; left: number; size: number; duration: number; delay: number; color: string }>>([]);
 
   // Onboarding state
   const [onboardingCompleted, setOnboardingCompleted] = useState(true);
@@ -192,50 +188,6 @@ export default function LoveCounter({ initialTabHref }: LoveCounterProps) {
       return () => window.removeEventListener("resize", handleResize);
     }
   }, []);
-
-  // Handle streak celebration heart bursts
-  useEffect(() => {
-    if (loved.showCelebration) {
-      const colors = ["text-rose-500", "text-pink-500", "text-amber-500", "text-red-500", "text-yellow-400"];
-      const hearts = Array.from({ length: 40 }).map((_, i) => ({
-        id: i,
-        left: Math.random() * 100,
-        size: Math.random() * 24 + 12,
-        duration: Math.random() * 2 + 2,
-        delay: Math.random() * 2,
-        color: colors[Math.floor(Math.random() * colors.length)]
-      }));
-      setCelebrationHearts(hearts);
-    }
-  }, [loved.showCelebration]);
-
-  const handlePartnerImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPartnerAvatar(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleConnectPartner = () => {
-    localStorage.setItem("loved_personB", partnerNameInput);
-    localStorage.setItem("loved_personB_desc", partnerDesc);
-    if (partnerAvatar) {
-      localStorage.setItem("loved_personB_avatar", partnerAvatar);
-    }
-    
-    loved.setPersonBName(partnerNameInput);
-    loved.setPersonBDesc(partnerDesc);
-    if (partnerAvatar) {
-      loved.setPersonBAvatar(partnerAvatar);
-    }
-    
-    setPartnerInviteName(null);
-    window.history.replaceState({}, document.title, window.location.pathname);
-  };
 
   // Sync theme
   const prevThemeIdRef = useRef(loved.themeId);
@@ -415,154 +367,34 @@ export default function LoveCounter({ initialTabHref }: LoveCounterProps) {
 
       {/* Invite Acceptance Modal */}
       {partnerInviteName && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
-          <div className="w-full max-w-md rounded-3xl bg-white dark:bg-zinc-900 shadow-2xl border border-zinc-200 dark:border-zinc-800 p-6 overflow-hidden animate-scale-up flex flex-col gap-5">
-            <div className="text-center flex flex-col items-center gap-1.5 select-none">
-              <span className="text-4xl animate-bounce">💖</span>
-              <h2 className="text-xl font-serif text-zinc-900 dark:text-white">
-                You&apos;re Invited!
-              </h2>
-              <p className="text-xs text-zinc-500 leading-normal max-w-xs mt-1 text-center font-sans">
-                <strong>{partnerInviteName}</strong> has invited you to connect their anniversary space! Enter profile details below.
-              </p>
-            </div>
-
-            <div className="flex flex-col gap-3.5 mt-2 text-left">
-              <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">My Name</label>
-                <input
-                  type="text"
-                  placeholder="Enter your name"
-                  value={partnerNameInput}
-                  onChange={(e) => setPartnerNameInput(e.target.value)}
-                  className="w-full p-2.5 rounded-xl bg-zinc-55 dark:bg-zinc-955 border border-zinc-200 dark:border-zinc-800 text-xs outline-none text-zinc-900 dark:text-white"
-                />
-              </div>
-
-              <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Short Description</label>
-                <input
-                  type="text"
-                  placeholder="e.g. My Anchor ⚓"
-                  value={partnerDesc}
-                  onChange={(e) => setPartnerDesc(e.target.value)}
-                  className="w-full p-2.5 rounded-xl bg-zinc-55 dark:bg-zinc-955 border border-zinc-200 dark:border-zinc-800 text-xs outline-none text-zinc-900 dark:text-white"
-                />
-              </div>
-
-              <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">My Avatar Image</label>
-                <div className="flex items-center gap-3">
-                  <label className="text-[10px] font-bold text-zinc-400 cursor-pointer p-2.5 border border-dashed border-zinc-300 dark:border-zinc-800 rounded-xl hover:bg-zinc-50 dark:hover:bg-zinc-955 flex-1 text-center font-sans">
-                    {partnerAvatar ? "Change Photo Slot" : "Upload Photo"}
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handlePartnerImageUpload}
-                      className="hidden"
-                    />
-                  </label>
-                  {partnerAvatar && (
-                    <div className="w-10 h-10 rounded-full overflow-hidden border border-zinc-200 shrink-0">
-                      <img src={partnerAvatar} alt="Partner avatar" className="w-full h-full object-cover" />
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            <button
-              onClick={handleConnectPartner}
-              disabled={!partnerNameInput}
-              className="w-full py-3 bg-gradient-to-r from-rose-500 to-pink-500 hover:brightness-105 disabled:opacity-40 text-white font-semibold rounded-full shadow-md transition-all cursor-pointer text-sm font-sans flex items-center justify-center gap-1.5 mt-2 border-none"
-            >
-              Accept Invitation &amp; Connect 💖
-            </button>
-          </div>
-        </div>
+        <InviteAcceptanceModal
+          partnerInviteName={partnerInviteName}
+          onConnect={(name, desc, avatar) => {
+            localStorage.setItem("loved_personB", name);
+            localStorage.setItem("loved_personB_desc", desc);
+            if (avatar) {
+              localStorage.setItem("loved_personB_avatar", avatar);
+            }
+            
+            loved.setPersonBName(name);
+            loved.setPersonBDesc(desc);
+            if (avatar) {
+              loved.setPersonBAvatar(avatar);
+            }
+            
+            setPartnerInviteName(null);
+            window.history.replaceState({}, document.title, window.location.pathname);
+          }}
+        />
       )}
 
       {/* Streak Celebration Overlay */}
-      {loved.showCelebration && (() => {
-        const getCelebrationStyle = (count: number) => {
-          if (count >= 500) {
-            return {
-              title: "Ultimate Streak Activated! 👑✨",
-              gradient: "from-indigo-450 via-fuchsia-400 to-amber-300",
-              flameBg: "from-indigo-600 via-purple-600 to-amber-500",
-              borderColor: "border-amber-350 shadow-[0_0_20px_rgba(245,158,11,0.65)]",
-              description: "You two are legendary! Over 500 days of pure devotion and beautiful memories. Absolute couple goals! 🌟💖"
-            };
-          }
-          if (count >= 100) {
-            return {
-              title: "Epic Streak Activated! 💖🔥",
-              gradient: "from-rose-450 via-pink-400 to-orange-400",
-              flameBg: "from-rose-500 via-pink-500 to-orange-500",
-              borderColor: "border-pink-350 shadow-[0_0_15px_rgba(244,63,94,0.55)]",
-              description: "Incredible milestone! Over 100 days of connecting, sharing, and loving each other every single day. Keep burning bright! ✨"
-            };
-          }
-          return {
-            title: "Streak Activated! 🔥",
-            gradient: "from-yellow-300 via-amber-400 to-rose-400",
-            flameBg: "from-amber-500 to-rose-500",
-            borderColor: "border-amber-300",
-            description: "You and your partner are perfectly in sync today! Keep sharing your feelings and commenting every day. 💕"
-          };
-        };
-
-        const celebStyle = getCelebrationStyle(loved.streakInfo.count);
-
-        return (
-          <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/70 backdrop-blur-md animate-fade-in pointer-events-none select-none">
-            <div className="absolute inset-0 overflow-hidden">
-              {celebrationHearts.map((heart) => (
-                <svg
-                  key={heart.id}
-                  className={`absolute ${heart.color} animate-float`}
-                  style={{
-                    left: `${heart.left}%`,
-                    width: `${heart.size}px`,
-                    height: `${heart.size}px`,
-                    bottom: `-50px`,
-                    animationDuration: `${heart.duration}s`,
-                    animationDelay: `${heart.delay}s`,
-                  }}
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                >
-                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                </svg>
-              ))}
-            </div>
-
-            <div className="flex flex-col items-center gap-4 text-center z-10 px-8 py-8 rounded-3xl bg-white/10 dark:bg-zinc-900/40 border border-white/20 dark:border-zinc-800/20 shadow-2xl backdrop-blur-xl animate-scale-up pointer-events-auto">
-              <div className="relative">
-                <div className="absolute inset-0 rounded-full bg-amber-500/20 blur-xl animate-ping" />
-                <div className="w-24 h-24 rounded-full bg-gradient-to-tr from-amber-500 to-rose-500 flex items-center justify-center border-4 border-amber-300 shadow-lg relative">
-                  <span className="text-4xl animate-bounce">🔥</span>
-                </div>
-              </div>
-              <h1 className={`text-3xl sm:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r ${celebStyle.gradient} font-serif drop-shadow-md`}>
-                {celebStyle.title}
-              </h1>
-              <p className="text-xl font-bold text-white max-w-sm animate-pulse">
-                {loved.streakInfo.count} {loved.streakInfo.count === 1 ? "Day" : "Days"} of Love &amp; Sharing
-              </p>
-              <p className="text-xs text-zinc-355 max-w-xs leading-normal font-sans">
-                {celebStyle.description}
-              </p>
-              <button
-                onClick={() => loved.setShowCelebration(false)}
-                className="mt-2 px-6 py-2 rounded-full bg-white hover:bg-zinc-100 text-rose-500 font-bold text-xs shadow-md transition-colors cursor-pointer border-none"
-              >
-                Awesome! 💖
-              </button>
-            </div>
-          </div>
-        );
-      })()}
+      {loved.showCelebration && (
+        <StreakCelebrationOverlay
+          streakCount={loved.streakInfo.count}
+          onClose={() => loved.setShowCelebration(false)}
+        />
+      )}
     </div>
   );
 }
