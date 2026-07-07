@@ -70,8 +70,8 @@ export const FollowPointer = ({
   y,
   title,
 }: {
-  x: any;
-  y: any;
+  x: ReturnType<typeof useMotionValue>;
+  y: ReturnType<typeof useMotionValue>;
   title?: string | React.ReactNode;
 }) => {
   const colors = [
