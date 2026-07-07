@@ -1,5 +1,6 @@
 import React from "react";
 import { Heart, HeartHandshake } from "lucide-react";
+import { CuteHighlight } from "@/components/ui/cute-highlight";
 
 interface WelcomeScreenProps {
   onEnter: () => void;
@@ -54,8 +55,8 @@ export default function WelcomeScreen({
           {customTitle || "Our Story"}
         </h1>
         
-        <p className="text-zinc-600 dark:text-zinc-300 text-lg">
-          Welcome to our special place. Relive our milestones, count the moments, and build our timeline.
+        <p className="text-zinc-600 dark:text-zinc-300 text-lg leading-relaxed">
+          Welcome to our <CuteHighlight variant="marker" color="pink">special place</CuteHighlight>. Relive our <CuteHighlight variant="sparkle" color="gold">milestones</CuteHighlight>, count the <CuteHighlight variant="heart" color="rose">moments</CuteHighlight>, and build our <CuteHighlight variant="wavy" color="purple">timeline</CuteHighlight>.
         </p>
 
         <button

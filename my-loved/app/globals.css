@@ -125,6 +125,14 @@
   * {
     @apply border-border outline-ring/50;
   }
+  ::selection {
+    background-color: #fecdd3; /* Tailwind rose-200 */
+    color: #9f1239; /* Tailwind rose-800 */
+  }
+  .dark ::selection {
+    background-color: #9f1239; /* Tailwind rose-800 */
+    color: #ffe4e6; /* Tailwind rose-100 */
+  }
   body {
     @apply bg-background text-foreground;
   }
