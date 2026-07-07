@@ -8,18 +8,20 @@ export default function CursorWrapper({ children }: { children: React.ReactNode 
 
   useEffect(() => {
     const updateLabel = () => {
-      if (typeof window !== "undefined") {
-        const personA = localStorage.getItem("loved_personA") || "Romeo";
-        const personB = localStorage.getItem("loved_personB") || "Juliet";
-        setPartnerLabel(`${personA} & ${personB} 💖`);
-      }
+      const personA = localStorage.getItem("loved_personA") || "Romeo";
+      const personB = localStorage.getItem("loved_personB") || "Juliet";
+      setPartnerLabel(`${personA} & ${personB} 💖`);
     };
 
     updateLabel();
 
-    // Listen for custom settings changes if any
+    // Listen for storage changes from other tabs and custom changes in the same tab
     window.addEventListener("storage", updateLabel);
-    return () => window.removeEventListener("storage", updateLabel);
+    window.addEventListener("loved_names_updated", updateLabel);
+    return () => {
+      window.removeEventListener("storage", updateLabel);
+      window.removeEventListener("loved_names_updated", updateLabel);
+    };
   }, []);
 
   return (
