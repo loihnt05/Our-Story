@@ -311,6 +311,11 @@ export default function LoveCounter({ initialTabHref }: LoveCounterProps) {
           onOpenSettings={() => loved.setShowSettings(true)}
           onTabChange={handleTabChange}
           activeTabHref={activeTabHref}
+          loved={loved}
+          onTriggerMemoryReminder={(milestone) => {
+            setActiveMemoryMilestone(milestone);
+            setShowMemoryReminder(true);
+          }}
         />
 
         {/* Timeline Memory Reminder Toast Banner */}
