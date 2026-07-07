@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { motion, AnimatePresence, useMotionValue } from "motion/react";
+import { motion, AnimatePresence, useMotionValue, MotionValue } from "motion/react";
 import { cn } from "@/lib/utils";
 
 export const FollowerPointerCard = ({
@@ -16,20 +16,38 @@ export const FollowerPointerCard = ({
   const y = useMotionValue(0);
   const ref = React.useRef<HTMLDivElement>(null);
   const [rect, setRect] = useState<DOMRect | null>(null);
-  const [isInside, setIsInside] = useState<boolean>(false); // Add this line
+  const [isInside, setIsInside] = useState<boolean>(false);
 
   useEffect(() => {
-    if (ref.current) {
-      setRect(ref.current.getBoundingClientRect());
-    }
+    if (!ref.current) return;
+
+    const updateRect = () => {
+      if (ref.current) {
+        setRect(ref.current.getBoundingClientRect());
+      }
+    };
+
+    updateRect();
+
+    // Use ResizeObserver for local layout/resize updates
+    const observer = new ResizeObserver(updateRect);
+    observer.observe(ref.current);
+
+    // Track viewport size changes and scrolling
+    window.addEventListener("resize", updateRect);
+    window.addEventListener("scroll", updateRect);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", updateRect);
+      window.removeEventListener("scroll", updateRect);
+    };
   }, []);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (rect) {
-      const scrollX = window.scrollX;
-      const scrollY = window.scrollY;
-      x.set(e.clientX - rect.left + scrollX);
-      y.set(e.clientY - rect.top + scrollY);
+      x.set(e.clientX - rect.left);
+      y.set(e.clientY - rect.top);
     }
   };
   const handleMouseLeave = () => {
@@ -45,10 +63,13 @@ export const FollowerPointerCard = ({
       onMouseEnter={handleMouseEnter}
       onMouseMove={handleMouseMove}
       style={{
-        cursor: "none",
+        cursor: isInside ? "none" : "auto",
       }}
       ref={ref}
-      className={cn("relative [&_*]:!cursor-none", className)}
+      className={cn(
+        "relative [&_:is(input,textarea,[contenteditable='true'])]:cursor-text [&_:is(button,a,select,[role='button'])]:cursor-pointer",
+        className,
+      )}
     >
       <AnimatePresence>
         {isInside && <FollowPointer x={x} y={y} title={title} />}
@@ -63,8 +84,8 @@ export const FollowPointer = ({
   y,
   title,
 }: {
-  x: any;
-  y: any;
+  x: MotionValue<number>;
+  y: MotionValue<number>;
   title?: string | React.ReactNode;
 }) => {
   const colors = [
@@ -76,6 +97,8 @@ export const FollowPointer = ({
     "#ef4444",
     "#eab308",
   ];
+  const [randomColor] = useState(() => colors[Math.floor(Math.random() * colors.length)]);
+
   return (
     <motion.div
       className="absolute z-50 h-4 w-4 rounded-full"
@@ -111,7 +134,7 @@ export const FollowPointer = ({
       </svg>
       <motion.div
         style={{
-          backgroundColor: colors[Math.floor(Math.random() * colors.length)],
+          backgroundColor: randomColor,
         }}
         initial={{
           scale: 0.5,
@@ -129,7 +152,7 @@ export const FollowPointer = ({
           "min-w-max rounded-full bg-neutral-200 px-2 py-2 text-xs whitespace-nowrap text-white"
         }
       >
-        {title || `William Shakespeare`}
+        {title || ""}
       </motion.div>
     </motion.div>
   );

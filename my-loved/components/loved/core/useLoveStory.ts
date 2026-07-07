@@ -68,6 +68,9 @@ export function useLoveStory() {
     localStorage.setItem("loved_personA_avatar", personAAvatar);
     localStorage.setItem("loved_personB_avatar", personBAvatar);
     localStorage.setItem("loved_theme", themeId);
+    
+    // Notify cursor wrapper and other same-tab components of configurations changes
+    window.dispatchEvent(new Event("loved_names_updated"));
   }, [personAName, personBName, personADesc, personBDesc, personAAvatar, personBAvatar, themeId, mounted]);
 
   // Audio Toggle
