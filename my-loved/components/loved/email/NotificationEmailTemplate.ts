@@ -1,0 +1,195 @@
+/**
+ * NotificationEmailTemplate.ts
+ * Generates a beautiful, responsive HTML email template for relationship updates.
+ */
+
+interface EmailTemplateOptions {
+  badgeText: string;          // e.g. "On This Day Memory" or "Love Streak Update"
+  title: string;              // e.g. "First Met 🌸 Anniversary!"
+  description: string;        // e.g. "1 year ago today: The moment our eyes met across the crowded room..."
+  actionUrl: string;          // e.g. "https://our-story-loved.vercel.app/timeline"
+  ctaText: string;            // e.g. "Relive This Memory" or "Open Our Story"
+  quote?: string;             // Optional sentimental quote
+}
+
+const DEFAULT_QUOTE = "Some moments are golden, others are precious, but this one with you is timeless. ✨";
+
+export function generateNotificationEmailHtml({
+  badgeText,
+  title,
+  description,
+  actionUrl,
+  ctaText,
+  quote = DEFAULT_QUOTE
+}: EmailTemplateOptions): string {
+  return `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${title}</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background-color: #faf6f6;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+    .wrapper {
+      width: 100%;
+      background-color: #faf6f6;
+      padding: 40px 20px;
+      box-sizing: border-box;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      border-radius: 24px;
+      border: 1px solid #f0e2e2;
+      box-shadow: 0 10px 30px rgba(224, 180, 180, 0.15);
+      overflow: hidden;
+    }
+    .header {
+      background: linear-gradient(135deg, #ffe3e3 0%, #ffd1d1 100%);
+      padding: 45px 30px;
+      text-align: center;
+    }
+    .logo-container {
+      display: inline-block;
+      width: 56px;
+      height: 56px;
+      background-color: rgba(255, 255, 255, 0.6);
+      border-radius: 50%;
+      text-align: center;
+      line-height: 56px;
+      font-size: 28px;
+      margin-bottom: 16px;
+    }
+    .header h1 {
+      margin: 0;
+      font-family: 'Georgia', serif;
+      color: #9c2a2a;
+      font-size: 24px;
+      font-weight: bold;
+    }
+    .header p {
+      margin: 6px 0 0;
+      color: #c47d7d;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      font-weight: 700;
+    }
+    .content {
+      padding: 40px 35px;
+      text-align: center;
+    }
+    .notification-badge {
+      display: inline-block;
+      padding: 6px 16px;
+      background-color: #fff0f0;
+      color: #e11d48;
+      font-size: 11px;
+      font-weight: 700;
+      border-radius: 100px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 24px;
+    }
+    .title {
+      font-size: 20px;
+      color: #1f2937;
+      font-weight: 800;
+      margin: 0 0 12px;
+      line-height: 1.3;
+    }
+    .description {
+      font-size: 14px;
+      color: #4b5563;
+      line-height: 1.6;
+      margin: 0 0 30px;
+    }
+    .cta-button {
+      display: inline-block;
+      padding: 16px 36px;
+      background: linear-gradient(90deg, #f43f5e 0%, #ec4899 100%);
+      color: #ffffff !important;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 14px;
+      border-radius: 100px;
+      box-shadow: 0 6px 20px rgba(244, 63, 94, 0.25);
+    }
+    .quote-box {
+      margin: 35px 0 0;
+      padding: 20px;
+      background-color: #fffafb;
+      border-left: 3px solid #f43f5e;
+      border-radius: 0 16px 16px 0;
+      text-align: left;
+    }
+    .quote-text {
+      font-style: italic;
+      color: #6b7280;
+      font-size: 13px;
+      line-height: 1.5;
+      margin: 0;
+    }
+    .footer {
+      background-color: #fdfafb;
+      border-top: 1px solid #f9ebeb;
+      padding: 30px;
+      text-align: center;
+    }
+    .footer p {
+      margin: 0;
+      color: #9ca3af;
+      font-size: 11px;
+      line-height: 1.5;
+    }
+    .footer a {
+      color: #f43f5e;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="container">
+      <div class="header">
+        <div class="logo-container">💖</div>
+        <h1>Our Story</h1>
+        <p>Memory Lane Notifications</p>
+      </div>
+      <div class="content">
+        <div class="notification-badge">${escapeHtml(badgeText)}</div>
+        <h2 class="title">${escapeHtml(title)}</h2>
+        <p class="description">${escapeHtml(description)}</p>
+        <a href="${escapeHtml(actionUrl)}" class="cta-button">${escapeHtml(ctaText)}</a>
+        
+        <div class="quote-box">
+          <p class="quote-text">"${escapeHtml(quote)}"</p>
+        </div>
+      </div>
+      <div class="footer">
+        <p>This email was automatically generated by <a href="${escapeHtml(actionUrl)}">Our Story Space</a>.<br>
+        Keep sharing your logs, taking quizzes, and building your story together.</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>`;
+}
+
+// Simple HTML escaping helper
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}

@@ -329,7 +329,7 @@ export default function Header({
   });
 
   const NotificationDropdown = () => (
-    <div className="absolute right-0 mt-3 w-80 bg-white/95 dark:bg-zinc-950/95 border border-zinc-200/50 dark:border-zinc-850/50 backdrop-blur-xl rounded-2xl shadow-xl p-4 z-50 flex flex-col gap-3.5 select-none text-zinc-800 dark:text-zinc-100 animate-scale-up max-h-96 overflow-y-auto">
+    <div className="absolute right-0 top-full origin-top-right mt-2.5 w-80 max-w-[calc(100vw-2rem)] bg-white/95 dark:bg-zinc-950/95 border border-zinc-200/50 dark:border-zinc-850/50 backdrop-blur-xl rounded-2xl shadow-xl p-4 z-50 flex flex-col gap-3.5 select-none text-zinc-800 dark:text-zinc-100 animate-scale-up max-h-96 overflow-y-auto">
       <div className="flex items-center justify-between border-b border-zinc-200/50 dark:border-zinc-850/50 pb-2">
         <span className="text-xs font-bold uppercase tracking-wider text-zinc-400">Notifications</span>
         <span className="text-[10px] bg-rose-500/10 text-rose-500 font-bold px-2 py-0.5 rounded-full">
