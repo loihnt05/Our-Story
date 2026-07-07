@@ -19,9 +19,19 @@ export const FollowerPointerCard = ({
   const [isInside, setIsInside] = useState<boolean>(false); // Add this line
 
   useEffect(() => {
-    if (ref.current) {
-      setRect(ref.current.getBoundingClientRect());
-    }
+    const updateRect = () => {
+      if (ref.current) {
+        setRect(ref.current.getBoundingClientRect());
+      }
+    };
+
+    updateRect();
+    window.addEventListener("resize", updateRect);
+    window.addEventListener("scroll", updateRect);
+    return () => {
+      window.removeEventListener("resize", updateRect);
+      window.removeEventListener("scroll", updateRect);
+    };
   }, []);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
