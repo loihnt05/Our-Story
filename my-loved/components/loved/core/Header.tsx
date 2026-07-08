@@ -13,7 +13,9 @@ import {
   X, 
   LayoutDashboard, 
   Calendar, 
-  Bell
+  Bell,
+  Sparkles,
+  Camera
 } from "lucide-react";
 import { UserButton } from "@/components/loved/core/AuthProvider";
 import { useTheme } from "next-themes";
@@ -85,6 +87,18 @@ export default function Header({
       href: "/quiz", 
       icon: Heart, // Replaced Sparkles with Heart since Sparkles was unused
       isActive: currentPath === "/quiz"
+    },
+    { 
+      name: "Decision Wheel", 
+      href: "/decision-wheel", 
+      icon: Sparkles,
+      isActive: currentPath === "/decision-wheel"
+    },
+    { 
+      name: "Memory Guess", 
+      href: "/memory-guess", 
+      icon: Camera,
+      isActive: currentPath === "/memory-guess"
     },
   ];
 
