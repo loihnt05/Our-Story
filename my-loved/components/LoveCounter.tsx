@@ -15,7 +15,7 @@ import { usePathname } from "next/navigation";
 import DashboardTab from "@/components/loved/dashboard/DashboardTab";
 import TimelineTab from "@/components/loved/timeline/TimelineTab";
 import StatsTab from "@/components/loved/stats/StatsTab";
-import QuizTab from "@/components/loved/quiz/QuizTab";
+import GamesTab from "@/components/loved/games/GamesTab";
 import SurpriseTakeover from "@/components/loved/surprise/SurpriseTakeover";
 import OnboardingWizard from "@/components/loved/core/OnboardingWizard";
 import { X } from "lucide-react";
@@ -304,7 +304,9 @@ export default function LoveCounter({ initialTabHref }: LoveCounterProps) {
           {activeTabHref === "/number-loved" && <DashboardTab loved={loved} currentTheme={currentTheme} />}
           {activeTabHref === "/timeline" && <TimelineTab loved={loved} currentTheme={currentTheme} offsetY={offsetY} isDesktop={isDesktop} />}
           {activeTabHref === "/relationship-dashboard" && <StatsTab loved={loved} currentTheme={currentTheme} />}
-          {activeTabHref === "/quiz" && <QuizTab loved={loved} currentTheme={currentTheme} />}
+          {(activeTabHref === "/games" || activeTabHref === "/quiz" || activeTabHref === "/decision-wheel" || activeTabHref === "/memory-guess") && (
+            <GamesTab loved={loved} currentTheme={currentTheme} />
+          )}
         </div>
       </div>
 
