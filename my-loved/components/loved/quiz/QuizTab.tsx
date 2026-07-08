@@ -19,11 +19,12 @@ import {
 interface QuizTabProps {
   loved: any;
   currentTheme: any;
+  onBack?: () => void;
 }
 
-export default function QuizTab({ loved, currentTheme }: QuizTabProps) {
+export default function QuizTab({ loved, currentTheme, onBack }: QuizTabProps) {
   // Local States
-  const [quizActiveTab, setQuizActiveTab] = useState<"quiz" | "insights" | "capsules">("quiz");
+  const [quizActiveTab, setQuizActiveTab] = useState<"quiz" | "capsules">("quiz");
   const [quizGameState, setQuizGameState] = useState<"idle" | "playing" | "reveal">("idle");
   const [quizCurrentIndex, setQuizCurrentIndex] = useState(0);
   const [quizAnswersA, setQuizAnswersA] = useState<string[]>([]);
@@ -305,7 +306,15 @@ export default function QuizTab({ loved, currentTheme }: QuizTabProps) {
   };
 
   return (
-    <div className="w-full max-w-6xl mx-auto px-2 sm:px-4 pb-12 flex flex-col gap-8 text-left">
+    <div className="w-full max-w-6xl mx-auto px-2 sm:px-4 pb-12 flex flex-col gap-6 text-left">
+      {onBack && (
+        <button
+          onClick={onBack}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/40 dark:bg-zinc-950/20 border border-zinc-200/50 dark:border-zinc-800/40 text-xs font-bold text-zinc-500 hover:text-rose-500 hover:scale-[1.01] transition-all cursor-pointer w-fit self-start"
+        >
+          <span>⬅️ Back to Game Center</span>
+        </button>
+      )}
       {/* Sub tabs quiz section */}
       <div className="max-w-md mx-auto w-full flex items-center justify-center shrink-0">
         <div className="flex bg-white/20 dark:bg-zinc-950/20 p-1 rounded-2xl border border-white/20 dark:border-zinc-800/10 shadow-sm backdrop-blur-md">
@@ -317,15 +326,6 @@ export default function QuizTab({ loved, currentTheme }: QuizTabProps) {
           >
             <Play className="w-3.5 h-3.5" />
             <span>Quiz &amp; Play</span>
-          </button>
-          <button
-            onClick={() => setQuizActiveTab("insights")}
-            className={`px-5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-              quizActiveTab === "insights" ? "bg-white dark:bg-zinc-800 text-rose-500 shadow-sm" : "text-zinc-550 dark:text-zinc-300"
-            }`}
-          >
-            <Trophy className="w-3.5 h-3.5" />
-            <span>Insights &amp; Badges</span>
           </button>
           <button
             onClick={() => setQuizActiveTab("capsules")}
@@ -618,44 +618,6 @@ export default function QuizTab({ loved, currentTheme }: QuizTabProps) {
                 </div>
               </>
             )}
-          </div>
-        )}
-
-        {quizActiveTab === "insights" && (
-          <div className="flex flex-col gap-8 text-left">
-            <div className="p-6 rounded-[32px] bg-white/45 dark:bg-zinc-900/45 border border-white/20 dark:border-zinc-800/20 shadow-xl backdrop-blur-md flex flex-col md:flex-row gap-8 items-center w-full">
-              <div className="w-48 h-48 rounded-full bg-gradient-to-tr from-rose-500/10 to-purple-500/10 border-4 border-dashed border-rose-400/30 flex items-center justify-center relative shrink-0">
-                <div className="absolute inset-4 rounded-full border border-purple-500/20 flex items-center justify-center">
-                  <Heart className="w-12 h-12 text-rose-500 animate-pulse animate-pulse-slow" />
-                </div>
-                <span className="absolute top-2 text-[8px] font-bold text-zinc-455">Quality Time</span>
-                <span className="absolute bottom-2 text-[8px] font-bold text-zinc-455">Future Dreams</span>
-              </div>
-
-              <div className="flex-1 flex flex-col gap-4">
-                <span className="text-[10px] font-extrabold text-rose-500 uppercase tracking-widest">Love Chemistry Insights</span>
-                <h3 className="text-xl font-bold text-zinc-900 dark:text-white font-cursive">Personality Alignment</h3>
-                <p className="text-xs text-zinc-550 dark:text-zinc-400 leading-relaxed font-medium">
-                  Based on your last 152 questions, you show a compatibility alignment of **94%**. You share identical preferences in Travel plans, Food choices, and Daily Lifestyles.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-3 mt-2">
-              <h3 className="text-base font-extrabold text-left font-cursive text-zinc-900 dark:text-white flex items-center gap-1.5 pl-1">
-                <Award className="w-5 h-5 text-rose-500" />
-                <span>Collectible Achievements</span>
-              </h3>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 w-full items-stretch">
-                {achievements.map((ach, idx) => (
-                  <div key={idx} className={`p-5 rounded-[24px] border shadow-md flex flex-col items-center gap-3 transition-all duration-300 relative select-none ${ach.unlocked ? "bg-white/40 dark:bg-zinc-900/40 border-white/20 dark:border-zinc-800/20 hover:scale-102 hover:shadow-lg" : "bg-zinc-100/50 dark:bg-zinc-950/20 border-transparent opacity-50 cursor-not-allowed"}`}>
-                    <div className="w-12 h-12 rounded-full flex items-center justify-center text-2xl bg-zinc-55 dark:bg-zinc-950 border border-rose-350">{ach.unlocked ? ach.icon : "🔒"}</div>
-                    <h4 className="text-xs font-bold text-zinc-850 dark:text-zinc-200">{ach.name}</h4>
-                    <p className="text-[10px] text-zinc-400 mt-1">{ach.desc}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
           </div>
         )}
 

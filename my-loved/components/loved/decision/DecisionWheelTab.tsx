@@ -46,6 +46,7 @@ interface HistoryItem {
 interface DecisionWheelTabProps {
   loved: any;
   currentTheme: any;
+  onBack?: () => void;
 }
 
 const DEFAULT_CATEGORIES: WheelCategory[] = [
@@ -121,7 +122,7 @@ const initAudio = () => {
   return audioCtx;
 };
 
-export default function DecisionWheelTab({ loved, currentTheme }: DecisionWheelTabProps) {
+export default function DecisionWheelTab({ loved, currentTheme, onBack }: DecisionWheelTabProps) {
   // Category states
   const [categories, setCategories] = useState<WheelCategory[]>(DEFAULT_CATEGORIES);
   const [activeCategoryId, setActiveCategoryId] = useState<string>("date-ideas");
@@ -182,6 +183,15 @@ export default function DecisionWheelTab({ loved, currentTheme }: DecisionWheelT
         console.error("Failed to parse history", e);
       }
     }
+  }, []);
+
+  // Cleanup spin animation on unmount
+  useEffect(() => {
+    return () => {
+      if (animationFrameRef.current !== null) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+    };
   }, []);
 
   // Update items when active category changes
@@ -614,8 +624,23 @@ export default function DecisionWheelTab({ loved, currentTheme }: DecisionWheelT
       `}</style>
 
       {/* Hero Header */}
-      <div className="text-center md:text-left flex flex-col md:flex-row md:items-center justify-between gap-4 p-6 rounded-3xl bg-white/40 dark:bg-zinc-950/20 border border-white/20 backdrop-blur-md">
+      <div className="text-center md:text-left flex flex-col md:flex-row md:items-center justify-between gap-4 p-6 rounded-3xl bg-white/40 dark:bg-zinc-955/20 border border-white/20 backdrop-blur-md">
         <div>
+          {onBack && (
+            <button
+              onClick={() => {
+                if (!isSpinning) onBack();
+              }}
+              disabled={isSpinning}
+              className={`mb-2 flex items-center gap-1 text-xs font-bold transition-all ${
+                isSpinning
+                  ? "text-zinc-300 dark:text-zinc-750 cursor-not-allowed opacity-50"
+                  : "text-zinc-405 hover:text-rose-500 cursor-pointer"
+              }`}
+            >
+              <span>⬅️ Back to Game Center</span>
+            </button>
+          )}
           <h1 className="text-2xl md:text-3xl font-cursive font-bold text-rose-600 dark:text-rose-400 flex items-center justify-center md:justify-start gap-2">
             <span>🎡 Decision Wheel</span>
           </h1>
