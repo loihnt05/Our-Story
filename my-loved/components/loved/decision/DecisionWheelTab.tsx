@@ -185,6 +185,15 @@ export default function DecisionWheelTab({ loved, currentTheme, onBack }: Decisi
     }
   }, []);
 
+  // Cleanup spin animation on unmount
+  useEffect(() => {
+    return () => {
+      if (animationFrameRef.current !== null) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+    };
+  }, []);
+
   // Update items when active category changes
   useEffect(() => {
     const activeCat = categories.find(c => c.id === activeCategoryId);
@@ -619,8 +628,15 @@ export default function DecisionWheelTab({ loved, currentTheme, onBack }: Decisi
         <div>
           {onBack && (
             <button
-              onClick={onBack}
-              className="mb-2 flex items-center gap-1 text-xs font-bold text-zinc-405 hover:text-rose-500 cursor-pointer"
+              onClick={() => {
+                if (!isSpinning) onBack();
+              }}
+              disabled={isSpinning}
+              className={`mb-2 flex items-center gap-1 text-xs font-bold transition-all ${
+                isSpinning
+                  ? "text-zinc-300 dark:text-zinc-750 cursor-not-allowed opacity-50"
+                  : "text-zinc-405 hover:text-rose-500 cursor-pointer"
+              }`}
             >
               <span>⬅️ Back to Game Center</span>
             </button>
