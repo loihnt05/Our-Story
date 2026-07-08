@@ -15,7 +15,8 @@ import {
   Calendar, 
   Bell,
   Sparkles,
-  Camera
+  Camera,
+  Gamepad2
 } from "lucide-react";
 import { UserButton } from "@/components/loved/core/AuthProvider";
 import { useTheme } from "next-themes";
@@ -63,6 +64,8 @@ export default function Header({
   };
 
   const currentPath = activeTabHref || pathname;
+  const isGamesActive = currentPath === "/games" || currentPath === "/quiz" || currentPath === "/decision-wheel" || currentPath === "/memory-guess";
+
   const navItems = [
     { 
       name: "Dashboard", 
@@ -83,22 +86,10 @@ export default function Header({
       isActive: currentPath === "/relationship-dashboard"
     },
     { 
-      name: "Love Quiz", 
-      href: "/quiz", 
-      icon: Heart, // Replaced Sparkles with Heart since Sparkles was unused
-      isActive: currentPath === "/quiz"
-    },
-    { 
-      name: "Decision Wheel", 
-      href: "/decision-wheel", 
-      icon: Sparkles,
-      isActive: currentPath === "/decision-wheel"
-    },
-    { 
-      name: "Memory Guess", 
-      href: "/memory-guess", 
-      icon: Camera,
-      isActive: currentPath === "/memory-guess"
+      name: "Play Games", 
+      href: "/games", 
+      icon: Gamepad2,
+      isActive: isGamesActive
     },
   ];
 
