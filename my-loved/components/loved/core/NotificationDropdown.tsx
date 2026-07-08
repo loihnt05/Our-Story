@@ -124,7 +124,7 @@ interface NotificationDropdownProps {
   loved: any;
   onTabChange?: (href: string) => void;
   onTriggerMemoryReminder?: (milestone: any) => void;
-  onClose: () => void;
+  onClose?: () => void;
 }
 
 export default function NotificationDropdown({
@@ -136,7 +136,7 @@ export default function NotificationDropdown({
   const notifications = getNotifications(loved, onTabChange, onTriggerMemoryReminder);
 
   return (
-    <div className="absolute right-0 top-full origin-top-right mt-2.5 w-80 max-w-[calc(100vw-2rem)] bg-white/95 dark:bg-zinc-950/95 border border-zinc-200/50 dark:border-zinc-850/50 backdrop-blur-xl rounded-2xl shadow-xl p-4 z-50 flex flex-col gap-3.5 select-none text-zinc-800 dark:text-zinc-100 animate-scale-up max-h-96 overflow-y-auto">
+    <div className="flex flex-col gap-3.5 select-none text-zinc-800 dark:text-zinc-100 max-h-80 overflow-y-auto scrollbar-hide">
       <div className="flex items-center justify-between border-b border-zinc-200/50 dark:border-zinc-850/50 pb-2">
         <span className="text-xs font-bold uppercase tracking-wider text-zinc-400">Notifications</span>
         <span className="text-[10px] bg-rose-500/10 text-rose-500 font-bold px-2 py-0.5 rounded-full">
@@ -163,7 +163,7 @@ export default function NotificationDropdown({
                 key={n.id}
                 onClick={() => {
                   if (n.onClick) n.onClick();
-                  onClose();
+                  if (onClose) onClose();
                 }}
                 className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-zinc-100/50 dark:hover:bg-zinc-850/35 border border-transparent hover:border-zinc-200/30 dark:hover:border-zinc-800/20 cursor-pointer transition-all text-left"
               >

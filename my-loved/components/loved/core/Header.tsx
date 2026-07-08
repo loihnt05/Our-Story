@@ -20,6 +20,7 @@ import { useTheme } from "next-themes";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/animate-ui/components/animate/tooltip";
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/animate-ui/components/radix/popover";
 import SidebarContent from "./SidebarContent";
 import NotificationDropdown, { getNotifications } from "./NotificationDropdown";
 
@@ -47,7 +48,8 @@ export default function Header({
   const { resolvedTheme: theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
-  const [isNotifyOpen, setIsNotifyOpen] = useState(false);
+  const [isDesktopNotifyOpen, setIsDesktopNotifyOpen] = useState(false);
+  const [isMobileNotifyOpen, setIsMobileNotifyOpen] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -152,32 +154,37 @@ export default function Header({
           <div className="hidden lg:flex items-center gap-4">
             <div className="flex items-center gap-2">
               {/* Notification Center Popover */}
-              <div className="relative">
+              <Popover open={isDesktopNotifyOpen} onOpenChange={setIsDesktopNotifyOpen}>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <button
-                      onClick={() => setIsNotifyOpen(!isNotifyOpen)}
-                      className="p-2 rounded-xl bg-white/40 dark:bg-zinc-800/40 border border-white/20 backdrop-blur-md shadow-sm text-zinc-700 dark:text-zinc-200 hover:bg-white/60 dark:hover:bg-zinc-800/60 transition-all cursor-pointer relative"
-                    >
-                      <Bell className="w-4 h-4 text-rose-500" />
-                      {notifications.length > 0 && (
-                        <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-rose-600 text-[9px] font-bold text-white animate-pulse">
-                          {notifications.length}
-                        </span>
-                      )}
-                    </button>
+                    <PopoverTrigger asChild>
+                      <button
+                        className="p-2 rounded-xl bg-white/40 dark:bg-zinc-800/40 border border-white/20 backdrop-blur-md shadow-sm text-zinc-700 dark:text-zinc-200 hover:bg-white/60 dark:hover:bg-zinc-800/60 transition-all cursor-pointer relative"
+                      >
+                        <Bell className="w-4 h-4 text-rose-500" />
+                        {notifications.length > 0 && (
+                          <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-rose-600 text-[9px] font-bold text-white animate-pulse">
+                            {notifications.length}
+                          </span>
+                        )}
+                      </button>
+                    </PopoverTrigger>
                   </TooltipTrigger>
                   <TooltipContent>Notifications</TooltipContent>
                 </Tooltip>
-                {isNotifyOpen && (
+                <PopoverContent
+                  align="end"
+                  sideOffset={8}
+                  className="w-80 max-w-[calc(100vw-2rem)] bg-white/95 dark:bg-zinc-950/95 border border-zinc-200/50 dark:border-zinc-850/50 backdrop-blur-xl rounded-2xl shadow-xl p-4"
+                >
                   <NotificationDropdown
                     loved={loved}
                     onTabChange={onTabChange}
                     onTriggerMemoryReminder={onTriggerMemoryReminder}
-                    onClose={() => setIsNotifyOpen(false)}
+                    onClose={() => setIsDesktopNotifyOpen(false)}
                   />
-                )}
-              </div>
+                </PopoverContent>
+              </Popover>
 
               {/* Music Player */}
               <Tooltip>
@@ -239,32 +246,37 @@ export default function Header({
           {/* Mobile hamburger menu toggle & Notification */}
           <div className="lg:hidden flex items-center gap-2">
             {/* Bell button for mobile */}
-            <div className="relative">
+            <Popover open={isMobileNotifyOpen} onOpenChange={setIsMobileNotifyOpen}>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <button
-                    onClick={() => setIsNotifyOpen(!isNotifyOpen)}
-                    className="p-2 rounded-xl bg-white/40 dark:bg-zinc-800/40 border border-white/20 backdrop-blur-md text-zinc-700 dark:text-zinc-200 hover:bg-white/60 dark:hover:bg-zinc-800/60 transition-all cursor-pointer relative"
-                  >
-                    <Bell className="w-4.5 h-4.5 text-rose-500" />
-                    {notifications.length > 0 && (
-                      <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-rose-600 text-[9px] font-bold text-white animate-pulse">
-                        {notifications.length}
-                      </span>
-                    )}
-                  </button>
+                  <PopoverTrigger asChild>
+                    <button
+                      className="p-2 rounded-xl bg-white/40 dark:bg-zinc-800/40 border border-white/20 backdrop-blur-md text-zinc-700 dark:text-zinc-200 hover:bg-white/60 dark:hover:bg-zinc-800/60 transition-all cursor-pointer relative"
+                    >
+                      <Bell className="w-4.5 h-4.5 text-rose-500" />
+                      {notifications.length > 0 && (
+                        <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-rose-600 text-[9px] font-bold text-white animate-pulse">
+                          {notifications.length}
+                        </span>
+                      )}
+                    </button>
+                  </PopoverTrigger>
                 </TooltipTrigger>
                 <TooltipContent>Notifications</TooltipContent>
               </Tooltip>
-              {isNotifyOpen && (
+              <PopoverContent
+                align="end"
+                sideOffset={8}
+                className="w-80 max-w-[calc(100vw-2rem)] bg-white/95 dark:bg-zinc-950/95 border border-zinc-200/50 dark:border-zinc-850/50 backdrop-blur-xl rounded-2xl shadow-xl p-4"
+              >
                 <NotificationDropdown
                   loved={loved}
                   onTabChange={onTabChange}
                   onTriggerMemoryReminder={onTriggerMemoryReminder}
-                  onClose={() => setIsNotifyOpen(false)}
+                  onClose={() => setIsMobileNotifyOpen(false)}
                 />
-              )}
-            </div>
+              </PopoverContent>
+            </Popover>
 
             <button
               onClick={() => setIsMobileOpen(true)}
