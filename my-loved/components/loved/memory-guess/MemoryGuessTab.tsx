@@ -46,6 +46,7 @@ interface Question {
 interface MemoryGuessTabProps {
   loved: any;
   currentTheme: any;
+  onBack?: () => void;
 }
 
 const FALLBACK_MEMORIES: Milestone[] = [
@@ -80,7 +81,7 @@ const initAudio = () => {
   return audioCtx;
 };
 
-export default function MemoryGuessTab({ loved, currentTheme }: MemoryGuessTabProps) {
+export default function MemoryGuessTab({ loved, currentTheme, onBack }: MemoryGuessTabProps) {
   // Game state: idle, playing, reveal, summary
   const [gameState, setGameState] = useState<"idle" | "playing" | "reveal" | "summary">("idle");
   const [activeTab, setActiveTab] = useState<"game" | "badges" | "stats">("game");
@@ -463,6 +464,14 @@ export default function MemoryGuessTab({ loved, currentTheme }: MemoryGuessTabPr
       {/* Header Banner */}
       <div className="text-center md:text-left flex flex-col md:flex-row md:items-center justify-between gap-4 p-6 rounded-3xl bg-white/40 dark:bg-zinc-950/20 border border-white/20 backdrop-blur-md">
         <div>
+          {onBack && (
+            <button
+              onClick={onBack}
+              className="mb-2 flex items-center gap-1 text-xs font-bold text-zinc-455 hover:text-rose-500 cursor-pointer"
+            >
+              <span>⬅️ Back to Game Center</span>
+            </button>
+          )}
           <h1 className="text-2xl md:text-3xl font-cursive font-bold text-rose-600 dark:text-rose-400 flex items-center justify-center md:justify-start gap-2">
             <span>📸 Memory Guess</span>
           </h1>
