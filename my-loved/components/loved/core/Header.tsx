@@ -113,7 +113,7 @@ export default function Header({
     <>
       {/* STICKY TOP NAVIGATION BAR (Horizontal bar on both desktop & mobile) */}
       <header className="sticky top-0 w-full z-40 border-b border-white/10 dark:border-zinc-900/20 bg-white/20 dark:bg-zinc-950/20 backdrop-blur-md select-none">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+        <div className="max-w-8xl mx-auto px-6 py-4 flex items-center justify-between">
           
           {/* Left: Branding */}
           <Link 

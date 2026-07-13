@@ -83,14 +83,14 @@ export default function MainCounter({
       {/* Soft decorative background radial glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] bg-gradient-to-br from-rose-500/10 to-pink-500/0 rounded-full blur-3xl pointer-events-none -z-10" />
 
-      <div className="flex items-center gap-2 mb-4 bg-white/40 dark:bg-zinc-800/40 border border-white/20 px-4.5 py-1.5 rounded-full backdrop-blur-md shadow-sm select-none">
+      <div className="flex mt-10 items-center gap-2 mb-4 bg-white/40 dark:bg-zinc-800/40 border border-white/20 px-4.5 py-1.5 rounded-full backdrop-blur-md shadow-sm select-none">
         <Calendar className="w-4 h-4 text-rose-500" />
         <span className="text-xs font-semibold text-rose-600 dark:text-rose-400 tracking-wide uppercase">
           Anniversary Date
         </span>
       </div>
 
-      <h1 className="text-lg md:text-xl font-medium font-serif text-zinc-900 dark:text-white max-w-md mt-2 select-none">
+      <h1 className="text-lg md:text-2xl font-medium font-cursive text-zinc-900 dark:text-white max-w-md mt-2 select-none">
         We have been loving each other for
       </h1>
 
@@ -98,7 +98,7 @@ export default function MainCounter({
       <div className="my-6 relative flex items-center justify-center gap-4 cute-floating select-none">
         <span className="text-3xl animate-bounce select-none" style={{ animationDuration: "1.2s", animationDelay: "0.1s" }}>🐰</span>
         <div className="relative flex flex-col items-center">
-          <span className="text-7xl md:text-8xl p-3 font-molle text-transparent bg-clip-text bg-gradient-to-r from-rose-600 via-pink-600 to-amber-500 select-none drop-shadow-[0_4px_8px_rgba(244,63,94,0.15)] filter tracking-tight">
+          <span className="text-7xl md:text-8xl p-6 font-molle text-transparent bg-clip-text bg-gradient-to-r from-rose-600 via-pink-600 to-amber-500 select-none drop-shadow-[0_4px_8px_rgba(244,63,94,0.15)] filter tracking-tight">
             {timeLeft.totalDays.toLocaleString()}
           </span>
           <span className="absolute -bottom-5 text-sm font-bold uppercase tracking-widest text-rose-500/80 dark:text-rose-400/80 mt-1">
@@ -155,7 +155,7 @@ export default function MainCounter({
         ))}
       </div>
 
-      <div className="mt-8 text-sm font-cursive text-zinc-500 dark:text-zinc-400 flex flex-col gap-1 items-center select-none">
+      <div className="mt-8 pb-5 mb-5 text-xl font-cursive text-zinc-500 dark:text-zinc-400 flex flex-col gap-1 items-center select-none">
         <span>Together since</span>
         <span className="text-rose-500 dark:text-rose-400 font-serif font-bold text-base mt-0.5 flex items-center gap-1.5">
           <Heart className="w-3.5 h-3.5 fill-current animate-pulse text-rose-500" />
