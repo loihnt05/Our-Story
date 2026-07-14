@@ -11,6 +11,7 @@ import { AuthProviderWrapper as ClerkProvider } from "@/components/loved/core/Au
 import { ThemeProvider } from "@/components/theme-provider";
 import { TooltipProvider } from "@/components/animate-ui/components/animate/tooltip";
 import CursorWrapper from "@/components/loved/core/CursorWrapper";
+import { Providers } from "./provider";
 
 const fredoka = Fredoka({
   variable: "--font-sans",
@@ -60,13 +61,15 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <body className="min-h-full flex flex-col">
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <TooltipProvider>
-              <CursorWrapper>
-                {children}
-              </CursorWrapper>
-            </TooltipProvider>
-          </ThemeProvider>
+          <Providers>
+            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+              <TooltipProvider>
+                <CursorWrapper>
+                  {children}
+                </CursorWrapper>
+              </TooltipProvider>
+            </ThemeProvider>
+          </Providers>
         </body>
       </html>
     </ClerkProvider>
