@@ -90,17 +90,6 @@ export default function SidebarContent({
             </Link>
           ))}
 
-          {/* Action Trigger for Settings Modal */}
-          <button
-            onClick={() => {
-              if (isMobileView) setIsMobileOpen(false);
-              onOpenSettings();
-            }}
-            className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-xs font-bold transition-all border border-transparent text-zinc-500 dark:text-zinc-400 hover:bg-zinc-100/50 dark:hover:bg-zinc-800/30 hover:text-zinc-800 dark:hover:text-zinc-200 cursor-pointer text-left font-sans"
-          >
-            <Settings className="w-4 h-4" />
-            <span>Customize Space</span>
-          </button>
         </nav>
 
         {/* Cute Sparkly Card */}
@@ -125,6 +114,22 @@ export default function SidebarContent({
             Quick Actions
           </span>
           <div className="flex items-center gap-2">
+            {/* Customize Space */}
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  onClick={() => {
+                    if (isMobileView) setIsMobileOpen(false);
+                    onOpenSettings();
+                  }}
+                  className="p-2.5 rounded-xl bg-white/40 dark:bg-zinc-800/40 border border-white/20 backdrop-blur-md shadow-sm text-zinc-700 dark:text-zinc-200 hover:bg-white/60 dark:hover:bg-zinc-800/60 transition-all cursor-pointer"
+                >
+                  <Settings className="w-4.5 h-4.5 text-rose-500" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>Customize Space</TooltipContent>
+            </Tooltip>
+
             {/* Music Player */}
             <Tooltip>
               <TooltipTrigger asChild>

@@ -91,18 +91,7 @@ export default function Header({
       icon: Gamepad2,
       isActive: isGamesActive
     },
-    { 
-      name: "Decision Wheel", 
-      href: "/decision-wheel", 
-      icon: Sparkles,
-      isActive: currentPath === "/decision-wheel"
-    },
-    { 
-      name: "Memory Guess", 
-      href: "/memory-guess", 
-      icon: Camera,
-      isActive: currentPath === "/memory-guess"
-    },
+    
   ];
 
   if (!mounted) return null;
@@ -113,7 +102,7 @@ export default function Header({
     <>
       {/* STICKY TOP NAVIGATION BAR (Horizontal bar on both desktop & mobile) */}
       <header className="sticky top-0 w-full z-40 border-b border-white/10 dark:border-zinc-900/20 bg-white/20 dark:bg-zinc-950/20 backdrop-blur-md select-none">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+        <div className="max-w-8xl mx-auto px-6 py-4 flex items-center justify-between">
           
           {/* Left: Branding */}
           <Link 
@@ -156,20 +145,24 @@ export default function Header({
                 <span>{item.name}</span>
               </Link>
             ))}
-            
-            {/* Customize space trigger */}
-            <button
-              onClick={onOpenSettings}
-              className="flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold transition-all border border-transparent text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200 cursor-pointer"
-            >
-              <Settings className="w-3.5 h-3.5" />
-              <span>Customize</span>
-            </button>
           </nav>
 
           {/* Right: Desktop Controls & Profile */}
           <div className="hidden lg:flex items-center gap-4">
             <div className="flex items-center gap-2">
+              {/* Customize Space */}
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    onClick={onOpenSettings}
+                    className="p-2 rounded-xl bg-white/40 dark:bg-zinc-800/40 border border-white/20 backdrop-blur-md shadow-sm text-zinc-700 dark:text-zinc-200 hover:bg-white/60 dark:hover:bg-zinc-800/60 transition-all cursor-pointer"
+                  >
+                    <Settings className="w-4 h-4 text-rose-500" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>Customize Space</TooltipContent>
+              </Tooltip>
+
               {/* Notification Center Popover */}
               <Popover open={isDesktopNotifyOpen} onOpenChange={setIsDesktopNotifyOpen}>
                 <Tooltip>
