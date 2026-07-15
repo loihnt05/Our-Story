@@ -1,10 +1,8 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
-  provider = "prisma-client"
+  provider = "prisma-client-js"
   output   = "../lib/generated/prisma"
 }
 
@@ -12,13 +10,225 @@ datasource db {
   provider = "postgresql"
 }
 
+// User representation (Clerk/NextAuth integration)
 model User {
-  id    String @id @default(cuid())
-  email String @unique
+  id        String   @id @default(cuid())
+  email     String   @unique
+  clerkId   String?  @unique
+  name      String?
+  avatarUrl String?
+  role      String?  // "A" or "B" (representing Romeo/Juliet or custom names)
+  coupleId  String?
+  couple    Couple?  @relation(fields: [coupleId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([coupleId])
 }
 
+// Couple / Relationship representation (central tenant for the relationship state)
+model Couple {
+  id                 String             @id @default(cuid())
+  personAName        String             @default("Romeo")
+  personBName        String             @default("Juliet")
+  personADesc        String             @default("My Universe 🌌")
+  personBDesc        String             @default("My Anchor ⚓")
+  personAAvatar      String?
+  personBAvatar      String?
+  anniversaryDate    DateTime?
+  customTitle        String             @default("Our Love Story")
+  themeId            String             @default("rose-gold")
+  secretNote         String             @default("My dearest, thank you for being by my side. Every single day with you is a gift, and I cherish every second, every laugh, and every quiet Sunday we share together. Yours forever and always. ❤️")
+  
+  // Journal Streak & Recovery
+  streakCount        Int                @default(0)
+  lastActiveStreak   Int                @default(0)
+  recoveriesUsed     Int                @default(0)
+  recoveredDates     String[]           @default([]) // Array of dates: e.g., "YYYY-MM-DD"
+  
+  // Memory Guess Game Stats
+  memoryGuessScoreA  Int                @default(0)
+  memoryGuessScoreB  Int                @default(0)
+  memoryGuessStreak  Int                @default(0)
+
+  // Relationship metrics
+  intimacyScore      Int                @default(75)
+  understandingScore Int                @default(82)
+  completedWeeks     Int                @default(3)
+
+  // Relations
+  users              User[]
+  milestones         Milestone[]
+  notes              Note[]
+  journalEntries     JournalEntry[]
+  timeCapsules       TimeCapsule[]
+  customQuizPacks    CustomQuizPack[]
+  quizMemories       QuizMemory[]
+  weeklyQuests       WeeklyQuest[]
+  wheelCategories    WheelCategory[]
+  decisionHistory    DecisionHistory[]
+
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+}
+
+// Relationship milestones (Timeline Events)
+model Milestone {
+  id          String   @id @default(cuid())
+  coupleId    String
+  couple      Couple   @relation(fields: [coupleId], references: [id], onDelete: Cascade)
+  title       String
+  date        DateTime
+  description String
+  icon        String
+  image       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([coupleId])
+}
+
+// Romantic Notes (Sticky notes board)
+model Note {
+  id        String   @id @default(cuid())
+  coupleId  String
+  couple    Couple   @relation(fields: [coupleId], references: [id], onDelete: Cascade)
+  text      String
+  author    String   @default("Anonymous") // Author name (e.g. Romeo/Juliet)
+  color     String   @default("rose")      // Tailwind color class prefix or simple name
+  date      DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([coupleId])
+}
+
+// Daily Feelings Journal entries
+model JournalEntry {
+  id        String           @id @default(cuid())
+  coupleId  String
+  couple    Couple           @relation(fields: [coupleId], references: [id], onDelete: Cascade)
+  author    String           // "A" or "B"
+  date      String           // "YYYY-MM-DD" format
+  emotion   String
+  content   String
+  comments  JournalComment[]
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+
+  @@unique([coupleId, author, date])
+  @@index([coupleId])
+}
+
+// Comments on daily journal entries
+model JournalComment {
+  id             String       @id @default(cuid())
+  journalEntryId String
+  journalEntry   JournalEntry @relation(fields: [journalEntryId], references: [id], onDelete: Cascade)
+  author         String       // "A" or "B"
+  content        String
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@index([journalEntryId])
+}
+
+// Time capsules sealed by the couple to unlock in the future
+model TimeCapsule {
+  id         String   @id @default(cuid())
+  coupleId   String
+  couple     Couple   @relation(fields: [coupleId], references: [id], onDelete: Cascade)
+  message    String
+  unlockDate DateTime
+  sealedBy   String   // "A" or "B"
+  isUnlocked Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([coupleId])
+}
+
+// Custom Quiz Packs created by the couple
+model CustomQuizPack {
+  id          String   @id @default(cuid())
+  coupleId    String
+  couple      Couple   @relation(fields: [coupleId], references: [id], onDelete: Cascade)
+  name        String
+  description String?
+  coverEmoji  String   @default("💖")
+  questions   Json     // Holds JSON array of questions [{ id, type, question, options }]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([coupleId])
+}
+
+// History of completed quizzes with results
+model QuizMemory {
+  id                 String   @id @default(cuid())
+  coupleId           String
+  couple             Couple   @relation(fields: [coupleId], references: [id], onDelete: Cascade)
+  title              String
+  scoreA             Int
+  scoreB             Int
+  intimacyScore      Int
+  understandingScore Int
+  date               DateTime @default(now())
+  createdAt          DateTime @default(now())
+
+  @@index([coupleId])
+}
+
+// Weekly couple quest checklist tasks
+model WeeklyQuest {
+  id         String   @id @default(cuid())
+  coupleId   String
+  couple     Couple   @relation(fields: [coupleId], references: [id], onDelete: Cascade)
+  text       String
+  completed  Boolean  @default(false)
+  points     Int
+  icon       String?
+  weekNumber Int      @default(1)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([coupleId])
+}
+
+// Decision Wheel Categories
+model WheelCategory {
+  id        String   @id @default(cuid())
+  coupleId  String
+  couple    Couple   @relation(fields: [coupleId], references: [id], onDelete: Cascade)
+  name      String
+  icon      String
+  isCustom  Boolean  @default(true)
+  items     Json     // JSON array of options: [{ text, emoji }]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([coupleId])
+}
+
+// Decision Wheel History log
+model DecisionHistory {
+  id           String   @id @default(cuid())
+  coupleId     String
+  couple       Couple   @relation(fields: [coupleId], references: [id], onDelete: Cascade)
+  text         String   // Selected option text
+  emoji        String   // Selected option emoji
+  categoryName String   // Category wheel name
+  date         DateTime @default(now())
+  completed    Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([coupleId])
+}
+
+// Retain Product model from the starter just in case it is imported or referenced
 model Product {
-  id    String @id @default(cuid())
+  id    String  @id @default(cuid())
   name  String
   price Decimal
 }
