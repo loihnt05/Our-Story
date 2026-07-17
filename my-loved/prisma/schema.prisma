@@ -226,9 +226,4 @@ model DecisionHistory {
   @@index([coupleId])
 }
 
-// Retain Product model from the starter just in case it is imported or referenced
-model Product {
-  id    String  @id @default(cuid())
-  name  String
-  price Decimal
-}
+

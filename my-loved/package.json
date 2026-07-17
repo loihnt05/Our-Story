@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@charkour/react-reactions": "^0.11.0",
-    "@clerk/nextjs": "^7.5.17",
+    "@clerk/nextjs": "^7.5.19",
     "@floating-ui/react": "^0.27.20",
     "@hookform/resolvers": "^5.4.0",
     "@prisma/client": "^7.8.0",
