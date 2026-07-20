@@ -59,6 +59,6 @@ export interface JournalEntry {
   content: string;
   createdAt: string;
   comments: JournalComment[];
-  reactions: JournalReaction[];
+  reactions?: JournalReaction[];
 }
 
