@@ -1,0 +1,152 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "OurStory API Reference",
+    "description": "API documentation for the OurStory relationship synchronization, journaling, and couple space application.",
+    "version": "1.0.0",
+    "contact": {
+      "name": "OurStory Support",
+      "email": "support@ourstory.local"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Development Server"
+    }
+  ],
+  "paths": {
+    "/api/webhooks/clerk": {
+      "post": {
+        "summary": "Clerk Webhook Sync",
+        "description": "Processes Clerk user events (`user.created`, `user.updated`, `user.deleted`) and synchronizes them with the local database. Verifies incoming signatures using Clerk's webhook secret.",
+        "headers": {
+          "svix-id": {
+            "description": "Unique event identifier from Svix",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          "svix-timestamp": {
+            "description": "Unix timestamp of the event",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          "svix-signature": {
+            "description": "Hexadecimal signature used to verify request integrity",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "data": {
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "string", "example": "user_2F3z..." },
+                      "email_addresses": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": { "type": "string" },
+                            "email_address": { "type": "string", "format": "email" }
+                          }
+                        }
+                      },
+                      "primary_email_address_id": { "type": "string" },
+                      "first_name": { "type": "string" },
+                      "last_name": { "type": "string" },
+                      "image_url": { "type": "string", "format": "uri" }
+                    }
+                  },
+                  "object": { "type": "string", "example": "event" },
+                  "type": { "type": "string", "example": "user.created" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully synchronized user data."
+          },
+          "400": {
+            "description": "Bad Request: Missing headers or invalid webhook signature."
+          },
+          "500": {
+            "description": "Internal Server Error: Database synchronization failure."
+          }
+        }
+      }
+    },
+    "/api/couple": {
+      "get": {
+        "summary": "Get Couple Space Details",
+        "description": "Retrieves the shared couple space settings, anniversaries, theme settings, and intimacy scores. Requires active Clerk session cookie auth.",
+        "responses": {
+          "200": {
+            "description": "Couple details returned successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "string" },
+                    "personAName": { "type": "string" },
+                    "personBName": { "type": "string" },
+                    "anniversaryDate": { "type": "string", "format": "date-time" },
+                    "themeId": { "type": "string" },
+                    "intimacyScore": { "type": "integer" },
+                    "understandingScore": { "type": "integer" }
+                  }
+                  
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized: Active session required."
+          }
+        }
+      }
+    },
+    "/api/journal": {
+      "post": {
+        "summary": "Create Daily Journal Entry",
+        "description": "Allows a partner to record their daily emotions, thoughts, and reflections. Updates couple streaks.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["emotion", "content", "date"],
+                "properties": {
+                  "date": { "type": "string", "example": "2026-07-20" },
+                  "emotion": { "type": "string", "example": "happy" },
+                  "content": { "type": "string", "example": "Today was a wonderful Sunday walk." }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Journal entry successfully recorded."
+          },
+          "400": {
+            "description": "Bad Request: User has already written a journal entry for today."
+          },
+          "401": {
+            "description": "Unauthorized."
+          }
+        }
+      }
+    }
+  }
+}

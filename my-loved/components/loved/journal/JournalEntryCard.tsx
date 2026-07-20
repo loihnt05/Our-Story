@@ -234,7 +234,13 @@ export default function JournalEntryCard({
         {entry.comments.length === 0 && (
           <div className="flex gap-2 items-center mt-1">
             {currentUserAvatar ? (
-              <img src={currentUserAvatar} className="w-6 h-6 rounded-full object-cover border border-zinc-200" alt="avatar" />
+              currentUserAvatar.startsWith("http") || currentUserAvatar.startsWith("/") || currentUserAvatar.startsWith("data:") ? (
+                <img src={currentUserAvatar} className="w-6 h-6 rounded-full object-cover border border-zinc-200" alt="avatar" />
+              ) : (
+                <span className="w-6 h-6 rounded-full bg-rose-100 dark:bg-rose-900/40 text-rose-600 dark:text-rose-200 text-xs flex items-center justify-center font-bold font-sans select-none">
+                  {currentUserAvatar}
+                </span>
+              )
             ) : (
               <span className="w-6 h-6 rounded-full bg-rose-200 dark:bg-rose-900 text-rose-600 dark:text-rose-200 text-[10px] flex items-center justify-center font-bold font-sans">
                 {currentUserCode}
