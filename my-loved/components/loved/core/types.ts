@@ -44,6 +44,13 @@ export interface JournalComment {
   createdAt: string;
 }
 
+export interface JournalReaction {
+  id: string;
+  author: string;
+  emoji: string;
+  createdAt: string;
+}
+
 export interface JournalEntry {
   id: string;
   date: string;
@@ -52,5 +59,6 @@ export interface JournalEntry {
   content: string;
   createdAt: string;
   comments: JournalComment[];
+  reactions: JournalReaction[];
 }
 

@@ -10,13 +10,16 @@ datasource db {
   provider = "postgresql"
 }
 
-// User representation (Clerk/NextAuth integration)
+// User representation (Clerk integration)
 model User {
   id        String   @id @default(cuid())
+  clerkId   String   @unique
   email     String   @unique
-  clerkId   String?  @unique
-  name      String?
-  avatarUrl String?
+  firstName String?
+  lastName  String?
+  imageUrl  String?
+  name      String?  // Kept for backward compatibility
+  avatarUrl String?  // Kept for backward compatibility
   role      String?  // "A" or "B" (representing Romeo/Juliet or custom names)
   coupleId  String?
   couple    Couple?  @relation(fields: [coupleId], references: [id])
@@ -113,6 +116,7 @@ model JournalEntry {
   emotion   String
   content   String
   comments  JournalComment[]
+  reactions JournalReaction[]
   createdAt DateTime         @default(now())
   updatedAt DateTime         @updatedAt
 
@@ -130,6 +134,19 @@ model JournalComment {
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
 
+  @@index([journalEntryId])
+}
+
+// Emoji reactions on daily journal entries
+model JournalReaction {
+  id             String       @id @default(cuid())
+  journalEntryId String
+  journalEntry   JournalEntry @relation(fields: [journalEntryId], references: [id], onDelete: Cascade)
+  author         String       // "A" or "B"
+  emoji          String       // E.g., "❤️", "👍", "🔥", "😢"
+  createdAt      DateTime     @default(now())
+
+  @@unique([journalEntryId, author]) // Restricts to one active reaction per user per entry
   @@index([journalEntryId])
 }
 
