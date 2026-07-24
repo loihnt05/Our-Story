@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export function useAnniversaryTimer(mounted: boolean) {
-  const [anniversaryDate, setAnniversaryDate] = useState("2026-01-27");
-  const [customTitle, setCustomTitle] = useState("Our Story");
+  const [anniversaryDate, setAnniversaryDateState] = useState("2026-01-27");
+  const [customTitle, setCustomTitleState] = useState("Our Story");
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
@@ -11,21 +11,58 @@ export function useAnniversaryTimer(mounted: boolean) {
     totalDays: 0
   });
 
-  // Load from local storage
+  const isInitialLoadRef = useRef(true);
+
+  // Load from database / local storage
   useEffect(() => {
     if (!mounted) return;
+    
+    // Initial sync from DB
+    fetch("/api/couple")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && data.couple) {
+          if (data.couple.anniversaryDate) {
+            const dateStr = new Date(data.couple.anniversaryDate).toISOString().split("T")[0];
+            setAnniversaryDateState(dateStr);
+            localStorage.setItem("loved_anniversary", dateStr);
+          }
+          if (data.couple.customTitle) {
+            setCustomTitleState(data.couple.customTitle);
+            localStorage.setItem("loved_title", data.couple.customTitle);
+          }
+        }
+      })
+      .catch((err) => console.error("[useAnniversaryTimer] DB load failed:", err))
+      .finally(() => {
+        isInitialLoadRef.current = false;
+      });
+
     const savedAnniversary = localStorage.getItem("loved_anniversary");
     const savedTitle = localStorage.getItem("loved_title");
-    if (savedAnniversary) setAnniversaryDate(savedAnniversary);
-    if (savedTitle) setCustomTitle(savedTitle);
+    if (savedAnniversary) setAnniversaryDateState(savedAnniversary);
+    if (savedTitle) setCustomTitleState(savedTitle);
   }, [mounted]);
 
-  // Sync to local storage
-  useEffect(() => {
-    if (!mounted) return;
-    localStorage.setItem("loved_anniversary", anniversaryDate);
-    localStorage.setItem("loved_title", customTitle);
-  }, [anniversaryDate, customTitle, mounted]);
+  const setAnniversaryDate = (date: string) => {
+    setAnniversaryDateState(date);
+    localStorage.setItem("loved_anniversary", date);
+    fetch("/api/couple", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ anniversaryDate: date }),
+    }).catch((err) => console.error("Failed to sync anniversaryDate to DB:", err));
+  };
+
+  const setCustomTitle = (title: string) => {
+    setCustomTitleState(title);
+    localStorage.setItem("loved_title", title);
+    fetch("/api/couple", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ customTitle: title }),
+    }).catch((err) => console.error("Failed to sync customTitle to DB:", err));
+  };
 
   // Live Timer logic
   useEffect(() => {

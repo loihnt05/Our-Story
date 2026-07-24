@@ -8,46 +8,49 @@ export function useMilestones(mounted: boolean) {
   const [newMilestoneDesc, setNewMilestoneDesc] = useState("");
   const [newMilestoneIcon, setNewMilestoneIcon] = useState("💖");
 
-  // Load from local storage
+  // Load from Database & LocalStorage
   useEffect(() => {
     if (!mounted) return;
-    const savedMilestones = localStorage.getItem("loved_milestones");
-    if (savedMilestones) {
-      try {
-        setMilestones(JSON.parse(savedMilestones));
-      } catch (err) {
-        console.error("Failed to parse milestones from localStorage", err);
-        const defaultMilestones = [
-          { id: "1", title: "First Met 🌸", date: "2024-11-15", description: "The spark that started everything.", icon: "✨" },
-          { id: "2", title: "First Date ☕", date: "2024-12-05", description: "Coffee, laughs, and talking for hours.", icon: "☕" },
-          { id: "3", title: "Officially Together 💕", date: "2025-01-01", description: "Holding hands and starting our journey.", icon: "💖" }
-        ];
-        setMilestones(defaultMilestones);
-        localStorage.setItem("loved_milestones", JSON.stringify(defaultMilestones));
-      }
-    } else {
-      const defaultMilestones = [
-        { id: "1", title: "First Met 🌸", date: "2024-11-15", description: "The spark that started everything.", icon: "✨" },
-        { id: "2", title: "First Date ☕", date: "2024-12-05", description: "Coffee, laughs, and talking for hours.", icon: "☕" },
-        { id: "3", title: "Officially Together 💕", date: "2025-01-01", description: "Holding hands and starting our journey.", icon: "💖" }
-      ];
-      setMilestones(defaultMilestones);
-      localStorage.setItem("loved_milestones", JSON.stringify(defaultMilestones));
-    }
+
+    fetch("/api/milestones")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.milestones) && data.milestones.length > 0) {
+          const formatted = data.milestones.map((m: any) => ({
+            id: m.id,
+            title: m.title,
+            date: new Date(m.date).toISOString().split("T")[0],
+            description: m.description,
+            icon: m.icon || "💖",
+            image: m.image,
+          }));
+          setMilestones(formatted);
+          localStorage.setItem("loved_milestones", JSON.stringify(formatted));
+        } else {
+          // Fallback local storage
+          const savedMilestones = localStorage.getItem("loved_milestones");
+          if (savedMilestones) {
+            try {
+              setMilestones(JSON.parse(savedMilestones));
+            } catch (err) {
+              console.error("Failed to parse milestones from localStorage", err);
+            }
+          }
+        }
+      })
+      .catch((err) => {
+        console.error("Milestones fetch failed:", err);
+      });
   }, [mounted]);
 
-  // Sync to local storage
-  const saveMilestones = (updatedList: Milestone[]) => {
-    setMilestones(updatedList);
-    localStorage.setItem("loved_milestones", JSON.stringify(updatedList));
-  };
-
   // Add Milestone
-  const handleAddMilestone = (title: string, date: string, desc: string, icon: string, image?: string) => {
+  const handleAddMilestone = async (title: string, date: string, desc: string, icon: string, image?: string) => {
     if (!title || !date) return;
     
+    // Optimistic UI update
+    const tempId = Date.now().toString();
     const newM: Milestone = {
-      id: Date.now().toString(),
+      id: tempId,
       title,
       date,
       description: desc,
@@ -56,13 +59,38 @@ export function useMilestones(mounted: boolean) {
     };
 
     const updated = [...milestones, newM].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-    saveMilestones(updated);
+    setMilestones(updated);
+    localStorage.setItem("loved_milestones", JSON.stringify(updated));
+
+    // Database Sync
+    try {
+      const res = await fetch("/api/milestones", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title, date, description: desc, icon, image }),
+      });
+      const data = await res.json();
+      if (data.success && data.milestone) {
+        setMilestones((prev) =>
+          prev.map((m) => (m.id === tempId ? { ...m, id: data.milestone.id } : m))
+        );
+      }
+    } catch (err) {
+      console.error("Failed to save milestone to database:", err);
+    }
   };
 
   // Remove Milestone
-  const handleRemoveMilestone = (id: string) => {
+  const handleRemoveMilestone = async (id: string) => {
     const updated = milestones.filter(m => m.id !== id);
-    saveMilestones(updated);
+    setMilestones(updated);
+    localStorage.setItem("loved_milestones", JSON.stringify(updated));
+
+    try {
+      await fetch(`/api/milestones/${id}`, { method: "DELETE" });
+    } catch (err) {
+      console.error("Failed to delete milestone from database:", err);
+    }
   };
 
   return {

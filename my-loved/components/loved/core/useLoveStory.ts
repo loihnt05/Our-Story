@@ -11,15 +11,15 @@ export function useLoveStory() {
   const [mounted, setMounted] = useState(false);
   const [showIntro, setShowIntro] = useState(true);
   const [showSettings, setShowSettings] = useState(false);
-  const [themeId, setThemeId] = useState("rose-gold");
+  const [themeId, setThemeIdState] = useState("rose-gold");
   
   // Customisable names & descriptions
-  const [personAName, setPersonAName] = useState("Romeo");
-  const [personBName, setPersonBName] = useState("Juliet");
-  const [personADesc, setPersonADesc] = useState("My Universe 🌌");
-  const [personBDesc, setPersonBDesc] = useState("My Anchor ⚓");
-  const [personAAvatar, setPersonAAvatar] = useState("");
-  const [personBAvatar, setPersonBAvatar] = useState("");
+  const [personAName, setPersonANameState] = useState("Romeo");
+  const [personBName, setPersonBNameState] = useState("Juliet");
+  const [personADesc, setPersonADescState] = useState("My Universe 🌌");
+  const [personBDesc, setPersonBDescState] = useState("My Anchor ⚓");
+  const [personAAvatar, setPersonAAvatarState] = useState("");
+  const [personBAvatar, setPersonBAvatarState] = useState("");
   
   // Audio state & Synth
   const [isMuted, setIsMuted] = useState(true);
@@ -29,9 +29,26 @@ export function useLoveStory() {
   const [quoteIndex, setQuoteIndex] = useState(0);
   const [activePartner, setActivePartner] = useState<"A" | "B">("A");
 
-  // Load basic configurations from local storage
+  // Load basic configurations from DB and local storage
   useEffect(() => {
     setMounted(true);
+
+    fetch("/api/couple")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && data.couple) {
+          const c = data.couple;
+          if (c.personAName) setPersonANameState(c.personAName);
+          if (c.personBName) setPersonBNameState(c.personBName);
+          if (c.personADesc) setPersonADescState(c.personADesc);
+          if (c.personBDesc) setPersonBDescState(c.personBDesc);
+          if (c.personAAvatar) setPersonAAvatarState(c.personAAvatar);
+          if (c.personBAvatar) setPersonBAvatarState(c.personBAvatar);
+          if (c.themeId) setThemeIdState(c.themeId);
+        }
+      })
+      .catch((err) => console.error("Failed to load couple configurations from DB:", err));
+
     const savedPersonA = localStorage.getItem("loved_personA");
     const savedPersonB = localStorage.getItem("loved_personB");
     const savedPersonADesc = localStorage.getItem("loved_personA_desc");
@@ -40,13 +57,13 @@ export function useLoveStory() {
     const savedPersonBAvatar = localStorage.getItem("loved_personB_avatar");
     const savedTheme = localStorage.getItem("loved_theme");
 
-    if (savedPersonA) setPersonAName(savedPersonA);
-    if (savedPersonB) setPersonBName(savedPersonB);
-    if (savedPersonADesc) setPersonADesc(savedPersonADesc);
-    if (savedPersonBDesc) setPersonBDesc(savedPersonBDesc);
-    if (savedPersonAAvatar) setPersonAAvatar(savedPersonAAvatar);
-    if (savedPersonBAvatar) setPersonBAvatar(savedPersonBAvatar);
-    if (savedTheme) setThemeId(savedTheme);
+    if (savedPersonA) setPersonANameState(savedPersonA);
+    if (savedPersonB) setPersonBNameState(savedPersonB);
+    if (savedPersonADesc) setPersonADescState(savedPersonADesc);
+    if (savedPersonBDesc) setPersonBDescState(savedPersonBDesc);
+    if (savedPersonAAvatar) setPersonAAvatarState(savedPersonAAvatar);
+    if (savedPersonBAvatar) setPersonBAvatarState(savedPersonBAvatar);
+    if (savedTheme) setThemeIdState(savedTheme);
 
     setQuoteIndex(Math.floor(Math.random() * ROMANTIC_QUOTES.length));
     synthRef.current = new AmbientSynth();
@@ -58,20 +75,58 @@ export function useLoveStory() {
     };
   }, []);
 
-  // Sync basic configurations to local storage when changed
-  useEffect(() => {
-    if (!mounted) return;
-    localStorage.setItem("loved_personA", personAName);
-    localStorage.setItem("loved_personB", personBName);
-    localStorage.setItem("loved_personA_desc", personADesc);
-    localStorage.setItem("loved_personB_desc", personBDesc);
-    localStorage.setItem("loved_personA_avatar", personAAvatar);
-    localStorage.setItem("loved_personB_avatar", personBAvatar);
-    localStorage.setItem("loved_theme", themeId);
-    
-    // Notify cursor wrapper and other same-tab components of configurations changes
+  // Sync state helpers that update DB + localStorage
+  const syncCoupleField = (fields: Record<string, any>) => {
+    fetch("/api/couple", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(fields),
+    }).catch((err) => console.error("Failed to sync couple field to DB:", err));
+  };
+
+  const setPersonAName = (val: string) => {
+    setPersonANameState(val);
+    localStorage.setItem("loved_personA", val);
+    syncCoupleField({ personAName: val });
     window.dispatchEvent(new Event("loved_names_updated"));
-  }, [personAName, personBName, personADesc, personBDesc, personAAvatar, personBAvatar, themeId, mounted]);
+  };
+
+  const setPersonBName = (val: string) => {
+    setPersonBNameState(val);
+    localStorage.setItem("loved_personB", val);
+    syncCoupleField({ personBName: val });
+    window.dispatchEvent(new Event("loved_names_updated"));
+  };
+
+  const setPersonADesc = (val: string) => {
+    setPersonADescState(val);
+    localStorage.setItem("loved_personA_desc", val);
+    syncCoupleField({ personADesc: val });
+  };
+
+  const setPersonBDesc = (val: string) => {
+    setPersonBDescState(val);
+    localStorage.setItem("loved_personB_desc", val);
+    syncCoupleField({ personBDesc: val });
+  };
+
+  const setPersonAAvatar = (val: string) => {
+    setPersonAAvatarState(val);
+    localStorage.setItem("loved_personA_avatar", val);
+    syncCoupleField({ personAAvatar: val });
+  };
+
+  const setPersonBAvatar = (val: string) => {
+    setPersonBAvatarState(val);
+    localStorage.setItem("loved_personB_avatar", val);
+    syncCoupleField({ personBAvatar: val });
+  };
+
+  const setThemeId = (val: string) => {
+    setThemeIdState(val);
+    localStorage.setItem("loved_theme", val);
+    syncCoupleField({ themeId: val });
+  };
 
   // Audio Toggle
   const togglePlay = () => {

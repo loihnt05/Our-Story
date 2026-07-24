@@ -16,69 +16,62 @@ export function useJournalAndStreaks(
   const [recoveriesUsed, setRecoveriesUsed] = useState<number>(0);
   const [lastActiveStreak, setLastActiveStreak] = useState<number>(0);
 
-  // Load from local storage
+  // Load from Database & LocalStorage
   useEffect(() => {
     if (!mounted) return;
     
-    // Initial Journal fallback
-    const savedJournal = localStorage.getItem("loved_journal_entries");
-    if (savedJournal) {
-      setJournalEntries(JSON.parse(savedJournal));
-    } else {
-      const defaultJournal: JournalEntry[] = [
-        {
-          id: "j-1",
-          date: "2026-07-03",
-          author: "A",
-          emotion: "Loved 💖",
-          content: "Loved our late-night call yesterday. It felt like time stood still.",
-          createdAt: new Date(Date.now() - 86400000).toISOString(),
-          comments: [
-            {
-              id: "jc-1",
-              author: "B",
-              content: "Me too, Romeo! I didn't want to hang up at all. 🥰",
-              createdAt: new Date(Date.now() - 86400000 + 1800000).toISOString()
+    // Fetch journal entries from DB
+    fetch("/api/journal")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.journalEntries) && data.journalEntries.length > 0) {
+          const formatted: JournalEntry[] = data.journalEntries.map((e: any) => ({
+            id: e.id,
+            date: e.date,
+            author: e.author,
+            emotion: e.emotion,
+            content: e.content,
+            createdAt: e.createdAt,
+            comments: (e.comments || []).map((c: any) => ({
+              id: c.id,
+              author: c.author,
+              content: c.content,
+              createdAt: c.createdAt,
+            })),
+          }));
+          setJournalEntries(formatted);
+          localStorage.setItem("loved_journal_entries", JSON.stringify(formatted));
+        } else {
+          const savedJournal = localStorage.getItem("loved_journal_entries");
+          if (savedJournal) {
+            try {
+              setJournalEntries(JSON.parse(savedJournal));
+            } catch (err) {
+              console.error("Failed to parse journal from localStorage", err);
             }
-          ]
-        },
-        {
-          id: "j-2",
-          date: "2026-07-03",
-          author: "B",
-          emotion: "Happy 😊",
-          content: "Had a busy day at work, but received your sweet morning message and it made my day!",
-          createdAt: new Date(Date.now() - 86400000).toISOString(),
-          comments: [
-            {
-              id: "jc-2",
-              author: "A",
-              content: "Always here to brighten your day, my love!",
-              createdAt: new Date(Date.now() - 86400000 + 3600000).toISOString()
-            }
-          ]
+          }
         }
-      ];
-      setJournalEntries(defaultJournal);
-      localStorage.setItem("loved_journal_entries", JSON.stringify(defaultJournal));
-    }
+      })
+      .catch((err) => console.error("Journal fetch error:", err));
 
-    const savedRecoveredDates = localStorage.getItem("loved_recovered_dates");
-    const savedRecoveriesUsed = localStorage.getItem("loved_recoveries_used");
-    const savedLastActiveStreak = localStorage.getItem("loved_last_active_streak");
-
-    if (savedRecoveredDates) setRecoveredDates(JSON.parse(savedRecoveredDates));
-    if (savedRecoveriesUsed) setRecoveriesUsed(parseInt(savedRecoveriesUsed, 10));
-    if (savedLastActiveStreak) setLastActiveStreak(parseInt(savedLastActiveStreak, 10));
+    // Fetch couple streak & recovery data
+    fetch("/api/couple")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && data.couple) {
+          if (Array.isArray(data.couple.recoveredDates)) {
+            setRecoveredDates(data.couple.recoveredDates);
+          }
+          if (typeof data.couple.recoveriesUsed === "number") {
+            setRecoveriesUsed(data.couple.recoveriesUsed);
+          }
+          if (typeof data.couple.lastActiveStreak === "number") {
+            setLastActiveStreak(data.couple.lastActiveStreak);
+          }
+        }
+      })
+      .catch((err) => console.error("Couple streak details fetch error:", err));
   }, [mounted]);
-
-  // Sync to local storage
-  useEffect(() => {
-    if (!mounted) return;
-    localStorage.setItem("loved_recovered_dates", JSON.stringify(recoveredDates));
-    localStorage.setItem("loved_recoveries_used", recoveriesUsed.toString());
-    localStorage.setItem("loved_last_active_streak", lastActiveStreak.toString());
-  }, [recoveredDates, recoveriesUsed, lastActiveStreak, mounted]);
 
   const saveJournalEntries = (updatedList: JournalEntry[]) => {
     setJournalEntries(updatedList);
@@ -86,8 +79,9 @@ export function useJournalAndStreaks(
   };
 
   // Add/Update daily journal entry
-  const handleAddJournalEntry = (date: string, emotion: string, content: string) => {
+  const handleAddJournalEntry = async (date: string, emotion: string, content: string) => {
     if (!content.trim()) return;
+
     const existingIndex = journalEntries.findIndex(
       (entry) => entry.date === date && entry.author === activePartner
     );
@@ -112,15 +106,38 @@ export function useJournalAndStreaks(
       updatedEntries = [newEntry, ...updatedEntries];
     }
     saveJournalEntries(updatedEntries);
+
+    // DB sync
+    try {
+      const res = await fetch("/api/journal", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ author: activePartner, date, emotion, content }),
+      });
+      const data = await res.json();
+      if (data.success && data.entry) {
+        setJournalEntries((prev) =>
+          prev.map((e) =>
+            e.date === date && e.author === activePartner
+              ? { ...e, id: data.entry.id }
+              : e
+          )
+        );
+      }
+    } catch (err) {
+      console.error("Failed to sync journal entry to DB:", err);
+    }
   };
 
   // Add comment to journal entry
-  const handleAddJournalComment = (entryId: string, content: string) => {
+  const handleAddJournalComment = async (entryId: string, content: string) => {
     if (!content.trim()) return;
+
+    const tempCommentId = `jc-${Date.now()}`;
     const updatedEntries = journalEntries.map((entry) => {
       if (entry.id === entryId) {
         const newComment: JournalComment = {
-          id: `jc-${Date.now()}`,
+          id: tempCommentId,
           author: activePartner,
           content,
           createdAt: new Date().toISOString()
@@ -133,16 +150,47 @@ export function useJournalAndStreaks(
       return entry;
     });
     saveJournalEntries(updatedEntries);
+
+    try {
+      const res = await fetch("/api/journal/comments", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ journalEntryId: entryId, author: activePartner, content }),
+      });
+      const data = await res.json();
+      if (data.success && data.comment) {
+        setJournalEntries((prev) =>
+          prev.map((e) =>
+            e.id === entryId
+              ? {
+                  ...e,
+                  comments: e.comments.map((c) =>
+                    c.id === tempCommentId ? { ...c, id: data.comment.id } : c
+                  ),
+                }
+              : e
+          )
+        );
+      }
+    } catch (err) {
+      console.error("Failed to add comment to DB:", err);
+    }
   };
 
   // Remove daily journal entry
-  const handleRemoveJournalEntry = (entryId: string) => {
+  const handleRemoveJournalEntry = async (entryId: string) => {
     const updated = journalEntries.filter((entry) => entry.id !== entryId);
     saveJournalEntries(updated);
+
+    try {
+      await fetch(`/api/journal/${entryId}`, { method: "DELETE" });
+    } catch (err) {
+      console.error("Failed to delete journal entry from DB:", err);
+    }
   };
 
   // Remove comment from entry
-  const handleRemoveJournalComment = (entryId: string, commentId: string) => {
+  const handleRemoveJournalComment = async (entryId: string, commentId: string) => {
     const updated = journalEntries.map((entry) => {
       if (entry.id === entryId) {
         return {
@@ -153,11 +201,18 @@ export function useJournalAndStreaks(
       return entry;
     });
     saveJournalEntries(updated);
+
+    try {
+      await fetch(`/api/journal/comments?id=${commentId}`, { method: "DELETE" });
+    } catch (err) {
+      console.error("Failed to delete comment from DB:", err);
+    }
   };
 
   // Edit comment in entry
-  const handleEditJournalComment = (entryId: string, commentId: string, content: string) => {
+  const handleEditJournalComment = async (entryId: string, commentId: string, content: string) => {
     if (!content.trim()) return;
+
     const updatedEntries = journalEntries.map((entry) => {
       if (entry.id === entryId) {
         return {
@@ -172,6 +227,16 @@ export function useJournalAndStreaks(
       return entry;
     });
     saveJournalEntries(updatedEntries);
+
+    try {
+      await fetch("/api/journal/comments", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ commentId, content: content.trim() }),
+      });
+    } catch (err) {
+      console.error("Failed to edit comment in DB:", err);
+    }
   };
 
   // Get local date string YYYY-MM-DD
@@ -257,7 +322,7 @@ export function useJournalAndStreaks(
         const audioCtx = (synthRef.current as any).ctx;
         if (audioCtx && audioCtx.state !== "suspended") {
           const now = audioCtx.currentTime;
-          const noteFreqs = [523.25, 659.25, 783.99, 987.77, 1046.50]; // C5, E5, G5, B5, C6
+          const noteFreqs = [523.25, 659.25, 783.99, 987.77, 1046.50];
           noteFreqs.forEach((freq, idx) => {
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
@@ -282,7 +347,7 @@ export function useJournalAndStreaks(
   };
 
   // Recover streak handler
-  const handleRecoverStreak = () => {
+  const handleRecoverStreak = async () => {
     const isDayCompleted = (dateStr: string) => {
       const entryA = journalEntries.find(e => e.date === dateStr && e.author === "A");
       const entryB = journalEntries.find(e => e.date === dateStr && e.author === "B");
@@ -312,46 +377,20 @@ export function useJournalAndStreaks(
       return;
     }
 
-    setRecoveredDates(prev => [...prev, brokenDate]);
-    setRecoveriesUsed(prev => prev + 1);
+    setRecoveredDates((prev) => [...prev, brokenDate]);
+    setRecoveriesUsed((prev) => prev + 1);
     triggerStreakCelebration();
-  };
 
-  // Reset or update recovery usage when streak starts anew
-  useEffect(() => {
-    if (!mounted) return;
-
-    const currentStreakCount = streakInfo.count;
-
-    if (currentStreakCount > 0) {
-      if (currentStreakCount > lastActiveStreak) {
-        setLastActiveStreak(currentStreakCount);
-      }
-
-      const yesterday = new Date();
-      yesterday.setDate(yesterday.getDate() - 1);
-      const yesterdayStr = getLocalDateString(yesterday);
-
-      const isDayCompleted = (dateStr: string) => {
-        const entryA = journalEntries.find(e => e.date === dateStr && e.author === "A");
-        const entryB = journalEntries.find(e => e.date === dateStr && e.author === "B");
-        if (!entryA || !entryB) return false;
-        const aCommentedOnB = entryB.comments.some(c => c.author === "A");
-        const bCommentedOnA = entryA.comments.some(c => c.author === "B");
-        return aCommentedOnB && bCommentedOnA;
-      };
-
-      const yesterdayCompletedOrRecovered = isDayCompleted(yesterdayStr) || recoveredDates.includes(yesterdayStr);
-
-      if (currentStreakCount === 1 && !yesterdayCompletedOrRecovered) {
-        if (recoveredDates.length > 0 || recoveriesUsed > 0 || lastActiveStreak !== 1) {
-          setRecoveredDates([]);
-          setRecoveriesUsed(0);
-          setLastActiveStreak(1);
-        }
-      }
+    try {
+      await fetch("/api/journal/streak-recovery", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ targetDate: brokenDate, author: activePartner }),
+      });
+    } catch (err) {
+      console.error("Failed to save streak recovery to DB:", err);
     }
-  }, [journalEntries, recoveredDates, mounted]);
+  };
 
   return {
     journalEntries,

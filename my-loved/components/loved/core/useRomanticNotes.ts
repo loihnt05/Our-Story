@@ -7,53 +7,91 @@ export function useRomanticNotes(mounted: boolean, personAName: string, personBN
   const [newNoteAuthor, setNewNoteAuthor] = useState("");
   const [newNoteColor, setNewNoteColor] = useState("rose");
 
-  // Load from local storage
+  // Load from Database & LocalStorage
   useEffect(() => {
     if (!mounted) return;
-    const savedNotes = localStorage.getItem("loved_notes");
-    if (savedNotes) {
-      setNotes(JSON.parse(savedNotes));
-    } else {
-      const defaultNotes = [
-        { id: "1", text: "You make my heart smile in ways nobody else can.", author: personAName || "Romeo", date: "Today", color: "pink" },
-        { id: "2", text: "Forever is a long time, but I wouldn't mind spending it with you.", author: personBName || "Juliet", date: "Yesterday", color: "purple" }
-      ];
-      setNotes(defaultNotes);
-      localStorage.setItem("loved_notes", JSON.stringify(defaultNotes));
-    }
-  }, [mounted, personAName, personBName]);
 
-  // Sync to local storage
-  const saveNotes = (updatedList: Note[]) => {
-    setNotes(updatedList);
-    localStorage.setItem("loved_notes", JSON.stringify(updatedList));
-  };
+    fetch("/api/notes")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.notes) && data.notes.length > 0) {
+          const formatted = data.notes.map((n: any) => ({
+            id: n.id,
+            text: n.text,
+            author: n.author,
+            date: new Date(n.date).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" }),
+            color: n.color || "rose",
+          }));
+          setNotes(formatted);
+          localStorage.setItem("loved_notes", JSON.stringify(formatted));
+        } else {
+          const savedNotes = localStorage.getItem("loved_notes");
+          if (savedNotes) {
+            try {
+              setNotes(JSON.parse(savedNotes));
+            } catch (err) {
+              console.error("Failed to parse notes from localStorage", err);
+            }
+          }
+        }
+      })
+      .catch((err) => console.error("Notes fetch error:", err));
+  }, [mounted]);
 
   // Add Note
-  const handleAddNote = (e: React.FormEvent) => {
+  const handleAddNote = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newNoteText) return;
+    if (!newNoteText.trim()) return;
 
+    const tempId = Date.now().toString();
     const newN: Note = {
-      id: Date.now().toString(),
+      id: tempId,
       text: newNoteText,
-      author: newNoteAuthor || "Anonymous",
+      author: newNoteAuthor || personAName || "Anonymous",
       date: new Date().toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" }),
       color: newNoteColor
     };
 
     const updated = [newN, ...notes];
-    saveNotes(updated);
+    setNotes(updated);
+    localStorage.setItem("loved_notes", JSON.stringify(updated));
+
+    const textToSave = newNoteText;
+    const authorToSave = newNoteAuthor || personAName || "Anonymous";
+    const colorToSave = newNoteColor;
 
     setNewNoteText("");
     setNewNoteAuthor("");
     setNewNoteColor("rose");
+
+    try {
+      const res = await fetch("/api/notes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: textToSave, author: authorToSave, color: colorToSave }),
+      });
+      const data = await res.json();
+      if (data.success && data.note) {
+        setNotes((prev) =>
+          prev.map((n) => (n.id === tempId ? { ...n, id: data.note.id } : n))
+        );
+      }
+    } catch (err) {
+      console.error("Failed to save note to DB:", err);
+    }
   };
 
   // Remove Note
-  const handleRemoveNote = (id: string) => {
+  const handleRemoveNote = async (id: string) => {
     const updated = notes.filter(n => n.id !== id);
-    saveNotes(updated);
+    setNotes(updated);
+    localStorage.setItem("loved_notes", JSON.stringify(updated));
+
+    try {
+      await fetch(`/api/notes/${id}`, { method: "DELETE" });
+    } catch (err) {
+      console.error("Failed to delete note from DB:", err);
+    }
   };
 
   return {
