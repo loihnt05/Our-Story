@@ -78,15 +78,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
+import UserSyncHandler from "./UserSyncHandler";
+
 // Conditionally wrap Layout in ClerkProvider
 export function AuthProviderWrapper({ children }: { children: React.ReactNode }) {
   if (IS_MOCK_AUTH) {
-    return <AuthProvider>{children}</AuthProvider>;
+    return (
+      <AuthProvider>
+        <UserSyncHandler />
+        {children}
+      </AuthProvider>
+    );
   }
 
   return (
     <ClerkProviderClient publishableKey={CLERK_PUBLISHABLE_KEY}>
-      <AuthProvider>{children}</AuthProvider>
+      <AuthProvider>
+        <UserSyncHandler />
+        {children}
+      </AuthProvider>
     </ClerkProviderClient>
   );
 }
