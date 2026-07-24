@@ -8,19 +8,21 @@ export default function UserSyncHandler() {
   const syncedRef = useRef<string | null>(null);
 
   useEffect(() => {
-    // Check if real user or mock user is signed in
     if (isSignedIn && user) {
-      // Avoid duplicate calls for the same user instance in a session
-      const userIdentifier = (user as any).id || (user as any).primaryEmailAddress?.emailAddress || "mock";
+      const userId = (user as any).id || "mock_user_id";
       
-      if (syncedRef.current === userIdentifier) return;
-      syncedRef.current = userIdentifier;
+      if (syncedRef.current === userId) return;
+      syncedRef.current = userId;
 
-      fetch("/api/sync-user", { method: "POST" })
+      fetch("/api/sync-user", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ clerkId: userId, email: (user as any).primaryEmailAddress?.emailAddress }),
+      })
         .then((res) => res.json())
         .then((data) => {
           if (data.success) {
-            console.log("[UserSyncHandler] Successfully auto-synced user to Neon DB:", data.user);
+            console.log("[UserSyncHandler] Successfully synced account to Neon DB:", data.user);
           } else {
             console.log("[UserSyncHandler] Sync status:", data.error || data);
           }

@@ -1,6 +1,24 @@
-import { clerkMiddleware } from '@clerk/nextjs/server';
+import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 
-export default clerkMiddleware();
+// Define public routes so Clerk does not force automatic redirects to accounts.dev
+const isPublicRoute = createRouteMatcher([
+  '/',
+  '/number-loved(.*)',
+  '/timeline(.*)',
+  '/relationship-dashboard(.*)',
+  '/games(.*)',
+  '/quiz(.*)',
+  '/decision-wheel(.*)',
+  '/memory-guess(.*)',
+  '/api/(.*)',
+]);
+
+export default clerkMiddleware(async (auth, req) => {
+  // Allow all application routes to load without external Clerk redirect
+  if (isPublicRoute(req)) {
+    return;
+  }
+});
 
 export const config = {
   matcher: [
