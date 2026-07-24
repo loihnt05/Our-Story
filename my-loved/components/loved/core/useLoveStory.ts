@@ -29,6 +29,8 @@ export function useLoveStory() {
   const [quoteIndex, setQuoteIndex] = useState(0);
   const [activePartner, setActivePartner] = useState<"A" | "B">("A");
 
+  const [coupleData, setCoupleData] = useState<any>(null);
+
   // Load basic configurations from DB and local storage
   useEffect(() => {
     setMounted(true);
@@ -38,6 +40,7 @@ export function useLoveStory() {
       .then((data) => {
         if (data.success && data.couple) {
           const c = data.couple;
+          setCoupleData(c);
           if (c.personAName) setPersonANameState(c.personAName);
           if (c.personBName) setPersonBNameState(c.personBName);
           if (c.personADesc) setPersonADescState(c.personADesc);
@@ -154,6 +157,7 @@ export function useLoveStory() {
 
   return {
     mounted,
+    coupleData,
     showIntro,
     setShowIntro,
     showSettings,

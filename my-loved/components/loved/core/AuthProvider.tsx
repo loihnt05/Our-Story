@@ -127,7 +127,7 @@ export function useClerk() {
   const mock = useMockAuth();
 
   return {
-    openSignIn: () => mock.login("romeo"),
+    openSignIn: (options?: any) => mock.login("romeo"),
     signOut: () => mock.logout(),
     user: mock.isSignedIn
       ? mock.account === "juliet"

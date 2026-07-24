@@ -302,6 +302,7 @@ export default function LoveBoard({
                   onRemoveComment={onRemoveComment}
                   onAddComment={onAddComment}
                   onEditComment={onEditComment}
+                  onUpdateEntry={onAddEntry}
                 />  
               )}
 

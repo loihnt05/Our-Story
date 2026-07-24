@@ -175,6 +175,82 @@ Romeo`,
     { category: "Late-night Talks 📞", count: 157, color: "bg-rose-500" }
   ];
 
+  // Dynamic Real Data Computations from loved state
+  const totalDaysTogether = loved.timeLeft?.totalDays ?? loved.timeLeft?.days ?? 0;
+  
+  const currentStreak = loved.streakInfo?.count ?? 0;
+  const longestStreak = Math.max(
+    currentStreak,
+    loved.lastActiveStreak || 0,
+    loved.coupleData?.longestStreak || 0,
+    loved.coupleData?.streakCount || 0
+  );
+
+  // Next Anniversary Calculation
+  const calculateNextAnniversary = (anniversaryDateStr?: string) => {
+    if (!anniversaryDateStr) return { days: 0, dateFormatted: "Soon" };
+    const parts = anniversaryDateStr.split("-");
+    const now = new Date();
+    const todayZero = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    
+    let year = now.getFullYear();
+    let month = parts.length === 3 ? parseInt(parts[1], 10) - 1 : now.getMonth();
+    let day = parts.length === 3 ? parseInt(parts[2], 10) : now.getDate();
+    
+    let nextAnni = new Date(year, month, day);
+    if (nextAnni.getTime() < todayZero.getTime()) {
+      nextAnni = new Date(year + 1, month, day);
+    }
+    
+    const diffMs = nextAnni.getTime() - todayZero.getTime();
+    const days = Math.max(0, Math.ceil(diffMs / (1000 * 60 * 60 * 24)));
+    const dateFormatted = nextAnni.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+    return { days, dateFormatted };
+  };
+
+  const nextAnniInfo = calculateNextAnniversary(loved.anniversaryDate);
+
+  // Real Notes / Letters Shared
+  const realNotes = loved.notes || [];
+  const displayLetters = realNotes.length > 0 ? realNotes.map((n: any, idx: number) => ({
+    id: n.id || idx + 1,
+    title: `Sticky Note from ${n.author || loved.personAName}`,
+    excerpt: n.text ? (n.text.length > 55 ? n.text.substring(0, 55) + "..." : n.text) : "",
+    content: n.text || "",
+    date: n.date || "Recent",
+    color: n.color || "rose"
+  })) : mockLetters;
+
+  const lettersCount = realNotes.length > 0 ? realNotes.length : mockLetters.length;
+
+  // Real Milestone Photos Captured
+  const milestonePhotos = (loved.milestones || [])
+    .filter((m: any) => m.image)
+    .map((m: any, idx: number) => ({
+      id: m.id || idx + 1,
+      title: m.title || "Milestone Moment 📸",
+      gradient: "from-rose-400 to-pink-500",
+      desc: m.description || "A special memory saved in your story timeline.",
+      image: m.image,
+      date: m.date ? new Date(m.date).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" }) : ""
+    }));
+
+  const displayPhotos = milestonePhotos.length > 0 ? milestonePhotos : mockPhotos;
+  const photosCount = milestonePhotos.length > 0 ? milestonePhotos.length : mockPhotos.length;
+
+  // Shared Memories breakdown
+  const journalCount = loved.journalEntries?.length || 0;
+  const milestoneCount = loved.milestones?.length || 0;
+  const notesCount = realNotes.length;
+  const totalSharedMemoriesCount = journalCount + milestoneCount + notesCount;
+
+  const realMemoriesBreakdown = [
+    { category: "Daily Journal Entries 📓", count: journalCount, color: "bg-rose-500" },
+    { category: "Timeline Milestones 🏆", count: milestoneCount, color: "bg-teal-500" },
+    { category: "Love Letters & Notes ✉️", count: notesCount, color: "bg-amber-500" },
+    { category: "Streak Days Logged 🔥", count: currentStreak, color: "bg-indigo-500" }
+  ];
+
   return (
     <main className="relative w-full max-w-4xl mx-auto px-6 pb-12 flex flex-col gap-8 mt-4 items-center">
       {/* Profile display summary */}
@@ -192,6 +268,18 @@ Romeo`,
             </p>
           </div>
         </div>
+
+        {/* Intimacy & Relationship Health metrics summary */}
+        <div className="hidden sm:flex items-center gap-4 text-right">
+          <div className="flex flex-col items-end">
+            <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">Intimacy Score</span>
+            <span className="text-sm font-extrabold text-rose-500">{loved.coupleData?.intimacyScore ?? 85}%</span>
+          </div>
+          <div className="flex flex-col items-end border-l border-zinc-200/40 dark:border-zinc-800/40 pl-4">
+            <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">Understanding</span>
+            <span className="text-sm font-extrabold text-pink-500">{loved.coupleData?.understandingScore ?? 90}%</span>
+          </div>
+        </div>
       </div>
 
       {/* Grid of stats */}
@@ -204,10 +292,10 @@ Romeo`,
           <div className="text-left mt-2">
             <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest">Together For</span>
             <h3 className="text-3xl font-extrabold text-rose-600 dark:text-rose-450 mt-1 font-serif" style={{ fontFamily: "var(--font-molle)" }}>
-              1,245 <span className="text-sm font-bold text-zinc-500 dark:text-zinc-400 font-sans">days</span>
+              {totalDaysTogether.toLocaleString()} <span className="text-sm font-bold text-zinc-500 dark:text-zinc-400 font-sans">days</span>
             </h3>
             <p className="text-xs text-zinc-500 mt-2 font-medium">
-              1,245 days of laughter, support, and endless memories. 💕
+              {totalDaysTogether.toLocaleString()} days of laughter, support, and endless memories. 💕
             </p>
           </div>
         </div>
@@ -220,10 +308,10 @@ Romeo`,
           <div className="text-left mt-2">
             <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest">Longest Streak</span>
             <h3 className="text-3xl font-extrabold text-amber-550 dark:text-amber-400 mt-1 font-serif" style={{ fontFamily: "var(--font-molle)" }}>
-              328 <span className="text-sm font-bold text-zinc-500 dark:text-zinc-400 font-sans">days</span>
+              {longestStreak} <span className="text-sm font-bold text-zinc-500 dark:text-zinc-400 font-sans">days</span>
             </h3>
             <p className="text-xs text-zinc-500 mt-2 font-medium">
-              Your ultimate streak! Logged, posted, and commented consistently. 👑
+              Current active streak: {currentStreak} days! Logged &amp; shared consistently. 👑
             </p>
           </div>
         </div>
@@ -236,10 +324,10 @@ Romeo`,
           <div className="text-left mt-2">
             <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest">Next Anniversary</span>
             <h3 className="text-3xl font-extrabold text-purple-600 dark:text-purple-400 mt-1 font-serif" style={{ fontFamily: "var(--font-molle)" }}>
-              35 <span className="text-sm font-bold text-zinc-500 dark:text-zinc-400 font-sans">days</span>
+              {nextAnniInfo.days} <span className="text-sm font-bold text-zinc-500 dark:text-zinc-400 font-sans">days</span>
             </h3>
             <p className="text-xs text-zinc-500 mt-2 font-medium">
-              Get ready! Make sure to write down something special for the big day! 🎉
+              Upcoming on {nextAnniInfo.dateFormatted}! Write down something special for the big day! 🎉
             </p>
           </div>
         </div>
@@ -255,7 +343,7 @@ Romeo`,
           <div className="text-left mt-2 flex-1">
             <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-400 uppercase tracking-widest">Letters Shared</span>
             <h3 className="text-3xl font-extrabold text-pink-600 dark:text-pink-400 mt-1 font-serif" style={{ fontFamily: "var(--font-molle)" }}>
-              56 <span className="text-sm font-bold text-zinc-500 dark:text-zinc-400 font-sans">letters</span>
+              {lettersCount} <span className="text-sm font-bold text-zinc-500 dark:text-zinc-400 font-sans">letters</span>
             </h3>
             <p className="text-xs text-zinc-500 mt-2 font-medium">
               Beautiful love letters and short notes. Click to open &amp; read. ✉️
@@ -274,7 +362,7 @@ Romeo`,
           <div className="text-left mt-2 flex-1">
             <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-400 uppercase tracking-widest">Photos Captured</span>
             <h3 className="text-3xl font-extrabold text-indigo-650 dark:text-indigo-400 mt-1 font-serif" style={{ fontFamily: "var(--font-molle)" }}>
-              1,842 <span className="text-sm font-bold text-zinc-500 dark:text-zinc-400 font-sans">photos</span>
+              {photosCount} <span className="text-sm font-bold text-zinc-500 dark:text-zinc-400 font-sans">photos</span>
             </h3>
             <p className="text-xs text-zinc-500 mt-2 font-medium">
               Polaroids and snapshots of adventures. Click to view album. 📸
@@ -293,10 +381,10 @@ Romeo`,
           <div className="text-left mt-2 flex-1">
             <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-400 uppercase tracking-widest">Shared Memories</span>
             <h3 className="text-3xl font-extrabold text-teal-600 dark:text-teal-400 mt-1 font-serif" style={{ fontFamily: "var(--font-molle)" }}>
-              412 <span className="text-sm font-bold text-zinc-500 dark:text-zinc-400 font-sans">capsules</span>
+              {totalSharedMemoriesCount} <span className="text-sm font-bold text-zinc-500 dark:text-zinc-400 font-sans">capsules</span>
             </h3>
             <p className="text-xs text-zinc-500 mt-2 font-medium">
-              Logged dates, travels, and conversations. Click to see categories. 📝
+              Logged dates, travels, and notes. Click to see categories. 📝
             </p>
           </div>
         </div>
@@ -487,7 +575,7 @@ Romeo`,
             <div className="flex items-center justify-between border-b pb-3 border-zinc-200/50 dark:border-zinc-800/50 shrink-0">
               <h2 className="text-lg font-bold font-cursive flex items-center gap-2">
                 <Mail className="w-5 h-5 text-rose-500 fill-rose-500/10" />
-                <span>Our Love Letters ({mockLetters.length})</span>
+                <span>Our Love Letters ({lettersCount})</span>
               </h2>
               <button 
                 onClick={() => {
@@ -503,7 +591,7 @@ Romeo`,
             <div className="flex-1 overflow-y-auto pr-1 py-4 flex flex-col gap-4">
               {selectedStatsLetter === null ? (
                 <div className="flex flex-col gap-3">
-                  {mockLetters.map((letter) => (
+                  {displayLetters.map((letter: any) => (
                     <div
                       key={letter.id}
                       onClick={() => setSelectedStatsLetter(letter.id)}
@@ -529,7 +617,7 @@ Romeo`,
                   </button>
 
                   {(() => {
-                    const lObj = mockLetters.find(l => l.id === selectedStatsLetter)!;
+                    const lObj = displayLetters.find((l: any) => l.id === selectedStatsLetter) || displayLetters[0];
                     return (
                       <div className="p-6 rounded-2xl bg-amber-50/20 dark:bg-zinc-950/30 border border-amber-200/30 dark:border-zinc-800/30 font-serif text-sm leading-relaxed text-zinc-800 dark:text-zinc-200 shadow-sm relative overflow-hidden">
                         <div className="absolute top-0 bottom-0 left-6 w-[1px] bg-red-400/20" />
@@ -556,7 +644,7 @@ Romeo`,
             <div className="flex items-center justify-between border-b pb-3 border-zinc-200/50 dark:border-zinc-800/50 shrink-0">
               <h2 className="text-lg font-bold font-cursive flex items-center gap-2">
                 <Camera className="w-5 h-5 text-indigo-500" />
-                <span>Our Snapshot Album ({mockPhotos.length})</span>
+                <span>Our Snapshot Album ({photosCount})</span>
               </h2>
               <button 
                 onClick={() => setActiveStatsModal(null)}
@@ -566,20 +654,30 @@ Romeo`,
               </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto pr-1 py-4 grid grid-cols-2 gap-4">
-              {mockPhotos.map((photo, idx) => (
+            <div className="flex-1 overflow-y-auto pr-1 py-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {displayPhotos.map((photo: any, idx: number) => (
                 <div 
-                  key={idx}
+                  key={photo.id || idx}
                   className="p-3 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/55 dark:border-zinc-800/55 rounded-2xl flex flex-col items-center gap-3 shadow-md hover:shadow-lg hover:rotate-1 hover:scale-105 transition-all duration-300 select-none cursor-default"
                 >
-                  <div className={`w-full aspect-video rounded-xl bg-gradient-to-br ${photo.gradient} flex items-center justify-center relative overflow-hidden border border-zinc-200/10`}>
-                    <ImageIcon className="w-8 h-8 text-white/50" />
+                  <div className={`w-full aspect-video rounded-xl bg-gradient-to-br ${photo.gradient || "from-rose-400 to-pink-500"} flex items-center justify-center relative overflow-hidden border border-zinc-200/10`}>
+                    {photo.image ? (
+                      /* eslint-disable-next-line @next/next/no-img-element */
+                      <img src={photo.image} alt={photo.title} className="w-full h-full object-cover rounded-xl" />
+                    ) : (
+                      <ImageIcon className="w-8 h-8 text-white/50" />
+                    )}
                   </div>
                   <div className="text-left w-full">
                     <h4 className="text-[11px] font-bold text-zinc-800 dark:text-zinc-200 truncate">{photo.title}</h4>
                     <p className="text-[9px] text-zinc-500 dark:text-zinc-400 mt-1 line-clamp-2 leading-relaxed">
                       {photo.desc}
                     </p>
+                    {photo.date && (
+                      <span className="text-[8px] font-semibold text-zinc-400 mt-1 block">
+                        {photo.date}
+                      </span>
+                    )}
                   </div>
                 </div>
               ))}
@@ -611,14 +709,14 @@ Romeo`,
               </p>
               
               <div className="flex flex-col gap-3">
-                {mockMemories.map((mem, idx) => (
+                {realMemoriesBreakdown.map((mem, idx) => (
                   <div key={idx} className="flex flex-col gap-1">
                     <div className="flex items-center justify-between text-xs font-bold text-zinc-800 dark:text-zinc-200">
                       <span>{mem.category}</span>
-                      <span>{mem.count} capsules</span>
+                      <span>{mem.count} logged</span>
                     </div>
                     <div className="w-full h-2 rounded-full bg-zinc-100 dark:bg-zinc-800 overflow-hidden">
-                      <div className={`h-full ${mem.color} rounded-full`} style={{ width: `${Math.min(100, (mem.count / 180) * 100)}%` }} />
+                      <div className={`h-full ${mem.color} rounded-full`} style={{ width: `${Math.min(100, Math.max(10, (mem.count / Math.max(1, totalSharedMemoriesCount)) * 100))}%` }} />
                     </div>
                   </div>
                 ))}
