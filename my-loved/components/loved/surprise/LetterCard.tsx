@@ -38,19 +38,19 @@ export default function LetterCard({
       initial={{ scale: 0.8, opacity: 0, y: 50 }}
       animate={{ scale: 1, opacity: 1, y: 0 }}
       transition={{ type: "spring", stiffness: 60, damping: 14 }}
-      className="w-full max-w-xl bg-gradient-to-b from-amber-50 to-amber-100/90 dark:from-zinc-900 dark:to-zinc-950 text-zinc-850 dark:text-zinc-100 rounded-[2.5rem] shadow-[0_0_60px_rgba(244,63,94,0.3)] border border-amber-200/50 dark:border-zinc-850 p-6 sm:p-10 flex flex-col gap-6 relative z-20 min-h-[500px]"
+      className="w-full max-w-xl bg-gradient-to-b from-amber-50 to-amber-100/90 dark:from-zinc-900 dark:to-zinc-950 text-zinc-800 dark:text-zinc-100 rounded-[2.5rem] shadow-[0_0_60px_rgba(244,63,94,0.3)] border border-amber-200/50 dark:border-zinc-800 p-6 sm:p-10 flex flex-col gap-6 relative z-20 min-h-[500px]"
     >
       <div className="absolute inset-4 rounded-[2rem] border border-amber-300/40 dark:border-zinc-800/40 pointer-events-none" />
       <div className="absolute inset-5 rounded-[1.8rem] border border-amber-300/20 dark:border-zinc-800/20 pointer-events-none" />
 
       {/* Navigation Tabs */}
-      <div className="flex justify-center border-b border-amber-350/30 dark:border-zinc-850 pb-4.5 mb-1 z-10 shrink-0 gap-2 sm:gap-4 select-none">
+      <div className="flex justify-center border-b border-amber-300/30 dark:border-zinc-800 pb-4.5 mb-1 z-10 shrink-0 gap-2 sm:gap-4 select-none">
         <button
           onClick={() => setActiveLetterTab("card")}
           className={`px-4 py-1.5 rounded-full text-xs font-bold font-serif transition-colors flex items-center gap-1.5 cursor-pointer ${
             activeLetterTab === "card"
               ? "bg-rose-500 text-white shadow-sm"
-              : "bg-amber-200/40 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:bg-amber-200/60 dark:hover:bg-zinc-850"
+              : "bg-amber-200/40 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:bg-amber-200/60 dark:hover:bg-zinc-800"
           }`}
         >
           <Heart className="w-3.5 h-3.5 fill-current" />
@@ -61,7 +61,7 @@ export default function LetterCard({
           className={`px-4 py-1.5 rounded-full text-xs font-bold font-serif transition-colors flex items-center gap-1.5 cursor-pointer ${
             activeLetterTab === "secret-note"
               ? "bg-rose-500 text-white shadow-sm"
-              : "bg-amber-200/40 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:bg-amber-200/60 dark:hover:bg-zinc-850"
+              : "bg-amber-200/40 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:bg-amber-200/60 dark:hover:bg-zinc-800"
           }`}
         >
           <Lock className="w-3.5 h-3.5" />
@@ -72,7 +72,7 @@ export default function LetterCard({
           className={`px-4 py-1.5 rounded-full text-xs font-bold font-serif transition-colors flex items-center gap-1.5 cursor-pointer ${
             activeLetterTab === "write-note"
               ? "bg-rose-500 text-white shadow-sm"
-              : "bg-amber-200/40 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:bg-amber-200/60 dark:hover:bg-zinc-850"
+              : "bg-amber-200/40 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:bg-amber-200/60 dark:hover:bg-zinc-800"
           }`}
         >
           <PenTool className="w-3.5 h-3.5" />
@@ -97,12 +97,12 @@ export default function LetterCard({
               <span className="text-2xl sm:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-rose-500 to-amber-500 font-serif mt-1.5 block">
                 {daysTogether} Beautiful Days Together
               </span>
-              <span className="text-xs text-zinc-555 dark:text-zinc-400 uppercase tracking-widest block font-bold font-sans">
+              <span className="text-xs text-zinc-500 dark:text-zinc-400 uppercase tracking-widest block font-bold font-sans">
                 ({yearsTogether > 0 ? `${yearsTogether} Year${yearsTogether > 1 ? "s" : ""}, ` : ""}{monthsTogether} Month${monthsTogether !== 1 ? "s" : ""} of Shared Devotion)
               </span>
             </div>
 
-            <div className="p-4 sm:p-6 rounded-3xl bg-amber-50/70 dark:bg-zinc-955/40 border border-amber-350/20 dark:border-zinc-850 font-serif text-sm leading-relaxed text-zinc-700 dark:text-zinc-300 italic min-h-[120px] flex items-center justify-center">
+            <div className="p-4 sm:p-6 rounded-3xl bg-amber-50/70 dark:bg-zinc-950/40 border border-amber-300/20 dark:border-zinc-800 font-serif text-sm leading-relaxed text-zinc-700 dark:text-zinc-300 italic min-h-[120px] flex items-center justify-center">
               <p className="max-w-md select-text">
                 {typedMessage || "Loading our memories..."}
                 {typedMessage.length < 230 && (
@@ -123,7 +123,7 @@ export default function LetterCard({
               <p className="text-[10px] text-zinc-400 font-sans tracking-wide uppercase mt-1">Locked note decrypted successfully</p>
             </div>
 
-            <div className="p-5 sm:p-7 rounded-3xl bg-rose-500/5 dark:bg-rose-555/5 border border-rose-300/20 dark:border-rose-950/30 font-serif text-sm leading-relaxed text-zinc-800 dark:text-zinc-200 select-text italic min-h-[140px] flex items-center justify-center text-left whitespace-pre-wrap">
+            <div className="p-5 sm:p-7 rounded-3xl bg-rose-500/5 dark:bg-rose-500/5 border border-rose-300/20 dark:border-rose-950/30 font-serif text-sm leading-relaxed text-zinc-800 dark:text-zinc-200 select-text italic min-h-[140px] flex items-center justify-center text-left whitespace-pre-wrap">
               &ldquo;{savedNote}&rdquo;
             </div>
 
@@ -137,14 +137,14 @@ export default function LetterCard({
           <div className="flex flex-col gap-4 animate-fade-in text-left">
             <div>
               <h3 className="text-lg font-bold text-zinc-900 dark:text-white font-serif">Customize Your Secret Message</h3>
-              <p className="text-xs text-zinc-555 dark:text-zinc-400 mt-1">Write a private letter for your partner. This will be encrypted and saved in the memory vault.</p>
+              <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">Write a private letter for your partner. This will be encrypted and saved in the memory vault.</p>
             </div>
 
             <textarea
               value={noteContent}
               onChange={(e) => setNoteContent(e.target.value)}
               placeholder="Write your heartfelt letter here..."
-              className="w-full h-40 p-4.5 rounded-2xl bg-white dark:bg-zinc-955 border border-amber-300/40 dark:border-zinc-850 text-sm outline-none focus:border-rose-400 font-serif text-zinc-900 dark:text-white shadow-inner resize-none"
+              className="w-full h-40 p-4.5 rounded-2xl bg-white dark:bg-zinc-950 border border-amber-300/40 dark:border-zinc-800 text-sm outline-none focus:border-rose-400 font-serif text-zinc-900 dark:text-white shadow-inner resize-none"
             />
 
             <div className="flex justify-end gap-2.5">
@@ -168,7 +168,7 @@ export default function LetterCard({
       </div>
 
       {activeLetterTab !== "write-note" && (
-        <div className="mt-4 pt-5 border-t border-amber-300/30 dark:border-zinc-850 flex flex-col sm:flex-row gap-3 select-none z-10 shrink-0">
+        <div className="mt-4 pt-5 border-t border-amber-300/30 dark:border-zinc-800 flex flex-col sm:flex-row gap-3 select-none z-10 shrink-0">
           <button
             onClick={() => {
               if (activeLetterTab === "card") {
@@ -177,7 +177,7 @@ export default function LetterCard({
                 setActiveLetterTab("card");
               }
             }}
-            className="flex-1 py-3 bg-white dark:bg-zinc-900 hover:bg-zinc-50 dark:hover:bg-zinc-850 border border-amber-350/40 dark:border-zinc-800 text-rose-500 font-bold rounded-full transition-all cursor-pointer text-xs font-sans flex items-center justify-center gap-1.5"
+            className="flex-1 py-3 bg-white dark:bg-zinc-900 hover:bg-zinc-50 dark:hover:bg-zinc-800 border border-amber-300/40 dark:border-zinc-800 text-rose-500 font-bold rounded-full transition-all cursor-pointer text-xs font-sans flex items-center justify-center gap-1.5"
           >
             {activeLetterTab === "card" ? (
               <>

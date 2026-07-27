@@ -47,7 +47,7 @@ export default function StreakCelebrationOverlay({
         title: "Ultimate Streak Activated! 👑✨",
         gradient: "from-indigo-450 via-fuchsia-400 to-amber-300",
         flameBg: "from-indigo-600 via-purple-600 to-amber-500",
-        borderColor: "border-amber-350 shadow-[0_0_20px_rgba(245,158,11,0.65)]",
+        borderColor: "border-amber-300 shadow-[0_0_20px_rgba(245,158,11,0.65)]",
         description:
           "You two are legendary! Over 500 days of pure devotion and beautiful memories. Absolute couple goals! 🌟💖",
       };

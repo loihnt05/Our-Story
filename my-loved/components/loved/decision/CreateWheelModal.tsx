@@ -24,7 +24,7 @@ export default function CreateWheelModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
-      <div className="w-full max-w-sm p-6 rounded-3xl bg-white/95 dark:bg-zinc-955/95 border border-zinc-200/50 dark:border-zinc-850/50 shadow-2xl backdrop-blur-xl flex flex-col gap-4">
+      <div className="w-full max-w-sm p-6 rounded-3xl bg-white/95 dark:bg-zinc-950/95 border border-zinc-200/50 dark:border-zinc-800/50 shadow-2xl backdrop-blur-xl flex flex-col gap-4">
         
         <div className="flex justify-between items-center border-b pb-2">
           <h3 className="text-md font-bold font-cursive text-rose-500 flex items-center gap-1.5">
@@ -63,7 +63,7 @@ export default function CreateWheelModal({
                   className={`text-lg p-1.5 rounded-xl transition-all cursor-pointer ${
                     newWheelIcon === em 
                       ? "bg-rose-500/10 border-rose-500 border-2" 
-                      : "bg-zinc-100/50 dark:bg-zinc-850/40 border border-transparent hover:bg-zinc-200/50 dark:hover:bg-zinc-800/60"
+                      : "bg-zinc-100/50 dark:bg-zinc-800/40 border border-transparent hover:bg-zinc-200/50 dark:hover:bg-zinc-800/60"
                   }`}
                 >
                   {em}

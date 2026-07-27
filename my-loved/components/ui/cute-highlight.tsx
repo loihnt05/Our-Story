@@ -21,7 +21,7 @@ export function CuteHighlight({
   // Define colors
   const colorMap = {
     pink: "from-pink-100 to-rose-200 dark:from-pink-950/40 dark:to-rose-900/40 text-pink-700 dark:text-pink-300",
-    gold: "from-amber-100 to-yellow-200 dark:from-amber-950/40 dark:to-yellow-900/40 text-amber-850 dark:text-amber-300",
+    gold: "from-amber-100 to-yellow-200 dark:from-amber-950/40 dark:to-yellow-900/40 text-amber-800 dark:text-amber-300",
     rose: "from-rose-100 to-pink-200 dark:from-rose-950/40 dark:to-pink-900/40 text-rose-700 dark:text-rose-300",
     purple: "from-purple-100 to-indigo-200 dark:from-purple-950/40 dark:to-indigo-900/40 text-purple-700 dark:text-purple-300",
   };

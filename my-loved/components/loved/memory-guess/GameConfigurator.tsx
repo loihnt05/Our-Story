@@ -50,7 +50,7 @@ export default function GameConfigurator({
               className={`py-2 rounded-xl text-xs font-bold border capitalize transition-all cursor-pointer ${
                 difficulty === diff
                   ? "bg-rose-500/10 border-rose-400 text-rose-600 dark:text-rose-400 shadow-sm"
-                  : "bg-white/40 dark:bg-zinc-955/20 border-zinc-200/50 dark:border-zinc-800/50 hover:bg-white/60 dark:hover:bg-zinc-950/30"
+                  : "bg-white/40 dark:bg-zinc-950/20 border-zinc-200/50 dark:border-zinc-800/50 hover:bg-white/60 dark:hover:bg-zinc-950/30"
               }`}
             >
               {diff}
@@ -70,7 +70,7 @@ export default function GameConfigurator({
               className={`py-2 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
                 currentPlayer === player
                   ? "bg-rose-500/10 border-rose-400 text-rose-600 dark:text-rose-400 shadow-sm"
-                  : "bg-white/40 dark:bg-zinc-955/20 border-zinc-200/50 dark:border-zinc-800/50 hover:bg-white/60 dark:hover:bg-zinc-950/30"
+                  : "bg-white/40 dark:bg-zinc-950/20 border-zinc-200/50 dark:border-zinc-800/50 hover:bg-white/60 dark:hover:bg-zinc-950/30"
               }`}
             >
               {getPartnerName(player)}
@@ -90,7 +90,7 @@ export default function GameConfigurator({
               className={`py-2 rounded-xl text-xs font-bold border capitalize transition-all cursor-pointer ${
                 activeCategory === cat
                   ? "bg-rose-500/10 border-rose-400 text-rose-600 dark:text-rose-400 shadow-sm"
-                  : "bg-white/40 dark:bg-zinc-955/20 border-zinc-200/50 dark:border-zinc-800/50 hover:bg-white/60 dark:hover:bg-zinc-950/30"
+                  : "bg-white/40 dark:bg-zinc-950/20 border-zinc-200/50 dark:border-zinc-800/50 hover:bg-white/60 dark:hover:bg-zinc-950/30"
               }`}
             >
               {cat}

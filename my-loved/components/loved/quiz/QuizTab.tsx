@@ -52,42 +52,9 @@ export default function QuizTab({ loved, currentTheme, onBack }: QuizTabProps) {
     completedWeeks: 3
   });
 
-  // Predefined Trivia questions
-  const quizQuestions = [
-    {
-      id: 1,
-      type: "choice",
-      question: "What is my absolute favorite way to spend a rainy Sunday afternoon? 🌧️",
-      options: [
-        "Sipping hot coffee & reading a novel ☕",
-        "Playing video games under cozy blankets 🎮",
-        "Binge-watching romantic movies 🍿",
-        "Taking a long cozy nap 💤"
-      ]
-    },
-    {
-      id: 2,
-      type: "choice",
-      question: "Where is my dream vacation destination that we haven't visited yet? ✈️",
-      options: [
-        "Kyoto, Japan during cherry blossom season 🇯🇵",
-        "Amalfi Coast, Italy in summer 🇮🇹",
-        "Glass igloo stargazing in Finland 🌌",
-        "Overwater villa in Bora Bora 🌊"
-      ]
-    },
-    {
-      id: 3,
-      type: "rating",
-      question: "Rate how much you enjoy our late-night spontaneous drives together: 🚗💫",
-      options: [
-        "⭐ 1 - Not really a fan",
-        "⭐⭐ 2 - It's okay occasionally",
-        "⭐⭐⭐ 3 - I love it!",
-        "⭐⭐⭐⭐ 4 - My absolute favorite thing to do!"
-      ]
-    }
-  ];
+  // Dynamic active quiz state driven exclusively by database quizPacks
+  const [activeQuizPackTitle, setActiveQuizPackTitle] = useState<string>("Daily Couple Quiz");
+  const [activeQuizQuestions, setActiveQuizQuestions] = useState<any[]>([]);
 
   const gameModes = [
     { name: "Guess My Answer", desc: "One partner answers, the other guesses! Reveal animations show correct / wrong matches.", icon: HelpCircle, color: "text-rose-500 bg-rose-500/10" },
@@ -119,66 +86,84 @@ export default function QuizTab({ loved, currentTheme, onBack }: QuizTabProps) {
     { name: "100 Completed", desc: "Answered 100 questions in total.", icon: "💯", unlocked: true }
   ];
 
-  // Load from local storage
+  // Load from API with local storage fallback
   useEffect(() => {
+    fetch("/api/games")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          if (data.quizPacks && data.quizPacks.length > 0) {
+            setCustomPacks(data.quizPacks);
+            const firstPack = data.quizPacks[0];
+            if (firstPack.questions && firstPack.questions.length > 0) {
+              setActiveQuizPackTitle(firstPack.name);
+              setActiveQuizQuestions(firstPack.questions);
+            }
+          }
+          if (data.quizMemories && data.quizMemories.length > 0) {
+            setSavedQuizMemories(data.quizMemories);
+          }
+          if (data.weeklyQuests && data.weeklyQuests.length > 0) {
+            setWeeklyTasks(data.weeklyQuests);
+          }
+          if (data.coupleStats) {
+            setScores((prev) => ({
+              ...prev,
+              intimacy: data.coupleStats.intimacyScore ?? prev.intimacy,
+              understanding: data.coupleStats.understandingScore ?? prev.understanding,
+            }));
+          }
+        }
+      })
+      .catch((err) => console.error("Failed to load quiz data from API:", err));
+
     const savedCapsules = localStorage.getItem("loved_sealed_capsules");
     if (savedCapsules) setSealedCapsules(JSON.parse(savedCapsules));
 
     const savedPacks = localStorage.getItem("loved_custom_quiz_packs");
-    if (savedPacks) setCustomPacks(JSON.parse(savedPacks));
+    if (savedPacks && customPacks.length === 0) setCustomPacks(JSON.parse(savedPacks));
 
     const savedMemories = localStorage.getItem("loved_quiz_memories");
-    if (savedMemories) setSavedQuizMemories(JSON.parse(savedMemories));
+    if (savedMemories && savedQuizMemories.length === 0) setSavedQuizMemories(JSON.parse(savedMemories));
 
-    // Load weekly quests
     const savedQuests = localStorage.getItem("loved_weekly_quests");
-    if (savedQuests) {
+    if (savedQuests && weeklyTasks.length === 0) {
       setWeeklyTasks(JSON.parse(savedQuests));
-    } else {
-      const defaultTasks = [
-        { id: "1", text: "Taking photos together 📸", completed: false, points: 10, icon: "📸" },
-        { id: "2", text: "Watching a movie together 🍿", completed: false, points: 15, icon: "🍿" },
-        { id: "3", text: "Trying a new dish 🍳", completed: false, points: 12, icon: "🍳" },
-        { id: "4", text: "Making a 30-minute phone call 📞", completed: false, points: 10, icon: "📞" }
-      ];
-      setWeeklyTasks(defaultTasks);
-      localStorage.setItem("loved_weekly_quests", JSON.stringify(defaultTasks));
-    }
-
-    const savedScores = localStorage.getItem("loved_relationship_scores");
-    if (savedScores) {
-      setScores(JSON.parse(savedScores));
-    } else {
-      const defaultScores = {
-        intimacy: 75,
-        understanding: 82,
-        completedWeeks: 3
-      };
-      setScores(defaultScores);
-      localStorage.setItem("loved_relationship_scores", JSON.stringify(defaultScores));
     }
   }, []);
 
-  const handleSelectQuizAnswer = (option: string) => {
-    if (quizCurrentIndex === 0) {
-      setQuizAnswersA([...quizAnswersA, option]);
-      setQuizAnswersB([...quizAnswersB, option]);
-    } else if (quizCurrentIndex === 1) {
-      setQuizAnswersA([...quizAnswersA, option]);
-      setQuizAnswersB([...quizAnswersB, "Glass igloo stargazing in Finland 🌌"]);
-    } else {
-      setQuizAnswersA([...quizAnswersA, option]);
-      setQuizAnswersB([...quizAnswersB, option]);
+  const startQuizWithPack = (pack?: any) => {
+    setQuizCurrentIndex(0);
+    setQuizAnswersA([]);
+    setQuizAnswersB([]);
+    const targetPack = pack || customPacks[0];
+    if (targetPack && targetPack.questions && targetPack.questions.length > 0) {
+      setActiveQuizPackTitle(targetPack.name || "Couple Quiz");
+      setActiveQuizQuestions(targetPack.questions);
     }
+    setQuizGameState("playing");
+  };
 
-    if (quizCurrentIndex < quizQuestions.length - 1) {
-      setQuizCurrentIndex(prev => prev + 1);
+  const handleSelectQuizAnswer = (option: string) => {
+    const currentQ = activeQuizQuestions[quizCurrentIndex];
+    if (!currentQ) return;
+    setQuizAnswersA((prev) => [...prev, option]);
+
+    // Match partner response dynamically from question options
+    const partnerOption = currentQ.options && currentQ.options.length > 0
+      ? currentQ.options[(quizCurrentIndex + 1) % currentQ.options.length]
+      : option;
+    setQuizAnswersB((prev) => [...prev, partnerOption]);
+
+    if (quizCurrentIndex < activeQuizQuestions.length - 1) {
+      setQuizCurrentIndex((prev) => prev + 1);
     } else {
       setQuizGameState("reveal");
     }
   };
 
   const getQuizMatchPercentage = () => {
+    if (quizAnswersA.length === 0) return 100;
     let m = 0;
     for (let i = 0; i < quizAnswersA.length; i++) {
       if (quizAnswersA[i] === quizAnswersB[i]) m++;
@@ -194,26 +179,41 @@ export default function QuizTab({ loved, currentTheme, onBack }: QuizTabProps) {
   };
 
   const handleSaveQuizToMemories = () => {
-    const updated = [
-      ...savedQuizMemories,
-      {
-        id: Date.now().toString(),
-        question: "Rainy Sunday Preference 🌧️",
-        ansA: quizAnswersA[0] || "No answer",
-        ansB: quizAnswersB[0] || "No answer",
-        match: quizAnswersA[0] === quizAnswersB[0],
-        date: new Date().toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })
-      },
-      {
-        id: (Date.now() + 1).toString(),
-        question: "Dream Destination ✈️",
-        ansA: quizAnswersA[1] || "No answer",
-        ansB: quizAnswersB[1] || "No answer",
-        match: quizAnswersA[1] === quizAnswersB[1],
-        date: new Date().toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })
-      }
-    ];
+    const matchPct = getQuizMatchPercentage();
+    const scoreVal = Math.round((matchPct / 100) * 100);
 
+    fetch("/api/games", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        action: "SAVE_QUIZ_RESULT",
+        payload: {
+          title: activeQuizPackTitle,
+          scoreA: scoreVal,
+          scoreB: scoreVal,
+          intimacyScore: scores.intimacy,
+          understandingScore: scores.understanding,
+        },
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && data.memory) {
+          setSavedQuizMemories((prev) => [data.memory, ...prev]);
+        }
+      })
+      .catch((err) => console.error("Failed to save quiz memory to backend:", err));
+
+    const newMemories = activeQuizQuestions.map((q, idx) => ({
+      id: `${Date.now()}-${idx}`,
+      question: q.question,
+      ansA: quizAnswersA[idx] || "No answer",
+      ansB: quizAnswersB[idx] || "No answer",
+      match: quizAnswersA[idx] === quizAnswersB[idx],
+      date: new Date().toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" }),
+    }));
+
+    const updated = [...newMemories, ...savedQuizMemories];
     setSavedQuizMemories(updated);
     localStorage.setItem("loved_quiz_memories", JSON.stringify(updated));
     alert("Saved to Memory Collection! 💖");
@@ -223,6 +223,27 @@ export default function QuizTab({ loved, currentTheme, onBack }: QuizTabProps) {
   const handleCreatePack = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newPackName) return;
+
+    fetch("/api/games", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        action: "CREATE_QUIZ_PACK",
+        payload: {
+          name: newPackName,
+          description: newPackDesc || "Custom question pack",
+          coverEmoji: newPackCover,
+          questions: [],
+        },
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && data.pack) {
+          setCustomPacks((prev) => [data.pack, ...prev]);
+        }
+      })
+      .catch((err) => console.error("Failed to create quiz pack on backend:", err));
 
     const updated = [
       ...customPacks,
@@ -251,6 +272,16 @@ export default function QuizTab({ loved, currentTheme, onBack }: QuizTabProps) {
     const open = new Date();
     open.setMonth(today.getMonth() + parseInt(capsuleDuration, 10));
 
+    fetch("/api/time-capsules", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        message: capsuleMessage,
+        unlockDate: open.toISOString(),
+        sealedBy: "A",
+      }),
+    }).catch((err) => console.error("Failed to seal capsule on backend:", err));
+
     const updated = [
       ...sealedCapsules,
       {
@@ -269,9 +300,21 @@ export default function QuizTab({ loved, currentTheme, onBack }: QuizTabProps) {
   };
 
   const handleToggleTask = (id: string) => {
+    const taskToToggle = weeklyTasks.find((t) => t.id === id);
+    const nextCompleted = !taskToToggle?.completed;
+
+    fetch("/api/games", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        action: "TOGGLE_WEEKLY_QUEST",
+        payload: { questId: id, completed: nextCompleted },
+      }),
+    }).catch((err) => console.error("Failed to toggle weekly quest on backend:", err));
+
     const updatedTasks = weeklyTasks.map(t => {
       if (t.id === id) {
-        return { ...t, completed: !t.completed };
+        return { ...t, completed: nextCompleted };
       }
       return t;
     });
@@ -321,7 +364,7 @@ export default function QuizTab({ loved, currentTheme, onBack }: QuizTabProps) {
           <button
             onClick={() => setQuizActiveTab("quiz")}
             className={`px-5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-              quizActiveTab === "quiz" ? "bg-white dark:bg-zinc-800 text-rose-500 shadow-sm" : "text-zinc-550 dark:text-zinc-300"
+              quizActiveTab === "quiz" ? "bg-white dark:bg-zinc-800 text-rose-500 shadow-sm" : "text-zinc-500 dark:text-zinc-300"
             }`}
           >
             <Play className="w-3.5 h-3.5" />
@@ -330,7 +373,7 @@ export default function QuizTab({ loved, currentTheme, onBack }: QuizTabProps) {
           <button
             onClick={() => setQuizActiveTab("capsules")}
             className={`px-5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-              quizActiveTab === "capsules" ? "bg-white dark:bg-zinc-800 text-rose-500 shadow-sm" : "text-zinc-550 dark:text-zinc-300"
+              quizActiveTab === "capsules" ? "bg-white dark:bg-zinc-800 text-rose-500 shadow-sm" : "text-zinc-500 dark:text-zinc-300"
             }`}
           >
             <Lock className="w-3.5 h-3.5" />
@@ -342,12 +385,17 @@ export default function QuizTab({ loved, currentTheme, onBack }: QuizTabProps) {
       <div className="w-full">
         {quizActiveTab === "quiz" && (
           <div className="flex flex-col gap-8">
-            {quizGameState === "playing" && (
+            {quizGameState === "playing" && activeQuizQuestions.length > 0 && (
               <div className="w-full max-w-lg mx-auto p-6 rounded-3xl bg-white/40 dark:bg-zinc-900/40 border border-white/20 dark:border-zinc-800/20 shadow-xl backdrop-blur-md flex flex-col gap-6 animate-scale-up">
                 <div className="flex items-center justify-between border-b pb-3 border-zinc-200/50 dark:border-zinc-800/50">
-                  <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">
-                    Question {quizCurrentIndex + 1} of {quizQuestions.length}
-                  </span>
+                  <div className="flex flex-col text-left">
+                    <span className="text-[10px] font-bold text-rose-500 uppercase tracking-widest">
+                      {activeQuizPackTitle}
+                    </span>
+                    <span className="text-xs font-bold text-zinc-400">
+                      Question {quizCurrentIndex + 1} of {activeQuizQuestions.length}
+                    </span>
+                  </div>
                   <button onClick={resetQuizGame} className="text-xs font-bold text-rose-500 hover:text-rose-600 flex items-center gap-1 cursor-pointer border-none bg-transparent">
                     Exit Game
                   </button>
@@ -355,12 +403,12 @@ export default function QuizTab({ loved, currentTheme, onBack }: QuizTabProps) {
 
                 <div className="p-5 rounded-2xl bg-gradient-to-tr from-rose-500/5 to-purple-500/5 border border-rose-500/10 text-center">
                   <h3 className="text-base font-extrabold leading-relaxed text-zinc-800 dark:text-zinc-100">
-                    {quizQuestions[quizCurrentIndex].question}
+                    {activeQuizQuestions[quizCurrentIndex]?.question}
                   </h3>
                 </div>
 
                 <div className="flex flex-col gap-3">
-                  {quizQuestions[quizCurrentIndex].options.map((option, idx) => (
+                  {activeQuizQuestions[quizCurrentIndex]?.options?.map((option: string, idx: number) => (
                     <button
                       key={idx}
                       onClick={() => handleSelectQuizAnswer(option)}
@@ -386,23 +434,27 @@ export default function QuizTab({ loved, currentTheme, onBack }: QuizTabProps) {
                   <h3 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-rose-500 to-pink-500 font-serif mt-1 animate-pulse" style={{ fontFamily: "var(--font-molle)" }}>
                     {getQuizMatchPercentage()}% Match!
                   </h3>
-                  <h4 className="text-xs font-bold text-zinc-800 dark:text-zinc-200 uppercase tracking-widest mt-1">Perfect Harmony</h4>
+                  <h4 className="text-xs font-bold text-zinc-800 dark:text-zinc-200 uppercase tracking-widest mt-1">{activeQuizPackTitle}</h4>
                 </div>
 
-                <div className="flex flex-col gap-3.5 w-full mt-2">
-                  <div className="p-4.5 rounded-2xl bg-zinc-55 dark:bg-zinc-950/40 border border-zinc-200/55 dark:border-zinc-800/40 text-left">
-                    <h5 className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Question 1: Sunday Prefs 🌧️</h5>
-                    <div className="grid grid-cols-2 gap-4 mt-2 border-t pt-2 border-zinc-205/20">
-                      <div>
-                        <span className="text-[9px] font-bold text-rose-500 block uppercase">{loved.personAName}</span>
-                        <span className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">{quizAnswersA[0]}</span>
-                      </div>
-                      <div>
-                        <span className="text-[9px] font-bold text-pink-500 block uppercase">{loved.personBName}</span>
-                        <span className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">{quizAnswersB[0]}</span>
+                <div className="flex flex-col gap-3.5 w-full mt-2 max-h-64 overflow-y-auto pr-1">
+                  {activeQuizQuestions.map((q: any, idx: number) => (
+                    <div key={q.id || idx} className="p-4 rounded-2xl bg-zinc-50 dark:bg-zinc-950/40 border border-zinc-200/55 dark:border-zinc-800/40 text-left">
+                      <h5 className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">
+                        Q{idx + 1}: {q.question}
+                      </h5>
+                      <div className="grid grid-cols-2 gap-4 mt-2 border-t pt-2 border-zinc-200/20 dark:border-zinc-800/20">
+                        <div>
+                          <span className="text-[9px] font-bold text-rose-500 block uppercase">{loved.personAName}</span>
+                          <span className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">{quizAnswersA[idx] || "No answer"}</span>
+                        </div>
+                        <div>
+                          <span className="text-[9px] font-bold text-pink-500 block uppercase">{loved.personBName}</span>
+                          <span className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">{quizAnswersB[idx] || "No answer"}</span>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  ))}
                 </div>
 
                 <div className="flex gap-3 w-full mt-2">
@@ -428,12 +480,12 @@ export default function QuizTab({ loved, currentTheme, onBack }: QuizTabProps) {
                       <h2 className="text-2xl sm:text-3xl font-extrabold text-zinc-900 dark:text-white font-cursive leading-tight">
                         How Well Do You Know Me?
                       </h2>
-                      <p className="text-xs font-cursive text-zinc-550 dark:text-zinc-400 mt-1 max-w-sm leading-normal">
+                      <p className="text-xs font-cursive text-zinc-500 dark:text-zinc-400 mt-1 max-w-sm leading-normal">
                         Test your relationship chemistry, guess secrets, and write down cute memory capsules together!
                       </p>
                     </div>
                     <div className="flex gap-3 w-full sm:w-auto mt-2">
-                      <button onClick={() => setQuizGameState("playing")} className="flex-1 sm:flex-initial px-6 py-2.5 rounded-full bg-rose-500 hover:bg-rose-600 text-white font-bold text-xs shadow-md transition-all hover:scale-105 cursor-pointer border-none">
+                      <button onClick={() => startQuizWithPack()} className="flex-1 sm:flex-initial px-6 py-2.5 rounded-full bg-rose-500 hover:bg-rose-600 text-white font-bold text-xs shadow-md transition-all hover:scale-105 cursor-pointer border-none">
                         Start Today&apos;s Quiz 🚀
                       </button>
                     </div>
@@ -460,7 +512,7 @@ export default function QuizTab({ loved, currentTheme, onBack }: QuizTabProps) {
                       <card.icon className={`w-5 h-5 ${card.color}`} />
                       <div className="text-left mt-4">
                         <span className="text-[9px] font-bold text-zinc-400 uppercase tracking-widest">{card.label}</span>
-                        <h4 className="text-xl font-bold mt-1 text-zinc-850 dark:text-zinc-100" style={{ fontFamily: "var(--font-molle)" }}>
+                        <h4 className="text-xl font-bold mt-1 text-zinc-800 dark:text-zinc-100" style={{ fontFamily: "var(--font-molle)" }}>
                           {card.value}
                         </h4>
                         <span className="text-[9px] font-medium text-zinc-400 mt-0.5 block">{card.detail}</span>
@@ -476,7 +528,7 @@ export default function QuizTab({ loved, currentTheme, onBack }: QuizTabProps) {
                     <div>
                       <span className="text-[10px] font-extrabold text-rose-500 uppercase tracking-widest">Weekly Mission 📅</span>
                       <h3 className="text-xl font-bold text-zinc-900 dark:text-white font-cursive mt-1">Couple Quests</h3>
-                      <p className="text-xs font-cursive text-zinc-550 dark:text-zinc-400 mt-0.5 max-w-sm leading-normal">
+                      <p className="text-xs font-cursive text-zinc-500 dark:text-zinc-400 mt-0.5 max-w-sm leading-normal">
                         Complete weekly tasks together to level up intimacy and understanding.
                       </p>
                     </div>
@@ -488,7 +540,7 @@ export default function QuizTab({ loved, currentTheme, onBack }: QuizTabProps) {
                           className={`flex items-center justify-between p-3.5 rounded-2xl border cursor-pointer select-none transition-all duration-200 hover:scale-[1.01] ${
                             task.completed 
                               ? "bg-rose-500/5 border-rose-500/20 text-rose-600 dark:text-rose-455" 
-                              : "bg-white/40 dark:bg-zinc-955/20 border-zinc-200/50 dark:border-zinc-800/20 hover:bg-white/60 dark:hover:bg-zinc-955/30 text-zinc-700 dark:text-zinc-200"
+                              : "bg-white/40 dark:bg-zinc-950/20 border-zinc-200/50 dark:border-zinc-800/20 hover:bg-white/60 dark:hover:bg-zinc-950/30 text-zinc-700 dark:text-zinc-200"
                           }`}
                         >
                           <div className="flex items-center gap-3">
@@ -511,7 +563,7 @@ export default function QuizTab({ loved, currentTheme, onBack }: QuizTabProps) {
                   </div>
 
                   {/* Divider on desktop */}
-                  <div className="hidden md:block w-[1px] bg-zinc-250/50 dark:bg-zinc-800/30 self-stretch" />
+                  <div className="hidden md:block w-[1px] bg-zinc-200/50 dark:bg-zinc-800/30 self-stretch" />
 
                   {/* Right: Intimacy / Understanding progress metrics */}
                   <div className="w-full md:w-80 flex flex-col justify-between gap-6">
@@ -527,7 +579,7 @@ export default function QuizTab({ loved, currentTheme, onBack }: QuizTabProps) {
                           </span>
                           <span style={{ fontFamily: "var(--font-molle)" }} className="text-rose-500 text-sm">{scores.intimacy}%</span>
                         </div>
-                        <div className="w-full h-2.5 rounded-full bg-zinc-150 dark:bg-zinc-950/50 overflow-hidden relative border border-zinc-200/10 shadow-inner">
+                        <div className="w-full h-2.5 rounded-full bg-zinc-100 dark:bg-zinc-950/50 overflow-hidden relative border border-zinc-200/10 shadow-inner">
                           <div 
                             className="h-full bg-gradient-to-r from-rose-500 to-pink-500 rounded-full transition-all duration-500 ease-out" 
                             style={{ width: `${scores.intimacy}%` }}
@@ -544,7 +596,7 @@ export default function QuizTab({ loved, currentTheme, onBack }: QuizTabProps) {
                           </span>
                           <span style={{ fontFamily: "var(--font-molle)" }} className="text-amber-500 text-sm">{scores.understanding}%</span>
                         </div>
-                        <div className="w-full h-2.5 rounded-full bg-zinc-150 dark:bg-zinc-955/50 overflow-hidden relative border border-zinc-200/10 shadow-inner">
+                        <div className="w-full h-2.5 rounded-full bg-zinc-100 dark:bg-zinc-950/50 overflow-hidden relative border border-zinc-200/10 shadow-inner">
                           <div 
                             className="h-full bg-gradient-to-r from-amber-400 to-amber-500 rounded-full transition-all duration-500 ease-out" 
                             style={{ width: `${scores.understanding}%` }}
@@ -557,7 +609,7 @@ export default function QuizTab({ loved, currentTheme, onBack }: QuizTabProps) {
                     <div className="p-4 rounded-2xl bg-rose-500/5 border border-rose-500/10 flex items-center justify-between gap-3 text-left">
                       <div className="flex-1">
                         <span className="text-[9px] font-bold text-zinc-400 uppercase tracking-widest block">Completed Quests</span>
-                        <h5 className="text-xs font-bold text-zinc-850 dark:text-zinc-200 mt-0.5 leading-normal">
+                        <h5 className="text-xs font-bold text-zinc-800 dark:text-zinc-200 mt-0.5 leading-normal">
                           {weeklyTasks.filter(t => t.completed).length === 4 ? "Weekly Challenge Completed! 🎉" : `${weeklyTasks.filter(t => t.completed).length} of 4 Completed`}
                         </h5>
                         <p className="text-[10px] text-zinc-500 mt-1 font-medium">
@@ -580,7 +632,7 @@ export default function QuizTab({ loved, currentTheme, onBack }: QuizTabProps) {
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-5 gap-6 w-full items-stretch text-left">
                     {gameModes.map((mode, idx) => (
-                      <div key={idx} onClick={() => setQuizGameState("playing")} className="p-5 rounded-[24px] bg-white/40 dark:bg-zinc-900/40 border border-white/20 dark:border-zinc-800/20 shadow-md backdrop-blur-md flex flex-col gap-3.5 hover:shadow-lg hover:border-rose-500/20 hover:scale-[1.02] cursor-pointer transition-all duration-300 group">
+                      <div key={idx} onClick={() => startQuizWithPack()} className="p-5 rounded-[24px] bg-white/40 dark:bg-zinc-900/40 border border-white/20 dark:border-zinc-800/20 shadow-md backdrop-blur-md flex flex-col gap-3.5 hover:shadow-lg hover:border-rose-500/20 hover:scale-[1.02] cursor-pointer transition-all duration-300 group">
                         <div className={`w-9 h-9 rounded-full ${mode.color} flex items-center justify-center group-hover:scale-115 transition-transform`}>
                           <Heart className="w-4.5 h-4.5" />
                         </div>
@@ -593,6 +645,35 @@ export default function QuizTab({ loved, currentTheme, onBack }: QuizTabProps) {
                   </div>
                 </div>
 
+                {customPacks.length > 0 && (
+                  <div className="flex flex-col gap-3">
+                    <h3 className="text-base font-extrabold text-left font-cursive text-zinc-900 dark:text-white flex items-center gap-1.5 pl-1">
+                      <Sparkles className="w-4 h-4 text-rose-500" />
+                      <span>Quiz Packs (Synced with Backend)</span>
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full text-left">
+                      {customPacks.map((pack) => (
+                        <div
+                          key={pack.id}
+                          onClick={() => startQuizWithPack(pack)}
+                          className="p-4.5 rounded-2xl bg-white/50 dark:bg-zinc-900/50 border border-zinc-200/50 dark:border-zinc-800/40 shadow-sm hover:shadow-md hover:scale-[1.01] cursor-pointer transition-all flex items-center justify-between gap-3"
+                        >
+                          <div className="flex items-center gap-3">
+                            <span className="text-2xl">{pack.coverEmoji || "💖"}</span>
+                            <div className="flex flex-col">
+                              <h4 className="text-xs font-bold text-zinc-900 dark:text-white">{pack.name}</h4>
+                              <p className="text-[10px] text-zinc-500 line-clamp-1">{pack.description || "Custom Pack"}</p>
+                            </div>
+                          </div>
+                          <span className="px-3 py-1 bg-rose-500/10 text-rose-500 text-[10px] font-bold rounded-full border border-rose-500/20 whitespace-nowrap">
+                            Play Pack 🚀
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 <div className="flex flex-col gap-3">
                   <h3 className="text-base font-extrabold text-left font-cursive text-zinc-900 dark:text-white flex items-center gap-1.5 pl-1">
                     <BookOpen className="w-4 h-4 text-rose-500" />
@@ -600,12 +681,12 @@ export default function QuizTab({ loved, currentTheme, onBack }: QuizTabProps) {
                   </h3>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-6 w-full items-stretch text-left">
                     {questionCategories.map((cat, idx) => (
-                      <div key={idx} onClick={() => setQuizGameState("playing")} className="p-4.5 rounded-[24px] bg-white/40 dark:bg-zinc-900/40 border border-white/20 dark:border-zinc-800/20 shadow-md backdrop-blur-md flex flex-col gap-3 hover:scale-102 hover:shadow-lg transition-all cursor-pointer">
+                      <div key={idx} onClick={() => startQuizWithPack()} className="p-4.5 rounded-[24px] bg-white/40 dark:bg-zinc-900/40 border border-white/20 dark:border-zinc-800/20 shadow-md backdrop-blur-md flex flex-col gap-3 hover:scale-102 hover:shadow-lg transition-all cursor-pointer">
                         <div className="flex items-center justify-between">
                           <h4 className="text-xs font-bold text-zinc-900 dark:text-white truncate max-w-[110px]">{cat.name}</h4>
                           <span className="text-[9px] font-bold text-zinc-455">{cat.progress}%</span>
                         </div>
-                        <div className="w-full h-1.5 rounded-full bg-zinc-100 dark:bg-zinc-850 overflow-hidden">
+                        <div className="w-full h-1.5 rounded-full bg-zinc-100 dark:bg-zinc-800 overflow-hidden">
                           <div className="h-full bg-rose-500 rounded-full" style={{ width: `${cat.progress}%` }} />
                         </div>
                         <div className="flex justify-between items-center text-[9px] font-bold text-zinc-400">
@@ -625,7 +706,7 @@ export default function QuizTab({ loved, currentTheme, onBack }: QuizTabProps) {
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start w-full text-left">
             <div className="md:col-span-7 flex flex-col gap-8">
               <div className="p-6 rounded-[28px] bg-white/40 dark:bg-zinc-900/40 border border-white/20 dark:border-zinc-800/20 shadow-lg backdrop-blur-md">
-                <h3 className="text-base font-extrabold font-cursive text-zinc-955 dark:text-white border-b pb-2.5 border-zinc-200/55 dark:border-zinc-800/55 flex items-center gap-1.5">
+                <h3 className="text-base font-extrabold font-cursive text-zinc-950 dark:text-white border-b pb-2.5 border-zinc-200/55 dark:border-zinc-800/55 flex items-center gap-1.5">
                   <Plus className="w-4.5 h-4.5 text-rose-500" />
                   <span>Create Question Pack</span>
                 </h3>
@@ -647,7 +728,7 @@ export default function QuizTab({ loved, currentTheme, onBack }: QuizTabProps) {
               </div>
 
               <div className="p-6 rounded-[28px] bg-white/40 dark:bg-zinc-900/40 border border-white/20 dark:border-zinc-800/20 shadow-lg backdrop-blur-md flex flex-col gap-4">
-                <h3 className="text-base font-extrabold font-cursive text-zinc-955 dark:text-white border-b pb-2.5 border-zinc-200/55 dark:border-zinc-800/55 flex items-center gap-1.5">
+                <h3 className="text-base font-extrabold font-cursive text-zinc-950 dark:text-white border-b pb-2.5 border-zinc-200/55 dark:border-zinc-800/55 flex items-center gap-1.5">
                   <Camera className="w-4.5 h-4.5 text-rose-500" />
                   <span>Saved Quiz Memories</span>
                 </h3>
@@ -655,11 +736,11 @@ export default function QuizTab({ loved, currentTheme, onBack }: QuizTabProps) {
                 {savedQuizMemories.length === 0 ? (
                   <p className="text-xs text-zinc-400 italic py-4">No quiz answers saved yet.</p>
                 ) : (
-                  <div className="flex flex-col gap-4 pl-4 border-l border-dashed border-rose-350 mt-1">
+                  <div className="flex flex-col gap-4 pl-4 border-l border-dashed border-rose-300 mt-1">
                     {savedQuizMemories.map((mem) => (
-                      <div key={mem.id} className="p-4 rounded-2xl bg-zinc-55 dark:bg-zinc-955/40 border border-zinc-200/50 dark:border-zinc-800/30 text-left flex flex-col gap-1.5 relative">
+                      <div key={mem.id} className="p-4 rounded-2xl bg-zinc-50 dark:bg-zinc-950/40 border border-zinc-200/50 dark:border-zinc-800/30 text-left flex flex-col gap-1.5 relative">
                         <div className="absolute -left-6 top-5 w-4 h-4 rounded-full bg-rose-450 border-4 border-white dark:border-zinc-900" />
-                        <h4 className="text-xs font-bold text-zinc-850 dark:text-zinc-250">{mem.question}</h4>
+                        <h4 className="text-xs font-bold text-zinc-800 dark:text-zinc-200">{mem.question}</h4>
                         <div className="grid grid-cols-2 gap-4 mt-2">
                           <div>
                             <span className="text-[8px] font-bold text-rose-500 uppercase block">{loved.personAName}</span>
@@ -679,7 +760,7 @@ export default function QuizTab({ loved, currentTheme, onBack }: QuizTabProps) {
 
             <div className="md:col-span-5 flex flex-col gap-8">
               <div className="p-6 rounded-[28px] bg-white/40 dark:bg-zinc-900/40 border border-white/20 dark:border-zinc-800/20 shadow-lg backdrop-blur-md flex flex-col gap-4">
-                <h3 className="text-base font-extrabold font-cursive  text-zinc-955 dark:text-white border-b pb-2.5 border-zinc-200/55 dark:border-zinc-800/55 flex items-center gap-1.5">
+                <h3 className="text-base font-extrabold font-cursive  text-zinc-950 dark:text-white border-b pb-2.5 border-zinc-200/55 dark:border-zinc-800/55 flex items-center gap-1.5">
                   <Lock className="w-4.5 h-4.5 text-rose-500" />
                   <span>Time Capsule</span>
                 </h3>
@@ -696,12 +777,12 @@ export default function QuizTab({ loved, currentTheme, onBack }: QuizTabProps) {
                 </form>
 
                 {sealedCapsules.length > 0 && (
-                  <div className="flex flex-col gap-3 mt-6 border-t pt-5 border-zinc-250">
+                  <div className="flex flex-col gap-3 mt-6 border-t pt-5 border-zinc-200">
                     {sealedCapsules.map((capsule) => (
-                      <div key={capsule.id} className="p-4 rounded-2xl bg-zinc-55 dark:bg-zinc-950 border border-zinc-200 flex items-center justify-between gap-4">
+                      <div key={capsule.id} className="p-4 rounded-2xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 flex items-center justify-between gap-4">
                         <Lock className="w-4 h-4 text-rose-500" />
                         <div className="flex-1 text-left">
-                          <h5 className="text-xs font-bold text-zinc-850 dark:text-zinc-200">Sealed Capsule</h5>
+                          <h5 className="text-xs font-bold text-zinc-800 dark:text-zinc-200">Sealed Capsule</h5>
                           <span className="text-[9px] text-zinc-450 block">Open: {capsule.openDate}</span>
                         </div>
                         <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-500 uppercase">Sealed</span>

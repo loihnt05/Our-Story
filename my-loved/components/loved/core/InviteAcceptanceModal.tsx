@@ -47,7 +47,7 @@ export default function InviteAcceptanceModal({
               placeholder="Enter your name"
               value={partnerNameInput}
               onChange={(e) => setPartnerNameInput(e.target.value)}
-              className="w-full p-2.5 rounded-xl bg-zinc-55 dark:bg-zinc-955 border border-zinc-200 dark:border-zinc-800 text-xs outline-none text-zinc-900 dark:text-white"
+              className="w-full p-2.5 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-xs outline-none text-zinc-900 dark:text-white"
             />
           </div>
 
@@ -58,14 +58,14 @@ export default function InviteAcceptanceModal({
               placeholder="e.g. My Anchor ⚓"
               value={partnerDesc}
               onChange={(e) => setPartnerDesc(e.target.value)}
-              className="w-full p-2.5 rounded-xl bg-zinc-55 dark:bg-zinc-955 border border-zinc-200 dark:border-zinc-800 text-xs outline-none text-zinc-900 dark:text-white"
+              className="w-full p-2.5 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-xs outline-none text-zinc-900 dark:text-white"
             />
           </div>
 
           <div className="flex flex-col gap-1.5">
             <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">My Avatar Image</label>
             <div className="flex items-center gap-3">
-              <label className="text-[10px] font-bold text-zinc-400 cursor-pointer p-2.5 border border-dashed border-zinc-300 dark:border-zinc-800 rounded-xl hover:bg-zinc-50 dark:hover:bg-zinc-955 flex-1 text-center font-sans">
+              <label className="text-[10px] font-bold text-zinc-400 cursor-pointer p-2.5 border border-dashed border-zinc-300 dark:border-zinc-800 rounded-xl hover:bg-zinc-50 dark:hover:bg-zinc-950 flex-1 text-center font-sans">
                 {partnerAvatar ? "Change Photo Slot" : "Upload Photo"}
                 <input
                   type="file"

@@ -20,10 +20,10 @@ export default function PolaroidCard({
       <div className={`polaroid-card ${isFlipped ? "flipped" : ""}`}>
         
         {/* FRONT SIDE (Question state) */}
-        <div className="polaroid-front bg-white dark:bg-zinc-900 border border-zinc-200/50 dark:border-zinc-850/50 shadow-2xl p-4.5 rounded-2xl flex flex-col justify-between">
+        <div className="polaroid-front bg-white dark:bg-zinc-900 border border-zinc-200/50 dark:border-zinc-800/50 shadow-2xl p-4.5 rounded-2xl flex flex-col justify-between">
           
           {/* Blurred Photo Frame */}
-          <div className="relative w-full aspect-square rounded-xl bg-gradient-to-tr from-rose-50 to-pink-100 dark:from-zinc-950 dark:to-zinc-800 border border-zinc-150/50 overflow-hidden flex items-center justify-center">
+          <div className="relative w-full aspect-square rounded-xl bg-gradient-to-tr from-rose-50 to-pink-100 dark:from-zinc-950 dark:to-zinc-800 border border-zinc-100/50 overflow-hidden flex items-center justify-center">
             
             {memory.image ? (
               <img
@@ -57,10 +57,10 @@ export default function PolaroidCard({
         </div>
 
         {/* BACK SIDE (Reveal state) */}
-        <div className="polaroid-back bg-white dark:bg-zinc-900 border border-zinc-200/50 dark:border-zinc-850/50 shadow-2xl p-4.5 rounded-2xl flex flex-col justify-between">
+        <div className="polaroid-back bg-white dark:bg-zinc-900 border border-zinc-200/50 dark:border-zinc-800/50 shadow-2xl p-4.5 rounded-2xl flex flex-col justify-between">
           
           {/* Unblurred Photo Frame */}
-          <div className="relative w-full aspect-square rounded-xl bg-gradient-to-tr from-rose-50 to-pink-100 dark:from-zinc-950 dark:to-zinc-800 border border-zinc-150/50 overflow-hidden flex items-center justify-center">
+          <div className="relative w-full aspect-square rounded-xl bg-gradient-to-tr from-rose-50 to-pink-100 dark:from-zinc-950 dark:to-zinc-800 border border-zinc-100/50 overflow-hidden flex items-center justify-center">
             {memory.image ? (
               <img
                 src={memory.image}

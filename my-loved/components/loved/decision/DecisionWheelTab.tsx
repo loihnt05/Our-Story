@@ -45,11 +45,25 @@ export default function DecisionWheelTab({ loved, currentTheme, onBack }: Decisi
 
   // Load custom wheels & history on mount
   useEffect(() => {
+    fetch("/api/games")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          if (data.wheelCategories && data.wheelCategories.length > 0) {
+            setCategories([...DEFAULT_CATEGORIES, ...data.wheelCategories]);
+          }
+          if (data.decisionHistory && data.decisionHistory.length > 0) {
+            setHistory(data.decisionHistory);
+          }
+        }
+      })
+      .catch((err) => console.error("Failed to load decision data from API:", err));
+
     const savedCustom = localStorage.getItem("loved_custom_wheels");
     if (savedCustom) {
       try {
         const parsed = JSON.parse(savedCustom);
-        setCategories([...DEFAULT_CATEGORIES, ...parsed]);
+        setCategories((prev) => [...prev.filter((c) => !c.isCustom), ...parsed]);
       } catch (e) {
         console.error("Failed to parse custom wheels", e);
       }
@@ -58,7 +72,7 @@ export default function DecisionWheelTab({ loved, currentTheme, onBack }: Decisi
     const savedHistory = localStorage.getItem("loved_decision_history");
     if (savedHistory) {
       try {
-        setHistory(JSON.parse(savedHistory));
+        setHistory((prev) => (prev.length === 0 ? JSON.parse(savedHistory) : prev));
       } catch (e) {
         console.error("Failed to parse history", e);
       }
@@ -167,12 +181,44 @@ export default function DecisionWheelTab({ loved, currentTheme, onBack }: Decisi
     });
     setCategories(updatedCategories);
     saveCustomWheelsToLocalStorage(updatedCategories);
+
+    fetch("/api/games", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        action: "UPDATE_WHEEL_CATEGORY",
+        payload: { categoryId: activeCategoryId, items: updatedItems },
+      }),
+    }).catch((err) => console.error("Failed to update wheel items on backend:", err));
   };
 
   // Create new Custom category/wheel
   const handleCreateCustomWheel = () => {
     if (!newWheelName.trim()) return;
     
+    fetch("/api/games", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        action: "CREATE_WHEEL_CATEGORY",
+        payload: {
+          name: newWheelName.trim(),
+          icon: newWheelIcon,
+          items: [
+            { text: "Adventure Option 1", emoji: "🌸" },
+            { text: "Adventure Option 2", emoji: "🍿" }
+          ],
+        },
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && data.category) {
+          setCategories((prev) => [...prev, data.category]);
+        }
+      })
+      .catch((err) => console.error("Failed to create custom wheel on backend:", err));
+
     const newId = `custom-${Date.now()}`;
     const newCat: WheelCategory = {
       id: newId,
@@ -205,6 +251,15 @@ export default function DecisionWheelTab({ loved, currentTheme, onBack }: Decisi
       if (activeCategoryId === catId) {
         setActiveCategoryId("date-ideas");
       }
+
+      fetch("/api/games", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "DELETE_WHEEL_CATEGORY",
+          payload: { categoryId: catId },
+        }),
+      }).catch((err) => console.error("Failed to delete custom wheel on backend:", err));
     }
   };
 
@@ -234,6 +289,26 @@ export default function DecisionWheelTab({ loved, currentTheme, onBack }: Decisi
 
   // Save selection directly to history list
   const saveToHistory = (item: DecisionOption, categoryName: string) => {
+    fetch("/api/games", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        action: "RECORD_DECISION",
+        payload: {
+          text: item.text,
+          emoji: item.emoji || "🎯",
+          categoryName: categoryName || "Decision Wheel",
+        },
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && data.decision) {
+          setHistory((prev) => [data.decision, ...prev].slice(0, 30));
+        }
+      })
+      .catch((err) => console.error("Failed to record decision on backend:", err));
+
     const newItem: HistoryItem = {
       id: Date.now().toString(),
       text: item.text,
@@ -256,6 +331,15 @@ export default function DecisionWheelTab({ loved, currentTheme, onBack }: Decisi
         if (nextState) {
           playChimeSound();
         }
+        fetch("/api/games", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            action: "TOGGLE_DECISION_COMPLETED",
+            payload: { decisionId: historyId, completed: nextState },
+          }),
+        }).catch((err) => console.error("Failed to toggle decision completed on backend:", err));
+
         return { ...h, completed: nextState };
       }
       return h;
@@ -277,6 +361,11 @@ export default function DecisionWheelTab({ loved, currentTheme, onBack }: Decisi
     if (confirm("Clear all decision wheel history? 🕰️")) {
       setHistory([]);
       localStorage.removeItem("loved_decision_history");
+      fetch("/api/games", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "DELETE_DECISION_HISTORY" }),
+      }).catch((err) => console.error("Failed to clear decision history on backend:", err));
     }
   };
 
@@ -304,7 +393,7 @@ export default function DecisionWheelTab({ loved, currentTheme, onBack }: Decisi
       `}</style>
 
       {/* Hero Header */}
-      <div className="text-center md:text-left flex flex-col md:flex-row md:items-center justify-between gap-4 p-6 rounded-3xl bg-white/40 dark:bg-zinc-955/20 border border-white/20 backdrop-blur-md">
+      <div className="text-center md:text-left flex flex-col md:flex-row md:items-center justify-between gap-4 p-6 rounded-3xl bg-white/40 dark:bg-zinc-950/20 border border-white/20 backdrop-blur-md">
         <div>
           {onBack && (
             <button

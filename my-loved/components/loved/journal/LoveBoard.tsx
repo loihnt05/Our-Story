@@ -84,7 +84,7 @@ export default function LoveBoard({
       return {
         bgClass: isCompleted
           ? "bg-gradient-to-r from-rose-500 via-pink-500 to-orange-500 text-white shadow-[0_0_10px_rgba(244,63,94,0.4)] cursor-pointer hover:scale-105"
-          : "bg-gradient-to-r from-rose-500/60 via-pink-500/60 to-orange-500/60 text-white/80 border border-rose-550/30 cursor-default",
+          : "bg-gradient-to-r from-rose-500/60 via-pink-500/60 to-orange-500/60 text-white/80 border border-rose-500/30 cursor-default",
         flameClass: "text-orange-300 fill-current animate-pulse",
         tierName: "Prominent"
       };
@@ -92,7 +92,7 @@ export default function LoveBoard({
     return {
       bgClass: isCompleted
         ? "bg-gradient-to-r from-amber-500 to-orange-500 text-white cursor-pointer hover:scale-105"
-        : "bg-gradient-to-r from-amber-500/60 to-orange-500/60 text-white/80 border border-amber-550/30 cursor-default",
+        : "bg-gradient-to-r from-amber-500/60 to-orange-500/60 text-white/80 border border-amber-500/30 cursor-default",
       flameClass: "text-orange-200 fill-current",
       tierName: "Basic"
     };
@@ -185,7 +185,7 @@ export default function LoveBoard({
         {/* Streak Counter Widget */}
         <div className="flex items-center gap-2">
           {streakInfo.count > 0 && (
-            <span className="text-[10px] font-bold px-2 py-1 rounded-lg bg-zinc-150 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400 border border-zinc-200/50 dark:border-zinc-700/50 shadow-sm shrink-0">
+            <span className="text-[10px] font-bold px-2 py-1 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400 border border-zinc-200/50 dark:border-zinc-700/50 shadow-sm shrink-0">
               Recoveries: {getMaxRecoveries(lastActiveStreak) - recoveriesUsed} left
             </span>
           )}
@@ -253,10 +253,10 @@ export default function LoveBoard({
               </div>
               <div className="text-left">
                 <h4 className="text-xs font-bold text-red-600 dark:text-red-400 uppercase tracking-wider">Streak Lost! 💔</h4>
-                <p className="text-xs text-zinc-605 dark:text-zinc-305 mt-0.5">
+                <p className="text-xs text-zinc-600 dark:text-zinc-300 mt-0.5">
                   You lost your <strong className="text-red-500">{lastActiveStreak}</strong> day streak.
                 </p>
-                <p className="text-[10px] text-zinc-400 dark:text-zinc-550 mt-0.5">
+                <p className="text-[10px] text-zinc-400 dark:text-zinc-500 mt-0.5">
                   Recoveries remaining: <strong>{getMaxRecoveries(lastActiveStreak) - recoveriesUsed}</strong> of {getMaxRecoveries(lastActiveStreak)}
                 </p>
               </div>

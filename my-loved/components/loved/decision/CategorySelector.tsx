@@ -35,7 +35,7 @@ export default function CategorySelector({
               className={`relative p-3 rounded-2xl border transition-all cursor-pointer flex flex-col gap-1 items-start ${
                 isActive
                   ? "bg-rose-500/10 border-rose-400 shadow-sm"
-                  : "bg-white/40 dark:bg-zinc-955/20 border-zinc-200/50 dark:border-zinc-800/50 hover:bg-white/60 dark:hover:bg-zinc-950/30"
+                  : "bg-white/40 dark:bg-zinc-950/20 border-zinc-200/50 dark:border-zinc-800/50 hover:bg-white/60 dark:hover:bg-zinc-950/30"
               }`}
             >
               <span className="text-xl">{cat.icon}</span>

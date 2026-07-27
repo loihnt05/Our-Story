@@ -248,7 +248,7 @@ export default function OnboardingWizard({ onComplete }: OnboardingWizardProps) 
                     ? "w-8 bg-gradient-to-r from-rose-500 to-pink-500"
                     : s < step
                     ? "w-2.5 bg-rose-500/50 dark:bg-rose-500/30"
-                    : "w-2.5 bg-zinc-200 dark:bg-zinc-850"
+                    : "w-2.5 bg-zinc-200 dark:bg-zinc-800"
                 }`}
               />
             ))}
@@ -279,7 +279,7 @@ export default function OnboardingWizard({ onComplete }: OnboardingWizardProps) 
                     placeholder="Enter your full name"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
-                    className="w-full p-3 rounded-xl bg-zinc-55 dark:bg-zinc-955 border border-zinc-200 dark:border-zinc-850 text-sm outline-none focus:border-rose-400 dark:focus:border-rose-550 transition-colors text-zinc-900 dark:text-white"
+                    className="w-full p-3 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-sm outline-none focus:border-rose-400 dark:focus:border-rose-500 transition-colors text-zinc-900 dark:text-white"
                   />
                 </div>
 
@@ -292,7 +292,7 @@ export default function OnboardingWizard({ onComplete }: OnboardingWizardProps) 
                     placeholder="e.g. Romeo"
                     value={nickname}
                     onChange={(e) => setNickname(e.target.value)}
-                    className="w-full p-3 rounded-xl bg-zinc-55 dark:bg-zinc-955 border border-zinc-200 dark:border-zinc-850 text-sm outline-none focus:border-rose-400 dark:focus:border-rose-550 transition-colors text-zinc-900 dark:text-white"
+                    className="w-full p-3 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-sm outline-none focus:border-rose-400 dark:focus:border-rose-500 transition-colors text-zinc-900 dark:text-white"
                   />
                 </div>
               </div>
@@ -306,7 +306,7 @@ export default function OnboardingWizard({ onComplete }: OnboardingWizardProps) 
                     required
                     value={dob}
                     onChange={(e) => setDob(e.target.value)}
-                    className="w-full p-3 rounded-xl bg-zinc-55 dark:bg-zinc-955 border border-zinc-200 dark:border-zinc-850 text-sm outline-none focus:border-rose-400 dark:focus:border-rose-550 transition-colors text-zinc-900 dark:text-white"
+                    className="w-full p-3 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-sm outline-none focus:border-rose-400 dark:focus:border-rose-500 transition-colors text-zinc-900 dark:text-white"
                   />
                 </div>
 
@@ -320,7 +320,7 @@ export default function OnboardingWizard({ onComplete }: OnboardingWizardProps) 
                       placeholder="name@example.com"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="w-full p-3 pl-9 rounded-xl bg-zinc-55 dark:bg-zinc-955 border border-zinc-200 dark:border-zinc-850 text-sm outline-none focus:border-rose-400 dark:focus:border-rose-550 transition-colors text-zinc-900 dark:text-white"
+                      className="w-full p-3 pl-9 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-sm outline-none focus:border-rose-400 dark:focus:border-rose-500 transition-colors text-zinc-900 dark:text-white"
                     />
                     <Mail className="w-4 h-4 text-zinc-400 absolute left-3 top-3.5" />
                   </div>
@@ -330,7 +330,7 @@ export default function OnboardingWizard({ onComplete }: OnboardingWizardProps) 
               {/* Avatar Selector */}
               <div className="flex flex-col gap-2 mt-1">
                 <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Choose Your Profile Avatar</label>
-                <div className="flex gap-4 border border-zinc-200/50 dark:border-zinc-800/50 rounded-2xl p-4 bg-zinc-55/30 dark:bg-zinc-955/20">
+                <div className="flex gap-4 border border-zinc-200/50 dark:border-zinc-800/50 rounded-2xl p-4 bg-zinc-50/30 dark:bg-zinc-950/20">
                   <div className="flex flex-col gap-2 shrink-0">
                     <button
                       type="button"
@@ -338,7 +338,7 @@ export default function OnboardingWizard({ onComplete }: OnboardingWizardProps) 
                       className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all cursor-pointer ${
                         avatarType === "preset"
                           ? "bg-rose-500 text-white border-rose-500"
-                          : "bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-300 border-zinc-200 dark:border-zinc-850"
+                          : "bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-300 border-zinc-200 dark:border-zinc-800"
                       }`}
                     >
                       Presets
@@ -349,7 +349,7 @@ export default function OnboardingWizard({ onComplete }: OnboardingWizardProps) 
                       className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all cursor-pointer ${
                         avatarType === "upload"
                           ? "bg-rose-500 text-white border-rose-500"
-                          : "bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-300 border-zinc-200 dark:border-zinc-850"
+                          : "bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-300 border-zinc-200 dark:border-zinc-800"
                       }`}
                     >
                       Upload
@@ -367,8 +367,8 @@ export default function OnboardingWizard({ onComplete }: OnboardingWizardProps) 
                             title={av.name}
                             className={`w-10 h-10 rounded-full flex items-center justify-center text-xl transition-all border cursor-pointer ${
                               avatarPreset === av.value
-                                ? "bg-rose-100 dark:bg-rose-955/40 border-rose-500 scale-110 shadow-sm"
-                                : "bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-850 hover:bg-zinc-50 dark:hover:bg-zinc-955/60"
+                                ? "bg-rose-100 dark:bg-rose-950/40 border-rose-500 scale-110 shadow-sm"
+                                : "bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-950/60"
                             }`}
                           >
                             {av.value}
@@ -377,7 +377,7 @@ export default function OnboardingWizard({ onComplete }: OnboardingWizardProps) 
                       </div>
                     ) : (
                       <div className="flex items-center gap-4">
-                        <label className="flex items-center gap-1.5 px-4 py-2 border border-dashed border-zinc-300 dark:border-zinc-850 rounded-xl hover:bg-zinc-50 dark:hover:bg-zinc-955/45 cursor-pointer text-xs font-sans text-zinc-500">
+                        <label className="flex items-center gap-1.5 px-4 py-2 border border-dashed border-zinc-300 dark:border-zinc-800 rounded-xl hover:bg-zinc-50 dark:hover:bg-zinc-950/45 cursor-pointer text-xs font-sans text-zinc-500">
                           <Camera className="w-4 h-4 text-rose-500" />
                           Upload Picture
                           <input
@@ -388,7 +388,7 @@ export default function OnboardingWizard({ onComplete }: OnboardingWizardProps) 
                           />
                         </label>
                         {avatarFileUrl && (
-                          <div className="w-12 h-12 rounded-full overflow-hidden border border-zinc-200/50 dark:border-zinc-850 shadow-inner">
+                          <div className="w-12 h-12 rounded-full overflow-hidden border border-zinc-200/50 dark:border-zinc-800 shadow-inner">
                             <img src={avatarFileUrl} alt="Avatar preview" className="w-full h-full object-cover" />
                           </div>
                         )}
@@ -420,7 +420,7 @@ export default function OnboardingWizard({ onComplete }: OnboardingWizardProps) 
                     required
                     value={anniversaryDate}
                     onChange={(e) => setAnniversaryDate(e.target.value)}
-                    className="w-full p-3 rounded-xl bg-zinc-55 dark:bg-zinc-955 border border-zinc-200 dark:border-zinc-850 text-sm outline-none focus:border-rose-400 dark:focus:border-rose-550 transition-colors text-zinc-900 dark:text-white"
+                    className="w-full p-3 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-sm outline-none focus:border-rose-400 dark:focus:border-rose-500 transition-colors text-zinc-900 dark:text-white"
                   />
                 </div>
 
@@ -432,7 +432,7 @@ export default function OnboardingWizard({ onComplete }: OnboardingWizardProps) 
                     placeholder="e.g. Our Kingdom, Our Story"
                     value={customTitle}
                     onChange={(e) => setCustomTitle(e.target.value)}
-                    className="w-full p-3 rounded-xl bg-zinc-55 dark:bg-zinc-955 border border-zinc-200 dark:border-zinc-850 text-sm outline-none focus:border-rose-400 dark:focus:border-rose-550 transition-colors text-zinc-900 dark:text-white"
+                    className="w-full p-3 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-sm outline-none focus:border-rose-400 dark:focus:border-rose-500 transition-colors text-zinc-900 dark:text-white"
                   />
                 </div>
               </div>
@@ -449,7 +449,7 @@ export default function OnboardingWizard({ onComplete }: OnboardingWizardProps) 
                       className={`p-3 rounded-2xl border text-left flex flex-col gap-1 transition-all relative overflow-hidden cursor-pointer ${
                         themeId === th.id
                           ? "border-rose-500 bg-rose-500/10 dark:bg-rose-950/20 scale-[1.02] shadow-sm"
-                          : "border-zinc-200 dark:border-zinc-850 bg-white/40 dark:bg-zinc-900/40 hover:bg-white/60 dark:hover:bg-zinc-900/60"
+                          : "border-zinc-200 dark:border-zinc-800 bg-white/40 dark:bg-zinc-900/40 hover:bg-white/60 dark:hover:bg-zinc-900/60"
                       }`}
                     >
                       <div className={`w-4 h-4 rounded-full bg-gradient-to-tr ${th.gradient} border border-zinc-200/50`} />
@@ -480,7 +480,7 @@ export default function OnboardingWizard({ onComplete }: OnboardingWizardProps) 
               </div>
 
               {/* Proposal Day */}
-              <div className="flex flex-col gap-3 p-4 rounded-2xl border border-zinc-200/50 dark:border-zinc-800/50 bg-zinc-55/25 dark:bg-zinc-955/10">
+              <div className="flex flex-col gap-3 p-4 rounded-2xl border border-zinc-200/50 dark:border-zinc-800/50 bg-zinc-50/25 dark:bg-zinc-950/10">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <span className="text-xl">💍</span>
@@ -507,7 +507,7 @@ export default function OnboardingWizard({ onComplete }: OnboardingWizardProps) 
               </div>
 
               {/* Engagement Day */}
-              <div className="flex flex-col gap-3 p-4 rounded-2xl border border-zinc-200/50 dark:border-zinc-800/50 bg-zinc-55/25 dark:bg-zinc-955/10">
+              <div className="flex flex-col gap-3 p-4 rounded-2xl border border-zinc-200/50 dark:border-zinc-800/50 bg-zinc-50/25 dark:bg-zinc-950/10">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <span className="text-xl">💎</span>
@@ -534,7 +534,7 @@ export default function OnboardingWizard({ onComplete }: OnboardingWizardProps) 
               </div>
 
               {/* Wedding Day */}
-              <div className="flex flex-col gap-3 p-4 rounded-2xl border border-zinc-200/50 dark:border-zinc-800/50 bg-zinc-55/25 dark:bg-zinc-955/10">
+              <div className="flex flex-col gap-3 p-4 rounded-2xl border border-zinc-200/50 dark:border-zinc-800/50 bg-zinc-50/25 dark:bg-zinc-950/10">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <span className="text-xl">⛪</span>
@@ -561,7 +561,7 @@ export default function OnboardingWizard({ onComplete }: OnboardingWizardProps) 
               </div>
 
               {/* Custom Anniversary */}
-              <div className="flex flex-col gap-3 p-4 rounded-2xl border border-zinc-200/50 dark:border-zinc-800/50 bg-zinc-55/25 dark:bg-zinc-955/10">
+              <div className="flex flex-col gap-3 p-4 rounded-2xl border border-zinc-200/50 dark:border-zinc-800/50 bg-zinc-50/25 dark:bg-zinc-950/10">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <span className="text-xl">🌟</span>
@@ -618,7 +618,7 @@ export default function OnboardingWizard({ onComplete }: OnboardingWizardProps) 
                     placeholder="e.g. Juliet"
                     value={partnerNickname}
                     onChange={(e) => setPartnerNickname(e.target.value)}
-                    className="w-full p-3 rounded-xl bg-zinc-55 dark:bg-zinc-955 border border-zinc-200 dark:border-zinc-850 text-sm outline-none focus:border-rose-400 dark:focus:border-rose-550 transition-colors text-zinc-900 dark:text-white"
+                    className="w-full p-3 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-sm outline-none focus:border-rose-400 dark:focus:border-rose-500 transition-colors text-zinc-900 dark:text-white"
                   />
                 </div>
 
@@ -629,7 +629,7 @@ export default function OnboardingWizard({ onComplete }: OnboardingWizardProps) 
                     placeholder="e.g. My Anchor ⚓"
                     value={partnerDesc}
                     onChange={(e) => setPartnerDesc(e.target.value)}
-                    className="w-full p-3 rounded-xl bg-zinc-55 dark:bg-zinc-955 border border-zinc-200 dark:border-zinc-850 text-sm outline-none focus:border-rose-400 dark:focus:border-rose-550 transition-colors text-zinc-900 dark:text-white"
+                    className="w-full p-3 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-sm outline-none focus:border-rose-400 dark:focus:border-rose-500 transition-colors text-zinc-900 dark:text-white"
                   />
                 </div>
               </div>
@@ -637,7 +637,7 @@ export default function OnboardingWizard({ onComplete }: OnboardingWizardProps) 
               {/* Partner Avatar */}
               <div className="flex flex-col gap-2">
                 <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Partner Avatar</label>
-                <div className="flex gap-4 border border-zinc-200/50 dark:border-zinc-800/50 rounded-2xl p-4 bg-zinc-55 dark:bg-zinc-955/20">
+                <div className="flex gap-4 border border-zinc-200/50 dark:border-zinc-800/50 rounded-2xl p-4 bg-zinc-50 dark:bg-zinc-950/20">
                   <div className="flex flex-col gap-2 shrink-0">
                     <button
                       type="button"
@@ -645,7 +645,7 @@ export default function OnboardingWizard({ onComplete }: OnboardingWizardProps) 
                       className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all cursor-pointer ${
                         partnerAvatarType === "preset"
                           ? "bg-rose-500 text-white border-rose-500"
-                          : "bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-300 border-zinc-200 dark:border-zinc-850"
+                          : "bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-300 border-zinc-200 dark:border-zinc-800"
                       }`}
                     >
                       Presets
@@ -656,7 +656,7 @@ export default function OnboardingWizard({ onComplete }: OnboardingWizardProps) 
                       className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all cursor-pointer ${
                         partnerAvatarType === "upload"
                           ? "bg-rose-500 text-white border-rose-500"
-                          : "bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-300 border-zinc-200 dark:border-zinc-850"
+                          : "bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-300 border-zinc-200 dark:border-zinc-800"
                       }`}
                     >
                       Upload
@@ -674,8 +674,8 @@ export default function OnboardingWizard({ onComplete }: OnboardingWizardProps) 
                             title={av.name}
                             className={`w-10 h-10 rounded-full flex items-center justify-center text-xl transition-all border cursor-pointer ${
                               partnerAvatarPreset === av.value
-                                ? "bg-rose-100 dark:bg-rose-955/40 border-rose-500 scale-110 shadow-sm"
-                                : "bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-850 hover:bg-zinc-50 dark:hover:bg-zinc-955/60"
+                                ? "bg-rose-100 dark:bg-rose-950/40 border-rose-500 scale-110 shadow-sm"
+                                : "bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-950/60"
                             }`}
                           >
                             {av.value}
@@ -684,7 +684,7 @@ export default function OnboardingWizard({ onComplete }: OnboardingWizardProps) 
                       </div>
                     ) : (
                       <div className="flex items-center gap-4">
-                        <label className="flex items-center gap-1.5 px-4 py-2 border border-dashed border-zinc-300 dark:border-zinc-850 rounded-xl hover:bg-zinc-50 dark:hover:bg-zinc-955/45 cursor-pointer text-xs font-sans text-zinc-500">
+                        <label className="flex items-center gap-1.5 px-4 py-2 border border-dashed border-zinc-300 dark:border-zinc-800 rounded-xl hover:bg-zinc-50 dark:hover:bg-zinc-950/45 cursor-pointer text-xs font-sans text-zinc-500">
                           <Camera className="w-4 h-4 text-rose-500" />
                           Partner Photo
                           <input
@@ -695,7 +695,7 @@ export default function OnboardingWizard({ onComplete }: OnboardingWizardProps) 
                           />
                         </label>
                         {partnerAvatarFileUrl && (
-                          <div className="w-12 h-12 rounded-full overflow-hidden border border-zinc-200/50 dark:border-zinc-850 shadow-inner">
+                          <div className="w-12 h-12 rounded-full overflow-hidden border border-zinc-200/50 dark:border-zinc-800 shadow-inner">
                             <img src={partnerAvatarFileUrl} alt="Partner avatar preview" className="w-full h-full object-cover" />
                           </div>
                         )}
@@ -731,11 +731,11 @@ export default function OnboardingWizard({ onComplete }: OnboardingWizardProps) 
                   type="text"
                   readOnly
                   value={inviteUrl}
-                  className="w-full p-2.5 rounded-xl bg-white dark:bg-zinc-950 border border-zinc-200/65 dark:border-zinc-850 text-[10px] outline-none text-zinc-500 font-mono truncate"
+                  className="w-full p-2.5 rounded-xl bg-white dark:bg-zinc-950 border border-zinc-200/65 dark:border-zinc-800 text-[10px] outline-none text-zinc-500 font-mono truncate"
                 />
 
                 {showQR && (
-                  <div className="flex flex-col items-center gap-2 p-3 bg-white dark:bg-zinc-950 rounded-2xl border border-zinc-200 dark:border-zinc-850 animate-scale-up w-fit mx-auto mt-1">
+                  <div className="flex flex-col items-center gap-2 p-3 bg-white dark:bg-zinc-950 rounded-2xl border border-zinc-200 dark:border-zinc-800 animate-scale-up w-fit mx-auto mt-1">
                     <img src={qrImageUrl} alt="QR Code Link to invite" className="w-36 h-36 object-contain" />
                     <span className="text-[9px] text-zinc-400 font-sans">Scan to accept invitation on another device</span>
                   </div>
@@ -751,7 +751,7 @@ export default function OnboardingWizard({ onComplete }: OnboardingWizardProps) 
           {step > 1 ? (
             <button
               onClick={handleBack}
-              className="flex items-center gap-1.5 px-5 py-2.5 rounded-full border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-850 text-xs font-semibold transition-colors cursor-pointer text-zinc-600 dark:text-zinc-300"
+              className="flex items-center gap-1.5 px-5 py-2.5 rounded-full border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800 text-xs font-semibold transition-colors cursor-pointer text-zinc-600 dark:text-zinc-300"
             >
               <ArrowLeft className="w-4 h-4" />
               Back

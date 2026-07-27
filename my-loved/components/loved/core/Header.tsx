@@ -118,7 +118,7 @@ export default function Header({
             <div className="w-9 h-9 rounded-full bg-rose-500/15 flex items-center justify-center animate-pulse shrink-0">
               <Heart className="w-4.5 h-4.5 text-rose-500 fill-rose-500" />
             </div>
-            <span className="text-xl font-cursive font-bold text-zinc-955 dark:text-white truncate max-w-[160px] sm:max-w-none">
+            <span className="text-xl font-cursive font-bold text-zinc-950 dark:text-white truncate max-w-[160px] sm:max-w-none">
               {customTitle || "Our Story"}
             </span>
           </Link>
@@ -185,7 +185,7 @@ export default function Header({
                 <PopoverContent
                   align="end"
                   sideOffset={8}
-                  className="w-80 max-w-[calc(100vw-2rem)] bg-white/95 dark:bg-zinc-950/95 border border-zinc-200/50 dark:border-zinc-850/50 backdrop-blur-xl rounded-2xl shadow-xl p-4"
+                  className="w-80 max-w-[calc(100vw-2rem)] bg-white/95 dark:bg-zinc-950/95 border border-zinc-200/50 dark:border-zinc-800/50 backdrop-blur-xl rounded-2xl shadow-xl p-4"
                 >
                   <NotificationDropdown
                     loved={loved}
@@ -277,7 +277,7 @@ export default function Header({
               <PopoverContent
                 align="end"
                 sideOffset={8}
-                className="w-80 max-w-[calc(100vw-2rem)] bg-white/95 dark:bg-zinc-950/95 border border-zinc-200/50 dark:border-zinc-850/50 backdrop-blur-xl rounded-2xl shadow-xl p-4"
+                className="w-80 max-w-[calc(100vw-2rem)] bg-white/95 dark:bg-zinc-950/95 border border-zinc-200/50 dark:border-zinc-800/50 backdrop-blur-xl rounded-2xl shadow-xl p-4"
               >
                 <NotificationDropdown
                   loved={loved}

@@ -19,7 +19,7 @@ export default function SummaryDashboard({
   onPlayAgain,
 }: SummaryDashboardProps) {
   return (
-    <div className="lg:col-span-12 flex flex-col items-center justify-center text-center p-8 rounded-3xl bg-white/40 dark:bg-zinc-955/20 border border-white/20 backdrop-blur-md max-w-xl mx-auto gap-5 animate-scale-up w-full">
+    <div className="lg:col-span-12 flex flex-col items-center justify-center text-center p-8 rounded-3xl bg-white/40 dark:bg-zinc-950/20 border border-white/20 backdrop-blur-md max-w-xl mx-auto gap-5 animate-scale-up w-full">
       
       <div className="relative w-20 h-20 rounded-full bg-gradient-to-tr from-amber-500 to-rose-500 flex items-center justify-center text-4xl shadow-lg animate-pulse">
         <span>🏆</span>
@@ -60,7 +60,7 @@ export default function SummaryDashboard({
       <div className="flex gap-2.5 w-full">
         <button
           onClick={onConfigureGame}
-          className="flex-1 py-3 rounded-full border border-zinc-250 dark:border-zinc-800 bg-white/40 dark:bg-zinc-950/20 backdrop-blur-sm text-zinc-700 dark:text-zinc-300 font-semibold text-xs transition-all cursor-pointer hover:bg-white/60 dark:hover:bg-zinc-950/30"
+          className="flex-1 py-3 rounded-full border border-zinc-200 dark:border-zinc-800 bg-white/40 dark:bg-zinc-950/20 backdrop-blur-sm text-zinc-700 dark:text-zinc-300 font-semibold text-xs transition-all cursor-pointer hover:bg-white/60 dark:hover:bg-zinc-950/30"
         >
           Configure Game 🔄
         </button>

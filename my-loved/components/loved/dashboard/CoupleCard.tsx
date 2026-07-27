@@ -72,7 +72,7 @@ export default function CoupleCard({
                   <span className="text-4xl select-none">{personAAvatar}</span>
                 )
               ) : (
-                <div className="w-full h-full flex items-center justify-center bg-rose-50/30 dark:bg-rose-955/20 text-rose-400 relative">
+                <div className="w-full h-full flex items-center justify-center bg-rose-50/30 dark:bg-rose-950/20 text-rose-400 relative">
                   <User className="w-6 h-6 opacity-60" />
                   <Heart className="w-2.5 h-2.5 fill-rose-400 text-rose-400 absolute bottom-2 right-2 opacity-80 animate-pulse" />
                 </div>
@@ -94,7 +94,7 @@ export default function CoupleCard({
         <div className="flex flex-col items-center justify-center relative">
           <div 
             onClick={onHeartClick}
-            className="w-14 h-14 rounded-full bg-rose-50 dark:bg-rose-955/40 flex items-center justify-center shadow-lg border border-rose-200/50 dark:border-rose-900/30 hover:scale-110 cursor-pointer active:scale-95 transition-all z-300 group/heart"
+            className="w-14 h-14 rounded-full bg-rose-50 dark:bg-rose-950/40 flex items-center justify-center shadow-lg border border-rose-200/50 dark:border-rose-900/30 hover:scale-110 cursor-pointer active:scale-95 transition-all z-300 group/heart"
           >
             <Heart className={`w-7 h-7 ${heartColor} animate-pulse group-hover/heart:scale-110 transition-transform`} />
           </div>
@@ -126,7 +126,7 @@ export default function CoupleCard({
         <div className="flex flex-col items-center flex-1 relative">
           
           {/* Polaroid Frame */}
-          <div className="p-2.5 pb-4 bg-white dark:bg-zinc-955 rounded-xl border border-zinc-200/60 dark:border-zinc-800/60 shadow-md hover:shadow-lg transform hover:rotate-[4deg] hover:scale-105 rotate-[2deg] transition-all duration-300 max-w-[120px] w-full flex flex-col items-center relative">
+          <div className="p-2.5 pb-4 bg-white dark:bg-zinc-950 rounded-xl border border-zinc-200/60 dark:border-zinc-800/60 shadow-md hover:shadow-lg transform hover:rotate-[4deg] hover:scale-105 rotate-[2deg] transition-all duration-300 max-w-[120px] w-full flex flex-col items-center relative">
             
             {/* Washi Tape */}
             <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-10 h-3.5 bg-rose-200/30 dark:bg-rose-900/20 border-x border-dashed border-rose-300/20 rotate-[3deg] shadow-sm" />
@@ -140,7 +140,7 @@ export default function CoupleCard({
                   <span className="text-4xl select-none">{personBAvatar}</span>
                 )
               ) : (
-                <div className="w-full h-full flex items-center justify-center bg-rose-50/30 dark:bg-rose-955/20 text-rose-400 relative">
+                <div className="w-full h-full flex items-center justify-center bg-rose-50/30 dark:bg-rose-950/20 text-rose-400 relative">
                   <User className="w-6 h-6 opacity-60" />
                   <Heart className="w-2.5 h-2.5 fill-rose-400 text-rose-400 absolute bottom-2 right-2 opacity-80 animate-pulse" />
                 </div>

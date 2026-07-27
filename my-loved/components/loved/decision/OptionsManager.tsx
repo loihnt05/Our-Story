@@ -99,7 +99,7 @@ export default function OptionsManager({
           return (
             <div 
               key={idx} 
-              className="flex items-center gap-2 bg-white/40 dark:bg-zinc-955/20 p-2.5 rounded-xl border border-zinc-200/40 dark:border-zinc-800/40 hover:scale-[1.01] transition-transform duration-200"
+              className="flex items-center gap-2 bg-white/40 dark:bg-zinc-950/20 p-2.5 rounded-xl border border-zinc-200/40 dark:border-zinc-800/40 hover:scale-[1.01] transition-transform duration-200"
             >
               {isEditing ? (
                 <div className="flex items-center gap-2 w-full">
@@ -129,7 +129,7 @@ export default function OptionsManager({
                 </div>
               ) : (
                 <>
-                  <span className="text-lg bg-zinc-200/20 dark:bg-zinc-850/40 w-7 h-7 rounded-lg flex items-center justify-center shrink-0">
+                  <span className="text-lg bg-zinc-200/20 dark:bg-zinc-800/40 w-7 h-7 rounded-lg flex items-center justify-center shrink-0">
                     {item.emoji}
                   </span>
                   <span 
@@ -175,7 +175,7 @@ export default function OptionsManager({
           value={newOptionEmoji}
           onChange={(e) => setNewOptionEmoji(e.target.value)}
           disabled={isSpinning}
-          className="p-2.5 rounded-xl bg-white/70 dark:bg-zinc-955/40 border border-zinc-200/50 dark:border-zinc-800/40 text-sm outline-none cursor-pointer"
+          className="p-2.5 rounded-xl bg-white/70 dark:bg-zinc-950/40 border border-zinc-200/50 dark:border-zinc-800/40 text-sm outline-none cursor-pointer"
         >
           {POPULAR_EMOJIS.map(em => (
             <option key={em} value={em}>{em}</option>
@@ -189,7 +189,7 @@ export default function OptionsManager({
           disabled={isSpinning}
           maxLength={30}
           required
-          className="flex-1 px-3 py-2 text-xs rounded-xl bg-white/70 dark:bg-zinc-955/40 border border-zinc-200/50 dark:border-zinc-800/40 text-zinc-900 dark:text-white outline-none"
+          className="flex-1 px-3 py-2 text-xs rounded-xl bg-white/70 dark:bg-zinc-950/40 border border-zinc-200/50 dark:border-zinc-800/40 text-zinc-900 dark:text-white outline-none"
         />
         <button
           type="submit"

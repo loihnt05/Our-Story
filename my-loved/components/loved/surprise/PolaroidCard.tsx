@@ -103,7 +103,7 @@ export default function PolaroidCard({
       }}
       onHoverStart={onHoverStart}
       onHoverEnd={onHoverEnd}
-      className="absolute top-1/2 left-1/2 p-4 pb-8 bg-[#faf7f0] dark:bg-zinc-850 border border-[#eadecc]/60 dark:border-zinc-700/60 rounded-xl w-72 sm:w-80 text-zinc-800 dark:text-zinc-200 cursor-grab active:cursor-grabbing transform pointer-events-auto transition-shadow"
+      className="absolute top-1/2 left-1/2 p-4 pb-8 bg-[#faf7f0] dark:bg-zinc-800 border border-[#eadecc]/60 dark:border-zinc-700/60 rounded-xl w-72 sm:w-80 text-zinc-800 dark:text-zinc-200 cursor-grab active:cursor-grabbing transform pointer-events-auto transition-shadow"
       style={{
         boxShadow: isMeHovered 
           ? "0 40px 80px -15px rgba(0,0,0,0.4), 0 20px 45px -10px rgba(0,0,0,0.3)"

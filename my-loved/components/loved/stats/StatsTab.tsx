@@ -303,11 +303,11 @@ Romeo`,
         {/* LONGEST STREAK */}
         <div className="p-6 rounded-[28px] bg-white/40 dark:bg-zinc-900/40 border border-white/20 dark:border-zinc-800/20 shadow-lg backdrop-blur-md flex flex-col gap-4 hover:shadow-xl hover:scale-[1.02] transition-all duration-300 group">
           <div className="w-10 h-10 rounded-full bg-amber-100 dark:bg-amber-950/40 flex items-center justify-center text-amber-500">
-            <Flame className="w-5 h-5 fill-current text-amber-550 animate-bounce" />
+            <Flame className="w-5 h-5 fill-current text-amber-500 animate-bounce" />
           </div>
           <div className="text-left mt-2">
             <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest">Longest Streak</span>
-            <h3 className="text-3xl font-extrabold text-amber-550 dark:text-amber-400 mt-1 font-serif" style={{ fontFamily: "var(--font-molle)" }}>
+            <h3 className="text-3xl font-extrabold text-amber-500 dark:text-amber-400 mt-1 font-serif" style={{ fontFamily: "var(--font-molle)" }}>
               {longestStreak} <span className="text-sm font-bold text-zinc-500 dark:text-zinc-400 font-sans">days</span>
             </h3>
             <p className="text-xs text-zinc-500 mt-2 font-medium">
@@ -397,7 +397,7 @@ Romeo`,
             <div>
               <span className="text-[10px] font-bold uppercase tracking-wider text-rose-500">Love Chemistry Meter ✍️</span>
               <h3 className="text-lg font-bold text-zinc-900 dark:text-white font-serif mt-1">Create a Question for {loved.personBName}</h3>
-              <p className="text-xs text-zinc-550 dark:text-zinc-400 mt-0.5 leading-normal text-center">
+              <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5 leading-normal text-center">
                 You haven&apos;t created any trivia questions for your partner yet. Create one now to test your chemistry!
               </p>
             </div>
@@ -492,7 +492,7 @@ Romeo`,
                   <h3 className="text-xs font-bold text-zinc-400 dark:text-zinc-400 uppercase tracking-widest mt-1 text-center">
                     Guess {loved.personBName}&apos;s favorite:
                   </h3>
-                  <h4 className="text-base font-extrabold text-zinc-850 dark:text-zinc-100 mt-2 font-serif px-4 py-3 rounded-2xl bg-rose-500/5 border border-rose-500/10">
+                  <h4 className="text-base font-extrabold text-zinc-800 dark:text-zinc-100 mt-2 font-serif px-4 py-3 rounded-2xl bg-rose-500/5 border border-rose-500/10">
                     {currentQ.questionText}
                   </h4>
                 </div>

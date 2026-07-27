@@ -110,7 +110,7 @@ export default function SettingsForm({
               disabled
               value={personAName}
               title="Name cannot be changed here"
-              className="w-full p-2.5 rounded-xl bg-zinc-100 dark:bg-zinc-850/50 border border-zinc-200 dark:border-zinc-800 text-xs text-zinc-400 dark:text-zinc-500 cursor-not-allowed font-medium"
+              className="w-full p-2.5 rounded-xl bg-zinc-100 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-800 text-xs text-zinc-400 dark:text-zinc-500 cursor-not-allowed font-medium"
             />
             <input
               type="text"

@@ -54,7 +54,7 @@ export default function SidebarContent({
             <div className="w-10 h-10 rounded-full bg-rose-500/15 flex items-center justify-center animate-pulse shrink-0">
               <Heart className="w-5 h-5 text-rose-500 fill-rose-500" />
             </div>
-            <span className="text-2xl font-cursive font-bold text-zinc-955 dark:text-white bg-clip-text bg-gradient-to-r from-zinc-955 to-zinc-700 dark:from-white dark:to-zinc-300">
+            <span className="text-2xl font-cursive font-bold text-zinc-950 dark:text-white bg-clip-text bg-gradient-to-r from-zinc-950 to-zinc-700 dark:from-white dark:to-zinc-300">
               {customTitle || "Our Story"}
             </span>
           </div>

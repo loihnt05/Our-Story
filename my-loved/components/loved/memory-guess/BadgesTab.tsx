@@ -27,7 +27,7 @@ export default function BadgesTab({
         
         {/* Player A badges board */}
         <div className="p-4 rounded-2xl bg-white/30 dark:bg-zinc-900/30 border border-white/10 flex flex-col gap-4">
-          <div className="flex justify-between items-center border-b pb-2 border-zinc-250/20">
+          <div className="flex justify-between items-center border-b pb-2 border-zinc-200/20">
             <span className="text-xs font-extrabold text-rose-500 flex items-center gap-1.5">
               <span>🌸</span>
               <span>{loved.personAName}'s Journey</span>
@@ -63,7 +63,7 @@ export default function BadgesTab({
 
         {/* Player B badges board */}
         <div className="p-4 rounded-2xl bg-white/30 dark:bg-zinc-900/30 border border-white/10 flex flex-col gap-4">
-          <div className="flex justify-between items-center border-b pb-2 border-zinc-250/20">
+          <div className="flex justify-between items-center border-b pb-2 border-zinc-200/20">
             <span className="text-xs font-extrabold text-rose-500 flex items-center gap-1.5">
               <span>🌸</span>
               <span>{loved.personBName}'s Journey</span>

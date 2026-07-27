@@ -350,7 +350,48 @@ async function seedRichRomeoJuliet() {
       data: [
         {
           coupleId,
-          name: "How Well Do You Know Romeo?",
+          name: "Daily Relationship Chemistry Quiz 💖",
+          description: "Daily test to check your relationship chemistry, favorite habits, and spontaneous moments!",
+          coverEmoji: "💖",
+          questions: [
+            {
+              id: "dq1",
+              question: "What is my absolute favorite way to spend a rainy Sunday afternoon? 🌧️",
+              options: [
+                "Sipping hot coffee & reading a novel ☕",
+                "Playing video games under cozy blankets 🎮",
+                "Binge-watching romantic movies 🍿",
+                "Taking a long cozy nap 💤"
+              ],
+              correctAnswer: 0
+            },
+            {
+              id: "dq2",
+              question: "Where is my dream vacation destination that we haven't visited yet? ✈️",
+              options: [
+                "Kyoto, Japan during cherry blossom season 🇯🇵",
+                "Amalfi Coast, Italy in summer 🇮🇹",
+                "Glass igloo stargazing in Finland 🌌",
+                "Overwater villa in Bora Bora 🌊"
+              ],
+              correctAnswer: 2
+            },
+            {
+              id: "dq3",
+              question: "What is my favorite late-night snack when we stay up late together? 🍕",
+              options: [
+                "Hot pizza & sodas 🍕",
+                "Artisanal gelato 🍦",
+                "Freshly baked chocolate cookies 🍪",
+                "Crunchy nachos & cheese dip 🧀"
+              ],
+              correctAnswer: 1
+            }
+          ],
+        },
+        {
+          coupleId,
+          name: "How Well Do You Know Romeo? 🎯",
           description: "A fun custom quiz created by Romeo for Juliet!",
           coverEmoji: "🎯",
           questions: [
@@ -366,11 +407,17 @@ async function seedRichRomeoJuliet() {
               options: ["By the river bank", "In the park", "Outside Caffe Dante", "At home"],
               correctAnswer: 0,
             },
+            {
+              id: "q3",
+              question: "What is Romeo's go-to music genre on long road trips?",
+              options: ["Acoustic & Indie Folk 🎸", "80s Synth Pop 🎶", "Classical Piano 🎹", "Jazz & Blues 🎷"],
+              correctAnswer: 0,
+            }
           ],
         },
         {
           coupleId,
-          name: "Juliet's Secret Preferences Quiz",
+          name: "Juliet's Secret Preferences Quiz 🌸",
           description: "Test how deeply you understand Juliet's favorite things!",
           coverEmoji: "🌸",
           questions: [
@@ -380,8 +427,34 @@ async function seedRichRomeoJuliet() {
               options: ["Pink Roses", "Sunflowers", "Peonies", "Tulips"],
               correctAnswer: 2,
             },
+            {
+              id: "q2",
+              question: "What is Juliet's dream date night idea?",
+              options: ["Candlelight dinner by the beach 🌅", "Stargazing rooftop picnic ✨", "Symphony orchestra concert 🎻", "Cozy bookstore exploration 📚"],
+              correctAnswer: 1,
+            }
           ],
         },
+        {
+          coupleId,
+          name: "Deep Relationship Chemistry & Dreams 💫",
+          description: "Deep talk questions for quiet evenings and heart-to-heart conversations.",
+          coverEmoji: "💫",
+          questions: [
+            {
+              id: "deep1",
+              question: "What habit of mine makes you feel most loved and appreciated?",
+              options: ["Morning coffee notes ☕", "Tight hugs when arriving home 🫂", "Listening attentively without distraction 👂", "Spontaneous forehead kisses 💋"],
+              correctAnswer: 1,
+            },
+            {
+              id: "deep2",
+              question: "What is our biggest shared dream for our next 3 years together?",
+              options: ["Buying our dream house 🏡", "Traveling across Japan & Europe ✈️", "Starting our own cozy business ☕", "Adopting another pet 🐶"],
+              correctAnswer: 1,
+            }
+          ],
+        }
       ],
     });
 

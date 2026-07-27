@@ -68,7 +68,7 @@ export default function Envelope3D({
         </motion.div>
  
         {/* Envelope Back Body (Using exact shapes from test section, styled in pink) */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#ff6b8b] via-[#ff85a2] to-[#ffb3c1] dark:from-zinc-800 dark:via-zinc-850 dark:to-zinc-900 rounded-b-xl shadow-[0_15px_35px_rgba(255,107,139,0.35)] z-20 overflow-hidden border-b border-x border-[#ffccd5]/50">
+        <div className="absolute inset-0 bg-gradient-to-br from-[#ff6b8b] via-[#ff85a2] to-[#ffb3c1] dark:from-zinc-800 dark:via-zinc-800 dark:to-zinc-900 rounded-b-xl shadow-[0_15px_35px_rgba(255,107,139,0.35)] z-20 overflow-hidden border-b border-x border-[#ffccd5]/50">
           <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.25)_0%,rgba(0,0,0,0)_60%)]" />
           
           <div className="absolute inset-2.5 rounded-[0.8rem] border border-dashed border-white/20 pointer-events-none" />
@@ -95,7 +95,7 @@ export default function Envelope3D({
 
         {/* Top Flap (Using exact shape and flip animation from test page, styled in pink) */}
         <motion.div 
-          className="absolute top-0 inset-x-0 h-28 bg-gradient-to-b from-[#ff6b8b] to-[#ff85a2] dark:from-zinc-800 dark:to-zinc-850 z-30 origin-top shadow-[0_8px_16px_rgba(255,107,139,0.2)] border-t border-[#ffccd5]/50"
+          className="absolute top-0 inset-x-0 h-28 bg-gradient-to-b from-[#ff6b8b] to-[#ff85a2] dark:from-zinc-800 dark:to-zinc-800 z-30 origin-top shadow-[0_8px_16px_rgba(255,107,139,0.2)] border-t border-[#ffccd5]/50"
           style={{ 
             clipPath: 'polygon(0 0, 50% 100%, 100% 0)',
             transformStyle: "preserve-3d"

@@ -53,7 +53,7 @@ export default function HistoryLog({
                   {hist.emoji}
                 </span>
                 <div className="min-w-0 flex flex-col">
-                  <span className={`text-xs font-extrabold truncate ${hist.completed ? "line-through text-zinc-400" : "text-zinc-850 dark:text-zinc-150"}`}>
+                  <span className={`text-xs font-extrabold truncate ${hist.completed ? "line-through text-zinc-400" : "text-zinc-800 dark:text-zinc-100"}`}>
                     {hist.text}
                   </span>
                   <span className="text-[9px] font-bold text-zinc-400 mt-0.5 flex items-center gap-1.5">

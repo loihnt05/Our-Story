@@ -169,7 +169,7 @@ export default function GamesTab({ loved, currentTheme }: GamesTabProps) {
     <div className="flex flex-col gap-6 w-full max-w-6xl mx-auto px-1 sm:px-4 py-2 animate-scale-up select-none">
       
       {/* Game Center Header Banner */}
-      <div className="text-center md:text-left flex flex-col md:flex-row md:items-center justify-between gap-4 p-6 rounded-3xl bg-white/40 dark:bg-zinc-955/25 border border-white/20 backdrop-blur-md">
+      <div className="text-center md:text-left flex flex-col md:flex-row md:items-center justify-between gap-4 p-6 rounded-3xl bg-white/40 dark:bg-zinc-950/25 border border-white/20 backdrop-blur-md">
         <div>
           <h1 className="text-2xl md:text-3xl font-cursive font-bold text-rose-600 dark:text-rose-400 flex items-center justify-center md:justify-start gap-2">
             <Gamepad2 className="w-6.5 h-6.5 text-rose-500" />
@@ -182,7 +182,7 @@ export default function GamesTab({ loved, currentTheme }: GamesTabProps) {
       </div>
 
       {/* Primary Tab Selectors */}
-      <div className="flex gap-1.5 p-1 bg-zinc-200/30 dark:bg-zinc-900/30 rounded-2xl border border-zinc-250/10 w-fit self-center md:self-start">
+      <div className="flex gap-1.5 p-1 bg-zinc-200/30 dark:bg-zinc-900/30 rounded-2xl border border-zinc-200/10 w-fit self-center md:self-start">
         <button
           onClick={() => setActiveTab("games")}
           className={`flex items-center gap-1.5 px-5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
@@ -233,7 +233,7 @@ export default function GamesTab({ loved, currentTheme }: GamesTabProps) {
 
                   {/* Card Details */}
                   <div className="text-left flex flex-col gap-1.5 mt-2">
-                    <h3 className="text-md font-bold text-zinc-850 dark:text-zinc-100 flex items-center gap-1 group-hover:text-rose-500 transition-colors">
+                    <h3 className="text-md font-bold text-zinc-800 dark:text-zinc-100 flex items-center gap-1 group-hover:text-rose-500 transition-colors">
                       <span>{game.name}</span>
                     </h3>
                     <p className="text-xs text-zinc-500 dark:text-zinc-400 font-medium leading-relaxed">
@@ -265,7 +265,7 @@ export default function GamesTab({ loved, currentTheme }: GamesTabProps) {
           <div className="lg:col-span-7 flex flex-col gap-6">
             
             {/* Connection Meters (Intimacy / Understanding) */}
-            <div className="p-6 rounded-3xl bg-white/70 dark:bg-zinc-900/60 border border-zinc-200/50 dark:border-zinc-850/30 backdrop-blur-md flex flex-col gap-5">
+            <div className="p-6 rounded-3xl bg-white/70 dark:bg-zinc-900/60 border border-zinc-200/50 dark:border-zinc-800/30 backdrop-blur-md flex flex-col gap-5">
               <h2 className="text-sm font-bold uppercase tracking-wider text-zinc-400 flex items-center gap-2">
                 <Compass className="w-4 h-4 text-rose-500" />
                 <span>Relationship Connection Meters</span>
@@ -298,7 +298,7 @@ export default function GamesTab({ loved, currentTheme }: GamesTabProps) {
                     </span>
                     <span className="text-amber-500 font-extrabold text-sm">{quizScores.understanding}%</span>
                   </div>
-                  <div className="w-full h-3 rounded-full bg-zinc-200/50 dark:bg-zinc-955/50 overflow-hidden relative border border-zinc-200/10 shadow-inner">
+                  <div className="w-full h-3 rounded-full bg-zinc-200/50 dark:bg-zinc-950/50 overflow-hidden relative border border-zinc-200/10 shadow-inner">
                     <div 
                       className="h-full bg-gradient-to-r from-amber-400 to-amber-500 rounded-full transition-all duration-500 ease-out" 
                       style={{ width: `${quizScores.understanding}%` }}
@@ -309,7 +309,7 @@ export default function GamesTab({ loved, currentTheme }: GamesTabProps) {
             </div>
 
             {/* Weekly Quests Section */}
-            <div className="p-6 rounded-3xl bg-white/70 dark:bg-zinc-900/60 border border-zinc-200/50 dark:border-zinc-850/30 backdrop-blur-md flex flex-col gap-4">
+            <div className="p-6 rounded-3xl bg-white/70 dark:bg-zinc-900/60 border border-zinc-200/50 dark:border-zinc-800/30 backdrop-blur-md flex flex-col gap-4">
               <div>
                 <span className="text-[9px] font-extrabold text-rose-500 uppercase tracking-widest">Weekly Mission 📅</span>
                 <h3 className="text-base font-bold text-zinc-900 dark:text-white font-cursive">Couple Quests</h3>
@@ -353,7 +353,7 @@ export default function GamesTab({ loved, currentTheme }: GamesTabProps) {
           <div className="lg:col-span-5 flex flex-col gap-6">
             
             {/* Gamification Stats Board */}
-            <div className="p-6 rounded-3xl bg-white/70 dark:bg-zinc-900/60 border border-zinc-200/50 dark:border-zinc-850/30 backdrop-blur-md flex flex-col gap-4">
+            <div className="p-6 rounded-3xl bg-white/70 dark:bg-zinc-900/60 border border-zinc-200/50 dark:border-zinc-800/30 backdrop-blur-md flex flex-col gap-4">
               <h2 className="text-sm font-bold uppercase tracking-wider text-zinc-400 flex items-center gap-2">
                 <Users className="w-4 h-4 text-rose-500" />
                 <span>Memory Guess Leaderboard</span>
@@ -382,7 +382,7 @@ export default function GamesTab({ loved, currentTheme }: GamesTabProps) {
             </div>
 
             {/* Badges Panel */}
-            <div className="p-6 rounded-3xl bg-white/70 dark:bg-zinc-900/60 border border-zinc-200/50 dark:border-zinc-850/30 backdrop-blur-md flex flex-col gap-4">
+            <div className="p-6 rounded-3xl bg-white/70 dark:bg-zinc-900/60 border border-zinc-200/50 dark:border-zinc-800/30 backdrop-blur-md flex flex-col gap-4">
               <h2 className="text-sm font-bold uppercase tracking-wider text-zinc-400 flex items-center gap-2">
                 <Award className="w-4 h-4 text-rose-500" />
                 <span>Couple Mastery Badges</span>
@@ -404,7 +404,7 @@ export default function GamesTab({ loved, currentTheme }: GamesTabProps) {
                     >
                       <span className="text-2xl">{unlocked ? "🏆" : "🔒"}</span>
                       <div className="flex flex-col text-left">
-                        <span className={`text-xs font-extrabold ${unlocked ? "text-zinc-850 dark:text-zinc-150" : "text-zinc-400"}`}>
+                        <span className={`text-xs font-extrabold ${unlocked ? "text-zinc-800 dark:text-zinc-100" : "text-zinc-400"}`}>
                           {badge.name}
                         </span>
                         <span className="text-[9px] text-zinc-400 mt-0.5 leading-tight">
@@ -433,7 +433,7 @@ export default function GamesTab({ loved, currentTheme }: GamesTabProps) {
                     >
                       <span className="text-2xl">{unlocked ? ach.icon : "🔒"}</span>
                       <div className="flex flex-col text-left">
-                        <span className={`text-xs font-extrabold ${unlocked ? "text-zinc-850 dark:text-zinc-150" : "text-zinc-400"}`}>
+                        <span className={`text-xs font-extrabold ${unlocked ? "text-zinc-800 dark:text-zinc-100" : "text-zinc-400"}`}>
                           {ach.name}
                         </span>
                         <span className="text-[9px] text-zinc-400 mt-0.5 leading-tight">

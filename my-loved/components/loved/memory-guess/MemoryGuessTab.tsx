@@ -42,6 +42,23 @@ export default function MemoryGuessTab({ loved, currentTheme, onBack }: MemoryGu
 
   // Load scores and gamification states on mount
   useEffect(() => {
+    fetch("/api/games")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && data.coupleStats) {
+          if (data.coupleStats.memoryGuessScoreA !== undefined || data.coupleStats.memoryGuessScoreB !== undefined) {
+            setScores({
+              A: data.coupleStats.memoryGuessScoreA ?? 0,
+              B: data.coupleStats.memoryGuessScoreB ?? 0,
+            });
+          }
+          if (data.coupleStats.memoryGuessStreak !== undefined) {
+            setStreak(data.coupleStats.memoryGuessStreak);
+          }
+        }
+      })
+      .catch((err) => console.error("Failed to load Memory Guess stats from API:", err));
+
     const savedScores = localStorage.getItem("loved_memory_guess_scores");
     if (savedScores) {
       try {
@@ -65,11 +82,27 @@ export default function MemoryGuessTab({ loved, currentTheme, onBack }: MemoryGu
   const saveScores = (newScores: { A: number; B: number }) => {
     setScores(newScores);
     localStorage.setItem("loved_memory_guess_scores", JSON.stringify(newScores));
+    fetch("/api/games", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        action: "UPDATE_MEMORY_GUESS_SCORES",
+        payload: { scoreA: newScores.A, scoreB: newScores.B, streak },
+      }),
+    }).catch((err) => console.error("Failed to update Memory Guess scores on backend:", err));
   };
 
   const saveStreak = (newStreak: number) => {
     setStreak(newStreak);
     localStorage.setItem("loved_memory_guess_streak", newStreak.toString());
+    fetch("/api/games", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        action: "UPDATE_MEMORY_GUESS_SCORES",
+        payload: { scoreA: scores.A, scoreB: scores.B, streak: newStreak },
+      }),
+    }).catch((err) => console.error("Failed to update Memory Guess streak on backend:", err));
   };
 
   // Generate unique multiple choices
@@ -322,7 +355,7 @@ export default function MemoryGuessTab({ loved, currentTheme, onBack }: MemoryGu
       `}</style>
 
       {/* Header Banner */}
-      <div className="text-center md:text-left flex flex-col md:flex-row md:items-center justify-between gap-4 p-6 rounded-3xl bg-white/40 dark:bg-zinc-955/20 border border-white/20 backdrop-blur-md">
+      <div className="text-center md:text-left flex flex-col md:flex-row md:items-center justify-between gap-4 p-6 rounded-3xl bg-white/40 dark:bg-zinc-950/20 border border-white/20 backdrop-blur-md">
         <div>
           {onBack && (
             <button
@@ -349,7 +382,7 @@ export default function MemoryGuessTab({ loved, currentTheme, onBack }: MemoryGu
           <div className={`flex items-center gap-1 px-3 py-1.5 rounded-full border text-xs font-bold shadow-sm ${
             streak > 0 
               ? "bg-rose-500/15 border-rose-500/25 text-rose-600 dark:text-rose-400 animate-pulse" 
-              : "bg-zinc-150/40 border-zinc-200/50 text-zinc-450 dark:text-zinc-550"
+              : "bg-zinc-100/40 border-zinc-200/50 text-zinc-450 dark:text-zinc-500"
           }`}>
             <Flame className="w-3.5 h-3.5" />
             <span>Streak: {streak}</span>
@@ -457,7 +490,7 @@ export default function MemoryGuessTab({ loved, currentTheme, onBack }: MemoryGu
                   <div className="flex gap-2.5 w-full">
                     <button
                       onClick={() => handleViewInTimeline(questions[currentIdx].memory.id)}
-                      className="flex-1 py-3 rounded-full border border-zinc-250 dark:border-zinc-800 bg-white/40 dark:bg-zinc-950/20 backdrop-blur-sm text-zinc-700 dark:text-zinc-300 hover:bg-white/60 text-xs font-bold shadow-sm transition-all cursor-pointer flex items-center justify-center gap-1.5"
+                      className="flex-1 py-3 rounded-full border border-zinc-200 dark:border-zinc-800 bg-white/40 dark:bg-zinc-950/20 backdrop-blur-sm text-zinc-700 dark:text-zinc-300 hover:bg-white/60 text-xs font-bold shadow-sm transition-all cursor-pointer flex items-center justify-center gap-1.5"
                     >
                       <Calendar className="w-3.5 h-3.5 text-rose-500" />
                       <span>View in Timeline</span>

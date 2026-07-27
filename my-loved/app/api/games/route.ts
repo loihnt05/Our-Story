@@ -16,7 +16,7 @@ export async function GET() {
       });
     }
 
-    const [
+    let [
       quizPacks,
       quizMemories,
       weeklyQuests,
@@ -29,6 +29,53 @@ export async function GET() {
       prisma.wheelCategory.findMany({ where: { coupleId: dbUser.coupleId } }),
       prisma.decisionHistory.findMany({ where: { coupleId: dbUser.coupleId }, orderBy: { date: "desc" } }),
     ]);
+
+    if (quizPacks.length === 0) {
+      const defaultPack = await prisma.customQuizPack.create({
+        data: {
+          coupleId: dbUser.coupleId,
+          name: "Daily Relationship Chemistry Quiz 💖",
+          description: "Daily test to check your relationship chemistry, favorite habits, and spontaneous moments!",
+          coverEmoji: "💖",
+          questions: [
+            {
+              id: "dq1",
+              question: "What is my absolute favorite way to spend a rainy Sunday afternoon? 🌧️",
+              options: [
+                "Sipping hot coffee & reading a novel ☕",
+                "Playing video games under cozy blankets 🎮",
+                "Binge-watching romantic movies 🍿",
+                "Taking a long cozy nap 💤"
+              ],
+              correctAnswer: 0
+            },
+            {
+              id: "dq2",
+              question: "Where is my dream vacation destination that we haven't visited yet? ✈️",
+              options: [
+                "Kyoto, Japan during cherry blossom season 🇯🇵",
+                "Amalfi Coast, Italy in summer 🇮🇹",
+                "Glass igloo stargazing in Finland 🌌",
+                "Overwater villa in Bora Bora 🌊"
+              ],
+              correctAnswer: 2
+            },
+            {
+              id: "dq3",
+              question: "What is my favorite late-night snack when we stay up late together? 🍕",
+              options: [
+                "Hot pizza & sodas 🍕",
+                "Artisanal gelato 🍦",
+                "Freshly baked chocolate cookies 🍪",
+                "Crunchy nachos & cheese dip 🧀"
+              ],
+              correctAnswer: 1
+            }
+          ]
+        }
+      });
+      quizPacks = [defaultPack];
+    }
 
     return NextResponse.json({
       success: true,
@@ -79,8 +126,8 @@ export async function POST(req: Request) {
         await prisma.couple.update({
           where: { id: dbUser.coupleId },
           data: {
-            intimacyScore: intimacyScore || dbUser.couple?.intimacyScore,
-            understandingScore: understandingScore || dbUser.couple?.understandingScore,
+            ...(intimacyScore !== undefined && { intimacyScore }),
+            ...(understandingScore !== undefined && { understandingScore }),
           },
         });
 
@@ -100,6 +147,14 @@ export async function POST(req: Request) {
         });
 
         return NextResponse.json({ success: true, pack });
+      }
+
+      case "DELETE_QUIZ_PACK": {
+        const { packId } = payload;
+        await prisma.customQuizPack.deleteMany({
+          where: { id: packId, coupleId: dbUser.coupleId },
+        });
+        return NextResponse.json({ success: true });
       }
 
       case "UPDATE_MEMORY_GUESS_SCORES": {
@@ -126,6 +181,44 @@ export async function POST(req: Request) {
         return NextResponse.json({ success: true, quest });
       }
 
+      case "CREATE_WHEEL_CATEGORY": {
+        const { name, icon, items } = payload;
+        const category = await prisma.wheelCategory.create({
+          data: {
+            coupleId: dbUser.coupleId,
+            name,
+            icon: icon || "🎡",
+            isCustom: true,
+            items: items || [],
+          },
+        });
+
+        return NextResponse.json({ success: true, category });
+      }
+
+      case "UPDATE_WHEEL_CATEGORY": {
+        const { categoryId, items, name, icon } = payload;
+        const category = await prisma.wheelCategory.updateMany({
+          where: { id: categoryId, coupleId: dbUser.coupleId },
+          data: {
+            ...(items !== undefined && { items }),
+            ...(name !== undefined && { name }),
+            ...(icon !== undefined && { icon }),
+          },
+        });
+
+        return NextResponse.json({ success: true, category });
+      }
+
+      case "DELETE_WHEEL_CATEGORY": {
+        const { categoryId } = payload;
+        await prisma.wheelCategory.deleteMany({
+          where: { id: categoryId, coupleId: dbUser.coupleId },
+        });
+
+        return NextResponse.json({ success: true });
+      }
+
       case "RECORD_DECISION": {
         const { text, emoji, categoryName } = payload;
         const decision = await prisma.decisionHistory.create({
@@ -140,6 +233,24 @@ export async function POST(req: Request) {
         return NextResponse.json({ success: true, decision });
       }
 
+      case "TOGGLE_DECISION_COMPLETED": {
+        const { decisionId, completed } = payload;
+        await prisma.decisionHistory.updateMany({
+          where: { id: decisionId, coupleId: dbUser.coupleId },
+          data: { completed },
+        });
+
+        return NextResponse.json({ success: true });
+      }
+
+      case "DELETE_DECISION_HISTORY": {
+        await prisma.decisionHistory.deleteMany({
+          where: { coupleId: dbUser.coupleId },
+        });
+
+        return NextResponse.json({ success: true });
+      }
+
       default:
         return NextResponse.json({ error: "Unknown action" }, { status: 400 });
     }
@@ -148,3 +259,4 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: error.message || "Failed to process game action" }, { status: 500 });
   }
 }
+

@@ -137,7 +137,7 @@ export default function NotificationDropdown({
 
   return (
     <div className="flex flex-col gap-3.5 select-none text-zinc-800 dark:text-zinc-100 max-h-80 overflow-y-auto scrollbar-hide">
-      <div className="flex items-center justify-between border-b border-zinc-200/50 dark:border-zinc-850/50 pb-2">
+      <div className="flex items-center justify-between border-b border-zinc-200/50 dark:border-zinc-800/50 pb-2">
         <span className="text-xs font-bold uppercase tracking-wider text-zinc-400">Notifications</span>
         <span className="text-[10px] bg-rose-500/10 text-rose-500 font-bold px-2 py-0.5 rounded-full">
           {notifications.length} Active
@@ -165,7 +165,7 @@ export default function NotificationDropdown({
                   if (n.onClick) n.onClick();
                   if (onClose) onClose();
                 }}
-                className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-zinc-100/50 dark:hover:bg-zinc-850/35 border border-transparent hover:border-zinc-200/30 dark:hover:border-zinc-800/20 cursor-pointer transition-all text-left"
+                className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-zinc-100/50 dark:hover:bg-zinc-800/35 border border-transparent hover:border-zinc-200/30 dark:hover:border-zinc-800/20 cursor-pointer transition-all text-left"
               >
                 <div className="mt-0.5 shrink-0">{itemIcon}</div>
                 <div className="flex-1 min-w-0">
