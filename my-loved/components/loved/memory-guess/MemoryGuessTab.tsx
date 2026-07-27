@@ -392,7 +392,7 @@ export default function MemoryGuessTab({ loved, currentTheme, onBack }: MemoryGu
 
       {/* Tabs navigation - Visible in Idle game state */}
       {gameState === "idle" && (
-        <div className="flex border-b border-zinc-200/30 dark:border-zinc-800/30 pb-1 gap-2">
+        <div className="flex border-b border-zinc-200/30 dark:border-zinc-800/30 pb-1 gap-2 justify-center max-w-md mx-auto w-full">
           {(["game", "badges", "stats"] as const).map((tab) => {
             const isActive = activeTab === tab;
             const labels = {
@@ -419,11 +419,11 @@ export default function MemoryGuessTab({ loved, currentTheme, onBack }: MemoryGu
 
       {/* TAB CONTENT: GAME CHANNELS */}
       {activeTab === "game" && (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        <div className="w-full flex flex-col items-center justify-center">
           
-          {/* LEFT: Game control / Idle configurations card */}
+          {/* Game control / Idle configurations card */}
           {gameState === "idle" && (
-            <div className="lg:col-span-5 flex flex-col gap-6">
+            <div className="w-full max-w-xl mx-auto flex flex-col gap-6">
               <GameConfigurator
                 difficulty={difficulty}
                 setDifficulty={setDifficulty}
@@ -438,9 +438,9 @@ export default function MemoryGuessTab({ loved, currentTheme, onBack }: MemoryGu
             </div>
           )}
 
-          {/* RIGHT: Active Question Display (Col-span-7) */}
+          {/* Active Question Display */}
           {(gameState === "playing" || gameState === "reveal") && questions.length > 0 && (
-            <div className="lg:col-span-7 flex flex-col items-center gap-6 mx-auto w-full max-w-lg">
+            <div className="w-full max-w-xl mx-auto flex flex-col items-center gap-6">
               
               {/* Question Index Progress tracker */}
               <div className="w-full flex justify-between items-center bg-white/40 dark:bg-zinc-950/20 p-4 rounded-2xl border border-white/20 backdrop-blur-md">
@@ -511,14 +511,16 @@ export default function MemoryGuessTab({ loved, currentTheme, onBack }: MemoryGu
 
           {/* SUMMARY DASHBOARD (End of game round) */}
           {gameState === "summary" && (
-            <SummaryDashboard
-              currentPlayer={currentPlayer}
-              getPartnerName={getPartnerName}
-              pointsEarnedThisRound={pointsEarnedThisRound}
-              streak={streak}
-              onConfigureGame={() => setGameState("idle")}
-              onPlayAgain={handleStartGame}
-            />
+            <div className="w-full max-w-xl mx-auto flex flex-col items-center justify-center">
+              <SummaryDashboard
+                currentPlayer={currentPlayer}
+                getPartnerName={getPartnerName}
+                pointsEarnedThisRound={pointsEarnedThisRound}
+                streak={streak}
+                onConfigureGame={() => setGameState("idle")}
+                onPlayAgain={handleStartGame}
+              />
+            </div>
           )}
 
         </div>
@@ -526,19 +528,23 @@ export default function MemoryGuessTab({ loved, currentTheme, onBack }: MemoryGu
 
       {/* TAB CONTENT: BADGES & LEVELS */}
       {gameState === "idle" && activeTab === "badges" && (
-        <BadgesTab
-          loved={loved}
-          scores={scores}
-        />
+        <div className="w-full max-w-4xl mx-auto">
+          <BadgesTab
+            loved={loved}
+            scores={scores}
+          />
+        </div>
       )}
 
       {/* TAB CONTENT: STATS & LEADERBOARD */}
       {gameState === "idle" && activeTab === "stats" && (
-        <LeaderboardTab
-          loved={loved}
-          scores={scores}
-          onResetScores={handleResetScores}
-        />
+        <div className="w-full max-w-2xl mx-auto">
+          <LeaderboardTab
+            loved={loved}
+            scores={scores}
+            onResetScores={handleResetScores}
+          />
+        </div>
       )}
 
     </div>

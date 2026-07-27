@@ -35,10 +35,15 @@ export default function SettingsModal({
   themeId,
   setThemeId,
   personAName,
+  setPersonAName,
   personADesc,
   setPersonADesc,
   personAAvatar,
   setPersonAAvatar,
+  personBName,
+  setPersonBName,
+  personBDesc,
+  setPersonBDesc,
   personBAvatar,
   setPersonBAvatar,
   onClose
@@ -129,6 +134,12 @@ export default function SettingsModal({
               setPersonADesc={setPersonADesc}
               personAAvatar={personAAvatar}
               setPersonAAvatar={setPersonAAvatar}
+              personBName={personBName}
+              setPersonBName={setPersonBName}
+              personBDesc={personBDesc}
+              setPersonBDesc={setPersonBDesc}
+              personBAvatar={personBAvatar}
+              setPersonBAvatar={setPersonBAvatar}
               onImageUpload={handleImageUpload}
               onShowInvite={() => setShowInvitePanel(true)}
             />

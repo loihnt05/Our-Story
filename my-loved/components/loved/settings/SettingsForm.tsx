@@ -16,6 +16,12 @@ interface SettingsFormProps {
   setPersonADesc: (val: string) => void;
   personAAvatar: string;
   setPersonAAvatar: (val: string) => void;
+  personBName?: string;
+  setPersonBName?: (val: string) => void;
+  personBDesc?: string;
+  setPersonBDesc?: (val: string) => void;
+  personBAvatar?: string;
+  setPersonBAvatar?: (val: string) => void;
   onImageUpload: (e: React.ChangeEvent<HTMLInputElement>, person: "A" | "B") => void;
   onShowInvite: () => void;
 }
@@ -32,9 +38,17 @@ export default function SettingsForm({
   setPersonADesc,
   personAAvatar,
   setPersonAAvatar,
+  personBName,
+  setPersonBName,
+  personBDesc,
+  setPersonBDesc,
+  personBAvatar,
+  setPersonBAvatar,
   onImageUpload,
   onShowInvite
 }: SettingsFormProps) {
+  const hasPartner = Boolean(personBName && personBName.trim().length > 0 && personBName.trim().toLowerCase() !== "partner");
+
   return (
     <>
       {/* Day X Config */}
@@ -96,9 +110,9 @@ export default function SettingsForm({
         </div>
       </div>
 
-      {/* Couple Info Config (Restricted editing) */}
+      {/* Couple Info Config */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5 border-t border-zinc-200/50 dark:border-zinc-800/50 pt-5">
-        {/* Person A config - USER SIDE (Only Avatar and Description) */}
+        {/* Person A config - USER SIDE */}
         <div className="flex flex-col gap-3.5">
           <span className="text-xs font-bold uppercase tracking-wider text-rose-500 dark:text-rose-400">
             Partner A (Left Side - You)
@@ -110,7 +124,7 @@ export default function SettingsForm({
               disabled
               value={personAName}
               title="Name cannot be changed here"
-              className="w-full p-2.5 rounded-xl bg-zinc-100 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-800 text-xs text-zinc-400 dark:text-zinc-500 cursor-not-allowed font-medium"
+              className="w-full p-2.5 rounded-xl bg-zinc-100 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-800 text-xs text-zinc-500 dark:text-zinc-400 cursor-not-allowed font-medium"
             />
             <input
               type="text"
@@ -141,29 +155,82 @@ export default function SettingsForm({
           </div>
         </div>
 
-        {/* Person B config - PARTNER SIDE (Locked with Invite block) */}
+        {/* Person B config - PARTNER SIDE */}
         <div className="flex flex-col gap-3.5">
-          <span className="text-xs font-bold uppercase tracking-wider text-zinc-400">
-            Partner B (Right Side)
-          </span>
-          
-          <div className="flex flex-col gap-3 p-4.5 rounded-2xl bg-zinc-50 dark:bg-zinc-950/20 border border-dashed border-zinc-200 dark:border-zinc-800 text-center items-center h-full justify-center">
-            <span className="text-2xl animate-pulse">💌</span>
-            <span className="text-[11px] font-bold text-rose-500 dark:text-rose-400">
-              Partner Connection Space
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-bold uppercase tracking-wider text-rose-500 dark:text-rose-400">
+              Partner B (Right Side)
             </span>
-            <p className="text-[10px] text-zinc-500 dark:text-zinc-400 leading-normal max-w-[160px] mt-0.5">
-              Partner B's details are managed by your companion. Invite them to join!
-            </p>
-            <button
-              type="button"
-              onClick={onShowInvite}
-              className="mt-1 px-4 py-2 bg-rose-500 hover:bg-rose-600 text-white rounded-full text-[10px] font-bold shadow-sm transition-all active:scale-95 cursor-pointer flex items-center gap-1.5"
-            >
-              <QrCode className="w-3.5 h-3.5" />
-              <span>Invite Partner</span>
-            </button>
+            {hasPartner && (
+              <span className="text-[9px] bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 px-2 py-0.5 rounded-full border border-emerald-500/20 font-bold">
+                Connected 💖
+              </span>
+            )}
           </div>
+          
+          {hasPartner ? (
+            <div className="flex flex-col gap-2.5">
+              <input
+                type="text"
+                disabled
+                value={personBName}
+                title="Partner Name"
+                className="w-full p-2.5 rounded-xl bg-zinc-100 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-800 text-xs text-zinc-700 dark:text-zinc-200 font-bold cursor-not-allowed"
+              />
+              <input
+                type="text"
+                placeholder="Partner Description"
+                value={personBDesc || ""}
+                onChange={(e) => setPersonBDesc && setPersonBDesc(e.target.value)}
+                className="w-full p-2.5 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-xs outline-none text-zinc-900 dark:text-white"
+              />
+              <div className="flex items-center gap-2">
+                <label className="text-[10px] font-bold text-zinc-400 cursor-pointer p-2 border border-dashed border-zinc-300 dark:border-zinc-800 rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-950 flex-1 text-center">
+                  Upload Partner Avatar
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => onImageUpload(e, "B")}
+                    className="hidden"
+                  />
+                </label>
+                {personBAvatar && setPersonBAvatar && (
+                  <button
+                    onClick={() => setPersonBAvatar("")}
+                    className="p-2 text-xs bg-rose-50 dark:bg-rose-950/20 text-rose-500 rounded-lg hover:bg-rose-100 cursor-pointer"
+                  >
+                    Reset
+                  </button>
+                )}
+              </div>
+              <button
+                type="button"
+                onClick={onShowInvite}
+                className="mt-1 text-[10px] font-bold text-rose-500 hover:text-rose-600 underline flex items-center justify-center gap-1 cursor-pointer bg-transparent border-none"
+              >
+                <QrCode className="w-3 h-3" />
+                <span>Share Invite Code &amp; Link</span>
+              </button>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-3 p-4.5 rounded-2xl bg-zinc-50 dark:bg-zinc-950/20 border border-dashed border-zinc-200 dark:border-zinc-800 text-center items-center h-full justify-center">
+              <span className="text-2xl animate-pulse">💌</span>
+              <span className="text-[11px] font-bold text-rose-500 dark:text-rose-400">
+                Partner Connection Space
+              </span>
+              <p className="text-[10px] text-zinc-500 dark:text-zinc-400 leading-normal max-w-[160px] mt-0.5">
+                Partner B's details are managed by your companion. Invite them to join!
+              </p>
+              <button
+                type="button"
+                onClick={onShowInvite}
+                className="mt-1 px-4 py-2 bg-rose-500 hover:bg-rose-600 text-white rounded-full text-[10px] font-bold shadow-sm transition-all active:scale-95 cursor-pointer flex items-center gap-1.5"
+              >
+                <QrCode className="w-3.5 h-3.5" />
+                <span>Invite Partner</span>
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </>

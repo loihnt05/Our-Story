@@ -19,7 +19,7 @@ export default function SummaryDashboard({
   onPlayAgain,
 }: SummaryDashboardProps) {
   return (
-    <div className="lg:col-span-12 flex flex-col items-center justify-center text-center p-8 rounded-3xl bg-white/40 dark:bg-zinc-950/20 border border-white/20 backdrop-blur-md max-w-xl mx-auto gap-5 animate-scale-up w-full">
+    <div className="w-full max-w-xl mx-auto flex flex-col items-center justify-center text-center p-8 rounded-3xl bg-white/40 dark:bg-zinc-950/20 border border-white/20 backdrop-blur-md gap-5 animate-scale-up">
       
       <div className="relative w-20 h-20 rounded-full bg-gradient-to-tr from-amber-500 to-rose-500 flex items-center justify-center text-4xl shadow-lg animate-pulse">
         <span>🏆</span>
