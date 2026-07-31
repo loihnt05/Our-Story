@@ -70,6 +70,7 @@ model Couple {
   weeklyQuests       WeeklyQuest[]
   wheelCategories    WheelCategory[]
   decisionHistory    DecisionHistory[]
+  invitations        CoupleInvitation[]
 
   createdAt          DateTime           @default(now())
   updatedAt          DateTime           @updatedAt
@@ -243,4 +244,20 @@ model DecisionHistory {
   @@index([coupleId])
 }
 
+// Couple Invitation representation for automated email & QR code verification
+model CoupleInvitation {
+  id             String    @id @default(cuid())
+  token          String    @unique
+  senderId       String?
+  senderName     String
+  recipientEmail String
+  coupleId       String
+  couple         Couple    @relation(fields: [coupleId], references: [id], onDelete: Cascade)
+  expiresAt      DateTime
+  isUsed         Boolean   @default(false)
+  usedAt         DateTime?
+  createdAt      DateTime  @default(now())
 
+  @@index([token])
+  @@index([coupleId])
+}

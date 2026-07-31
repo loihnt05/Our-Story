@@ -50,6 +50,7 @@ export default function LoveCounter({ initialTabHref }: LoveCounterProps) {
   // Invite parameters state
   const [partnerInviteName, setPartnerInviteName] = useState<string | null>(null);
   const [connectedPartner, setConnectedPartner] = useState<string | null>(null);
+  const [inviteErrorMessage, setInviteErrorMessage] = useState<string | null>(null);
 
   // Onboarding state
   const [onboardingCompleted, setOnboardingCompleted] = useState(true);
@@ -81,6 +82,19 @@ export default function LoveCounter({ initialTabHref }: LoveCounterProps) {
       const partnerNameParam = params.get("partner");
       if (isConn && partnerNameParam) {
         setConnectedPartner(partnerNameParam);
+      }
+
+      const inviteErr = params.get("invite_error");
+      if (inviteErr) {
+        if (inviteErr === "token_expired") {
+          setInviteErrorMessage("This invitation link has expired (invitation tokens are valid for 24 hours). Please ask your partner to send a new invitation email.");
+        } else if (inviteErr === "token_already_used") {
+          setInviteErrorMessage("This single-use invitation token has already been redeemed to connect profiles.");
+        } else if (inviteErr === "invalid_token") {
+          setInviteErrorMessage("The invitation verification token is invalid or unrecognized.");
+        } else {
+          setInviteErrorMessage("Failed to process invitation verification. Please try again.");
+        }
       }
 
       // 1. First-time ever load trigger check
@@ -416,6 +430,30 @@ export default function LoveCounter({ initialTabHref }: LoveCounterProps) {
               className="w-full py-3 rounded-full bg-gradient-to-r from-rose-500 to-pink-500 hover:bg-rose-600 text-white font-bold text-xs shadow-md transition-all cursor-pointer border-none"
             >
               Explore Our Shared Space 🚀
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Invitation Error Alert Modal */}
+      {inviteErrorMessage && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-fade-in">
+          <div className="w-full max-w-md rounded-3xl bg-white dark:bg-zinc-900 border border-amber-200 dark:border-zinc-800 p-6 text-center flex flex-col items-center gap-4 animate-scale-up shadow-2xl">
+            <span className="text-4xl">⚠️</span>
+            <h2 className="text-xl font-serif font-extrabold text-zinc-900 dark:text-white">
+              Invitation Status
+            </h2>
+            <p className="text-xs text-zinc-600 dark:text-zinc-300 leading-relaxed font-medium">
+              {inviteErrorMessage}
+            </p>
+            <button
+              onClick={() => {
+                setInviteErrorMessage(null);
+                window.history.replaceState({}, document.title, window.location.pathname);
+              }}
+              className="w-full py-2.5 rounded-full bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 font-bold text-xs shadow-md hover:opacity-90 transition-all cursor-pointer border-none"
+            >
+              Dismiss
             </button>
           </div>
         </div>

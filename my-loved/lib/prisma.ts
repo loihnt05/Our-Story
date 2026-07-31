@@ -11,10 +11,10 @@ const createPrismaClient = () => {
   if (!connectionString) {
     throw new Error("DATABASE_URL environment variable is not defined");
   }
-  
+
   // Create a connection pool using the pg driver
   const pool = new pg.Pool({ connectionString });
-  
+
   // Instantiate the Prisma PG adapter
   const adapter = new PrismaPg(pool);
 
@@ -24,8 +24,25 @@ const createPrismaClient = () => {
   });
 };
 
-export const prisma = globalForPrisma.prisma ?? createPrismaClient();
+const getPrismaInstance = (): PrismaClient => {
+  if (globalForPrisma.prisma && (globalForPrisma.prisma as any).coupleInvitation) {
+    return globalForPrisma.prisma;
+  }
+  const client = createPrismaClient();
+  if (process.env.NODE_ENV !== "production") {
+    globalForPrisma.prisma = client;
+  }
+  return client;
+};
 
-if (process.env.NODE_ENV !== "production") {
-  globalForPrisma.prisma = prisma;
-}
+// Proxy wrapper guarantees hot-reloaded Next.js dev modules always get the latest PrismaClient instance with all models
+export const prisma = new Proxy({} as PrismaClient, {
+  get(_target, prop: string | symbol) {
+    const instance = getPrismaInstance();
+    const value = (instance as any)[prop];
+    if (typeof value === "function") {
+      return value.bind(instance);
+    }
+    return value;
+  },
+});

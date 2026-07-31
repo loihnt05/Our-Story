@@ -65,8 +65,6 @@ export default function PartnerSettingsModal({
 
     setIsSendingEmail(true);
 
-    let generatedUrl = inviteUrl;
-
     try {
       const res = await fetch("/api/invite/send-email", {
         method: "POST",
@@ -77,23 +75,18 @@ export default function PartnerSettingsModal({
         }),
       });
       const data = await res.json();
-      if (data.success && data.confirmUrl) {
-        generatedUrl = data.confirmUrl;
+      if (res.ok && data.success) {
+        if (data.confirmUrl) {
+          setTestInviteUrl(data.confirmUrl);
+        }
+        setEmailSent(true);
+        setPartnerEmail("");
+        setTimeout(() => setEmailSent(false), 5000);
       }
     } catch (err) {
       console.error("Email send error:", err);
     } finally {
       setIsSendingEmail(false);
-      setTestInviteUrl(generatedUrl);
-      setEmailSent(true);
-
-      // Open email client with prefilled email body and direct confirm URL
-      const subject = encodeURIComponent(`You're invited to connect our anniversary space on Our Story! 💖`);
-      const body = encodeURIComponent(
-        `Hi! ${personAName} has invited you to connect your anniversary space on Our Story! 💖\n\nClick the link below to accept the invitation and connect our profiles:\n${generatedUrl}\n\nCan't wait to share our love story together! ✨`
-      );
-      window.open(`mailto:${partnerEmail}?subject=${subject}&body=${body}`, "_blank");
-      setTimeout(() => setEmailSent(false), 4000);
     }
   };
 
@@ -348,14 +341,14 @@ export default function PartnerSettingsModal({
                       className="w-full py-2.5 rounded-xl bg-rose-500 hover:bg-rose-600 disabled:opacity-50 text-white font-bold text-xs shadow-sm transition-all cursor-pointer border-none flex items-center justify-center gap-1.5"
                     >
                       <Send className="w-3.5 h-3.5" />
-                      <span>{isSendingEmail ? "Sending..." : emailSent ? "Email Client Opened! 📧" : "Send Email Invite 📧"}</span>
+                      <span>{isSendingEmail ? "Sending Invitation..." : emailSent ? "Invitation Email Sent! 📧" : "Send Email Invite 📧"}</span>
                     </button>
                   </form>
 
                   {testInviteUrl && (
                     <div className="mt-1 p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-left flex flex-col gap-1.5 animate-fade-in">
                       <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400">
-                        Generated Email Connection Token! 💖
+                        Single-Use Token &amp; Verification Link Generated! 💖
                       </span>
                       <a
                         href={testInviteUrl}
@@ -363,13 +356,13 @@ export default function PartnerSettingsModal({
                         rel="noreferrer"
                         className="text-xs font-bold text-rose-500 hover:underline flex items-center gap-1"
                       >
-                        <span>Test Invitation Confirmation Link 🚀</span>
+                        <span>Preview Verification Link 🚀</span>
                       </a>
                     </div>
                   )}
 
                   <p className="text-[10px] text-zinc-400 font-medium leading-relaxed">
-                    Clicking send opens your email app pre-filled with the invitation &amp; direct confirmation link.
+                    Sends an automated invitation email with a secure single-use token (expires in 24 hours) and QR code.
                   </p>
                 </div>
               </div>
