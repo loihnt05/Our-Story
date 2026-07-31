@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Users, X, QrCode, Copy, Check, Sparkles, Camera, Heart } from "lucide-react";
+import { Users, X, QrCode, Copy, Check, Sparkles, Camera, Heart, Mail, Send } from "lucide-react";
 
 interface PartnerSettingsModalProps {
   personAName: string;
@@ -39,6 +39,8 @@ export default function PartnerSettingsModal({
   const [copied, setCopied] = useState(false);
   const [activeTab, setActiveTab] = useState<"profiles" | "invite">("profiles");
   const [inviteUrl, setInviteUrl] = useState("");
+  const [partnerEmail, setPartnerEmail] = useState("");
+  const [emailSent, setEmailSent] = useState(false);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -46,11 +48,52 @@ export default function PartnerSettingsModal({
     }
   }, [personAName]);
 
+  const [isSendingEmail, setIsSendingEmail] = useState(false);
+  const [testInviteUrl, setTestInviteUrl] = useState<string | null>(null);
+
   const handleCopyLink = () => {
     if (navigator.clipboard) {
       navigator.clipboard.writeText(inviteUrl);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
+  const handleSendEmailInvite = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!partnerEmail || isSendingEmail) return;
+
+    setIsSendingEmail(true);
+
+    let generatedUrl = inviteUrl;
+
+    try {
+      const res = await fetch("/api/invite/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          partnerEmail,
+          senderName: personAName,
+        }),
+      });
+      const data = await res.json();
+      if (data.success && data.confirmUrl) {
+        generatedUrl = data.confirmUrl;
+      }
+    } catch (err) {
+      console.error("Email send error:", err);
+    } finally {
+      setIsSendingEmail(false);
+      setTestInviteUrl(generatedUrl);
+      setEmailSent(true);
+
+      // Open email client with prefilled email body and direct confirm URL
+      const subject = encodeURIComponent(`You're invited to connect our anniversary space on Our Story! 💖`);
+      const body = encodeURIComponent(
+        `Hi! ${personAName} has invited you to connect your anniversary space on Our Story! 💖\n\nClick the link below to accept the invitation and connect our profiles:\n${generatedUrl}\n\nCan't wait to share our love story together! ✨`
+      );
+      window.open(`mailto:${partnerEmail}?subject=${subject}&body=${body}`, "_blank");
+      setTimeout(() => setEmailSent(false), 4000);
     }
   };
 
@@ -263,41 +306,92 @@ export default function PartnerSettingsModal({
           )}
 
           {activeTab === "invite" && (
-            <div className="flex flex-col items-center text-center gap-6 p-4">
-              <div className="p-4 rounded-full bg-rose-500/10 text-rose-500 border border-rose-500/20">
-                <QrCode className="w-8 h-8" />
-              </div>
-
+            <div className="flex flex-col items-center text-center gap-6 p-2">
               <div>
-                <h3 className="text-base font-bold text-zinc-900 dark:text-white">
-                  Connect Your Partner's Space
+                <h3 className="text-base font-bold text-zinc-900 dark:text-white flex items-center justify-center gap-2">
+                  <QrCode className="w-4 h-4 text-rose-500" />
+                  <span>Connect Your Partner's Space</span>
                 </h3>
-                <p className="text-xs text-zinc-500 dark:text-zinc-400 max-w-sm mt-1 leading-relaxed">
-                  Have your partner scan the QR code below or open the invite link to join your shared anniversary space!
+                <p className="text-xs text-zinc-500 dark:text-zinc-400 max-w-md mt-1 leading-relaxed">
+                  Your partner can connect by scanning the QR code, receiving an email invitation, or clicking your direct invite link!
                 </p>
               </div>
 
-              <div className="p-4 bg-white rounded-2xl border border-zinc-200 shadow-md">
-                <img src={qrImageUrl} alt="QR Code Link" className="w-40 h-40 object-contain" />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-xl items-center">
+                {/* Method 1: QR Code */}
+                <div className="p-4 bg-white dark:bg-zinc-950/60 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm flex flex-col items-center gap-2">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-rose-500">Method 1: Scan QR Code</span>
+                  <div className="p-2 bg-white rounded-xl border border-zinc-200 shadow-inner">
+                    <img src={qrImageUrl} alt="QR Code Link" className="w-36 h-36 object-contain" />
+                  </div>
+                  <span className="text-[10px] text-zinc-400 font-medium">Scan with camera app</span>
+                </div>
+
+                {/* Method 2: Email Invitation */}
+                <div className="p-4 bg-gradient-to-tr from-rose-500/5 to-purple-500/5 dark:bg-zinc-950/60 rounded-2xl border border-rose-500/15 flex flex-col gap-3 text-left justify-center h-full">
+                  <div className="flex items-center gap-1.5 text-xs font-bold text-rose-500">
+                    <Mail className="w-4 h-4" />
+                    <span>Method 2: Send to Partner Email</span>
+                  </div>
+                  <form onSubmit={handleSendEmailInvite} className="flex flex-col gap-2">
+                    <input
+                      type="email"
+                      required
+                      placeholder="partner@example.com"
+                      value={partnerEmail}
+                      onChange={(e) => setPartnerEmail(e.target.value)}
+                      className="w-full p-2.5 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-xs outline-none text-zinc-900 dark:text-white"
+                    />
+                    <button
+                      type="submit"
+                      disabled={isSendingEmail}
+                      className="w-full py-2.5 rounded-xl bg-rose-500 hover:bg-rose-600 disabled:opacity-50 text-white font-bold text-xs shadow-sm transition-all cursor-pointer border-none flex items-center justify-center gap-1.5"
+                    >
+                      <Send className="w-3.5 h-3.5" />
+                      <span>{isSendingEmail ? "Sending..." : emailSent ? "Email Client Opened! 📧" : "Send Email Invite 📧"}</span>
+                    </button>
+                  </form>
+
+                  {testInviteUrl && (
+                    <div className="mt-1 p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-left flex flex-col gap-1.5 animate-fade-in">
+                      <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400">
+                        Generated Email Connection Token! 💖
+                      </span>
+                      <a
+                        href={testInviteUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-xs font-bold text-rose-500 hover:underline flex items-center gap-1"
+                      >
+                        <span>Test Invitation Confirmation Link 🚀</span>
+                      </a>
+                    </div>
+                  )}
+
+                  <p className="text-[10px] text-zinc-400 font-medium leading-relaxed">
+                    Clicking send opens your email app pre-filled with the invitation &amp; direct confirmation link.
+                  </p>
+                </div>
               </div>
 
-              <div className="w-full max-w-md flex flex-col gap-2">
-                <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">
-                  Invite Link
-                </label>
+              {/* Method 3: Direct Link Copy */}
+              <div className="w-full max-w-xl flex flex-col gap-2 text-left bg-zinc-50/70 dark:bg-zinc-950/30 p-4 rounded-2xl border border-zinc-200/60 dark:border-zinc-800/60">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-rose-500">
+                  Method 3: Direct Link (Click or Copy)
+                </span>
                 <div className="flex gap-2">
                   <input
                     type="text"
                     readOnly
                     value={inviteUrl}
-                    className="flex-1 p-2.5 rounded-xl bg-zinc-100 dark:bg-zinc-800 text-xs outline-none text-zinc-600 dark:text-zinc-300 font-mono"
+                    className="flex-1 p-2.5 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-xs outline-none text-zinc-600 dark:text-zinc-300 font-mono truncate"
                   />
                   <button
                     onClick={handleCopyLink}
-                    className="px-4 py-2.5 rounded-xl bg-rose-500 hover:bg-rose-600 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm transition-all cursor-pointer border-none"
+                    className="px-4 py-2.5 rounded-xl bg-rose-500 hover:bg-rose-600 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm transition-all cursor-pointer border-none shrink-0"
                   >
                     {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                    <span>{copied ? "Copied!" : "Copy"}</span>
+                    <span>{copied ? "Copied!" : "Copy Link"}</span>
                   </button>
                 </div>
               </div>

@@ -49,6 +49,7 @@ export default function LoveCounter({ initialTabHref }: LoveCounterProps) {
 
   // Invite parameters state
   const [partnerInviteName, setPartnerInviteName] = useState<string | null>(null);
+  const [connectedPartner, setConnectedPartner] = useState<string | null>(null);
 
   // Onboarding state
   const [onboardingCompleted, setOnboardingCompleted] = useState(true);
@@ -68,12 +69,18 @@ export default function LoveCounter({ initialTabHref }: LoveCounterProps) {
 
   // Load configuration and data on mount
   useEffect(() => {
-    // Read invite params
+    // Read invite & connection params
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
       const inviteVal = params.get("invite");
       if (inviteVal) {
         setPartnerInviteName(inviteVal);
+      }
+
+      const isConn = params.get("connected") === "true";
+      const partnerNameParam = params.get("partner");
+      if (isConn && partnerNameParam) {
+        setConnectedPartner(partnerNameParam);
       }
 
       // 1. First-time ever load trigger check
@@ -388,6 +395,30 @@ export default function LoveCounter({ initialTabHref }: LoveCounterProps) {
             window.history.replaceState({}, document.title, window.location.pathname);
           }}
         />
+      )}
+
+      {/* Connected Partner Celebration Modal */}
+      {connectedPartner && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-fade-in">
+          <div className="w-full max-w-md rounded-3xl bg-white dark:bg-zinc-900 border border-rose-200 dark:border-zinc-800 p-6 text-center flex flex-col items-center gap-4 animate-scale-up shadow-2xl">
+            <span className="text-5xl animate-bounce">🎉💖</span>
+            <h2 className="text-2xl font-serif font-extrabold text-zinc-900 dark:text-white">
+              Connection Successful!
+            </h2>
+            <p className="text-xs text-zinc-600 dark:text-zinc-300 leading-relaxed font-medium">
+              You are now officially connected with <span className="font-bold text-rose-500">{connectedPartner}</span>! Your shared countdown, daily feelings journal, milestones, and games are now synced together.
+            </p>
+            <button
+              onClick={() => {
+                setConnectedPartner(null);
+                window.history.replaceState({}, document.title, window.location.pathname);
+              }}
+              className="w-full py-3 rounded-full bg-gradient-to-r from-rose-500 to-pink-500 hover:bg-rose-600 text-white font-bold text-xs shadow-md transition-all cursor-pointer border-none"
+            >
+              Explore Our Shared Space 🚀
+            </button>
+          </div>
+        </div>
       )}
 
       {/* Streak Celebration Overlay */}
